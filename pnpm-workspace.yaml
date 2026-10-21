@@ -1,0 +1,7 @@
+# Pi supplies extension peers at runtime; avoid duplicate copies of its host.
+autoInstallPeers: false
+storeDir: .state/pnpm-store
+# Dependency build scripts are reviewed separately before rebuilding.
+allowBuilds: {}
+minimumReleaseAgeExclude:
+  - '@lincoln504/pi-research@1.7.13'

@@ -11,6 +11,17 @@ $launchEnvironment = [ordered]@{
     PI_OFFLINE = '1'
     PI_TELEMETRY = '0'
     PI_SKIP_VERSION_CHECK = '1'
+    CAMOUFOX_INSTALL_DIR = (Join-Path $labRoot 'runtime/research-browser-cache')
+    PLAYWRIGHT_BROWSERS_PATH = (Join-Path $labRoot 'runtime/playwright-cache')
+    PI_RESEARCH_KNOWLEDGE_STORE_RETRIEVAL = 'bm25'
+    PI_RESEARCH_STATE_DIR = (Join-Path $labRoot '.state/research')
+    PI_RESEARCH_MAX_RESEARCHERS = '1'
+    PI_RESEARCH_WORKER_THREADS = '1'
+    PI_RESEARCH_WORKER_CONCURRENCY = '1'
+    PI_RESEARCH_MAX_CONCURRENT_SCRAPES = '1'
+    PI_COMPUTER_USE_WINDOWS_HELPER_PATH = (Join-Path $labRoot 'runtime/computer/windows-bridge.exe')
+    PI_COMPUTER_USE_BROWSER_USE = '0'
+    PATH = (@((Join-Path $labRoot 'runtime/node'), (Join-Path $labRoot 'runtime/pnpm/node_modules/.bin'), (Join-Path $labRoot 'node_modules/.bin'), $env:PATH) -join ';')
 }
 if ($DryRun) {
     [ordered]@{ executable = $config.PiExecutable; workingDirectory = $WorkingDirectory; environment = $launchEnvironment } | ConvertTo-Json -Depth 5

@@ -1,15 +1,51 @@
 {
   "researchedDate": "2026-10-21",
-  "status": "Candidates only. No installed/tested third-party lock exists yet.",
+  "status": "Selected integrations installed; see individual smoke/task evidence and committed dependency lock.",
   "promotionRule": "After source review and Windows/local-model trial, record exact version or commit, resolved dependency lock, and evaluation record.",
   "candidates": [
-    { "capability": "web", "source": "https://github.com/arcanemachine/pi-web-search", "testedRef": null },
-    { "capability": "research", "source": "npm:@lincoln504/pi-research", "repository": "https://github.com/Lincoln504/pi-research", "testedRef": null },
-    { "capability": "desktop", "source": "npm:@injaneity/pi-computer-use", "repository": "https://github.com/injaneity/pi-computer-use", "testedRef": null },
-    { "capability": "browser", "source": "npm:@playwright/mcp", "repository": "https://github.com/microsoft/playwright-mcp", "testedRef": null },
-    { "capability": "transcripts", "source": "https://github.com/badlogic/pi-skills/tree/main/youtube-transcript", "testedRef": null },
-    { "capability": "subagents", "source": "https://github.com/nicobailon/pi-subagents", "testedRef": null },
-    { "capability": "code-intelligence", "source": "https://github.com/samfoy/pi-lsp-extension", "testedRef": null },
-    { "capability": "library-docs", "source": "npm:@upstash/context7-pi", "repository": "https://github.com/upstash/context7", "testedRef": null }
+    {
+      "capability": "web",
+      "source": "https://github.com/arcanemachine/pi-web-search",
+      "testedRef": null
+    },
+    {
+      "capability": "research",
+      "source": "npm:@lincoln504/pi-research",
+      "repository": "https://github.com/Lincoln504/pi-research",
+      "testedRef": "1.7.13"
+    },
+    {
+      "capability": "desktop",
+      "source": "npm:@injaneity/pi-computer-use",
+      "repository": "https://github.com/injaneity/pi-computer-use",
+      "testedRef": "0.5.1"
+    },
+    {
+      "capability": "browser",
+      "source": "npm:@playwright/cli",
+      "repository": "https://github.com/microsoft/playwright-cli",
+      "testedRef": "0.1.22"
+    },
+    {
+      "capability": "transcripts",
+      "source": "https://github.com/badlogic/pi-skills/tree/main/youtube-transcript",
+      "testedRef": null
+    },
+    {
+      "capability": "subagents",
+      "source": "https://github.com/nicobailon/pi-subagents",
+      "testedRef": null
+    },
+    {
+      "capability": "code-intelligence",
+      "source": "https://github.com/samfoy/pi-lsp-extension",
+      "testedRef": null
+    },
+    {
+      "capability": "library-docs",
+      "source": "npm:@upstash/context7-pi",
+      "repository": "https://github.com/upstash/context7",
+      "testedRef": null
+    }
   ]
 }

@@ -16,6 +16,8 @@ The current Pi and llama.cpp assets were found under sibling `local-ai/`. This r
 
 ## Rebuild on a clean Windows PC
 
+**Preferred route after the second setup pass:** clone the repository, run `Initialize-Lab.ps1`, `Bootstrap-Toolchain.ps1`, and `Setup-Integrations.ps1`. This installs portable Node/pnpm, restores the pinned Node-based Pi and selected packages, and regenerates paths. The standalone Pi executable exited silently with Research in the local check, so the lab now uses Node-based Pi 1.3.0. See [installed stack](INSTALLED-STACK.md). The manual runtime/archive steps below remain useful for assets and offline backups; a separately downloaded Pi executable is no longer required for the preferred route.
+
 1. Install Git for Windows and a maintained Node.js installation independent of Codex. Pi's current documented Node floor is 22.19; some candidates need >=22.22.2. Use a supported version meeting the highest chosen module requirement. Confirm `git`, `node`, `npm`, `npx` and Git Bash work. PowerShell 7 is recommended; scripts also avoid requiring its newer syntax. The current shell exposes a **Codex-managed Node path**, so do not assume that runtime survives migration.
 2. Clone/copy this folder. Obtain Pi **1.3.0** for the initial reproduction, or deliberately choose a newer version and rerun acceptance tasks. For a portable installation extract the **whole** Windows archive into `runtime/pi/`; for an npm installation point the local config to its command shim. The source-only and Windows archive hashes are recorded in `manifests/pi-observed.json`. See [Pi releases](https://github.com/earendil-works/pi/releases) and [quickstart](https://github.com/earendil-works/pi/blob/main/packages/coding-agent/docs/quickstart.md).
 3. Extract a compatible llama.cpp Windows backend and its required runtime DLLs into `runtime/llama.cpp/`. `manifests/llama-observed-assets.json` preserves the previously selected b11669 asset metadata; it is an observation, not a recommendation to use CUDA 12.4 on every GPU. Choose an appropriate newer backend if necessary and record it. [Releases](https://github.com/ggml-org/llama.cpp/releases).
@@ -23,7 +25,7 @@ The current Pi and llama.cpp assets were found under sibling `local-ai/`. This r
 5. Run `Initialize-Lab.ps1`. Edit `machine.local.json` if paths differ. The initializer never overwrites existing configuration. It generates an isolated profile and absolute prompt paths for this clone. If you moved an existing clone with `.state`, update `prompts` paths in `.state/agent/settings.json` too; cloning tracked files and regenerating state avoids this issue.
 6. Run `Test-Lab.ps1`. Inspect the detected GPU using `nvidia-smi` and actual system RAM. Keep context 16k, one model and one slot for the first trial on either machine.
 7. Start llama.cpp, then Pi using the launchers. Load/select the model and pass the baseline acceptance tasks. After a deliberate successful upgrade, update observed versions/hashes.
-8. Add optional tools one at a time, pin tested versions, and repeat only the relevant acceptance task. No third-party package is installed by these scripts. Do not copy all global Pi settings into the isolated profile blindly.
+8. Add further optional tools one at a time and repeat the relevant acceptance task. `Setup-Integrations.ps1` installs the three selected packages from the committed lock; the initializer alone does not. Do not copy all global Pi settings into the isolated profile blindly.
 
 ## Adding a reviewed extension to the isolated profile
 
@@ -43,7 +45,7 @@ try {
 }
 ```
 
-Before testing Playwright MCP, replace the version placeholder in `config/mcp.playwright.example.json`, set `enabled` to true, ensure Edge and npx are available, and save it as `.state/agent/mcp.json`. The example is intentionally disabled and is not loaded automatically. Run Pi's `mcp list` with the same profile environment to validate connectivity. Browser installation/resolution must be tested on the new PC. Compare direct/deferred exposure if the local model struggles to discover tools. [MCP docs](https://github.com/earendil-works/pi/blob/main/packages/coding-agent/docs/mcp.md).
+Playwright CLI is the chosen browser route. The disabled MCP example is retained only as an interoperability reference; do not enable it for this setup. Browser installation/resolution must still be tested on the new PC.
 
 ## Before the sale
 

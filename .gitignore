@@ -32,3 +32,5 @@ sessions/
 evaluation/local/
 Thumbs.db
 .DS_Store
+.playwright-cli/
+.playwright/

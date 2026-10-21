@@ -1,5 +1,7 @@
 # Pi ecosystem research — 2026-10-21
 
+Installation update: the selected CLI/browser, Research and desktop packages have now been installed. See [current stack](INSTALLED-STACK.md) and [second-pass validation](../evaluation/SETUP-2026-10-21.md). The catalogue below records source-reviewed options; those pages distinguish actual load/task checks. CLI/API is preferred to equivalent MCP integrations.
+
 ## Decision
 
 Build a small, reproducible native-Windows stack around upstream Pi. Preserve the ability to replace individual modules. Start with 16 GB VRAM, one loaded model, one inference slot, and a 16k context trial. Treat all third-party compatibility claims below as documentation evidence until tested on this installation.

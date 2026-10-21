@@ -1,5 +1,7 @@
 # Local model operating playbook
 
+Runtime update: the lab now uses Node-based Pi 1.3.0 because the standalone executable exited silently with Pi Research during extension loading. See [installed stack](INSTALLED-STACK.md). The llama.cpp and model-sizing guidance remains unchanged.
+
 ## Baseline and sizing
 
 Use **16 GB VRAM** as the present bottleneck. Target-PC RAM was reported as 32 GB; current-PC RAM and both actual GPU memory totals should be measured before tuning. The destination's reported 24 GB is not needed to run the baseline.

@@ -2,6 +2,8 @@
 
 This is a migration design map, not an exhaustive current Claude Code product comparison. The left column describes workflows the user wants to retain; the right columns describe the researched Pi route and its limits.
 
+For the requested historical source-based analysis of Claude Code 2.1.88, including tool execution, compaction, agents, gates and background consolidation, see [architecture research](ARCHITECTURE-RESEARCH.md). The preferred browser route is now Playwright CLI; MCP stays optional.
+
 | Familiar workflow | Pi route | Practical limit / next check |
 |---|---|---|
 | Read/edit/write and run code | Native tools; optional native PowerShell | Tool use depends on the local model and chat template |

@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><title>Pi Local Lab browser check</title>
+<main><h1>Local browser check</h1>
+<form id="greeting"><label>Your name <input name="name" required></label><button>Greet</button></form>
+<p role="status" id="result">Waiting for input</p></main>
+<script>
+document.querySelector('#greeting').addEventListener('submit', event => {
+  event.preventDefault();
+  document.querySelector('#result').textContent = `Hello, ${new FormData(event.target).get('name')}!`;
+});
+</script></html>
