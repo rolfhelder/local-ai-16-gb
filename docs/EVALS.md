@@ -1,5 +1,7 @@
 # Evaluation protocol and first evidence
 
+A [paired clean/100k-background coding suite](CODING-SUITE.md) is prepared. Its execution and fixture/grader validation are **on hold** at the user's request; no new model results are claimed. The runner requires explicit `--run` and is not part of the default test command.
+
 Current defaults are **200k (204,800 tokens) for both Qwen and Gemma**, reasoning enabled, 2,048 thinking tokens and 8,192 total output tokens, on port 48763. See [the model comparison](CONTEXT-COMPARISON.md) for the newer capacity, VRAM, TPS and strict five-needle recall results. The original Qwen-only baseline below preserves its historical settings.
 
 The current unit suite passes **53/53** checks, covering policy, context-status formatting, exact recall grading, server timing parsing and generation budgets. The real 80-column Pi TUI displays the added context status. Four LSP freshness cases pass: initial error, clearing after a fix, detecting a newly introduced error, and references excluding a same-text string. The latest tool matrix still passes 9/9 for `standard`.

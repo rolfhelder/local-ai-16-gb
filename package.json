@@ -17,6 +17,7 @@
     "eval:statusline": "node evals/statusline-tui.mjs",
     "eval:web": "node evals/web-tools.mjs",
     "eval:coding": "node evals/model-coding.mjs",
+    "eval:coding-context": "node evals/coding-context.mjs",
     "eval:live": "node evals/live.mjs",
     "pia": "node scripts/pia.mjs"
   },
