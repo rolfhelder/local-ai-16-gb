@@ -1,0 +1,16 @@
+[
+  {
+    "Repo": "Tesslate/OmniCoder-9B-GGUF",
+    "Revision": "c06117a99179f36962d782946970726b9fc9e533",
+    "File": "omnicoder-9b-q4_k_m.gguf",
+    "Size": 5737242944,
+    "SHA256": "550e8f7253c8e07997fbce2570d37259b69b0d21faf77e5ed518d4ee4c73d8b3"
+  },
+  {
+    "Repo": "ggml-org/gpt-oss-20b-GGUF",
+    "Revision": "15dcfc7e7c608c6161507211ed43c5b590801b4b",
+    "File": "gpt-oss-20b-MXFP4.gguf",
+    "Size": 12109566624,
+    "SHA256": "27cd6c432c7672cb812a92f611cf3ba7bbc35928262bb1e1253ff4ee6ae35901"
+  }
+]

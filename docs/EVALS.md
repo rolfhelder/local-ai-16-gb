@@ -1,6 +1,6 @@
 # Evaluation protocol and first evidence
 
-A [paired clean/100k-background coding suite](CODING-SUITE.md) is prepared. Its execution and fixture/grader validation are **on hold** at the user's request; no new model results are claimed. The runner requires explicit `--run` and is not part of the default test command.
+A [paired clean/100k-background coding suite](CODING-SUITE.md) completed all 12 trials after fixture/grader preflight. Full agent passes: Qwen **2/3 clean, 0/3 loaded**; Gemma **3/3 clean, 2/3 loaded**. Qwen's clean CSV code passed but the agent timed out. [Per-case results](../evaluation/CODING-CONTEXT-2026-10-21.md) distinguish correctness, completion, TPS and VRAM. The runner requires explicit `--run` and is not part of the default test command.
 
 Current defaults are **200k (204,800 tokens) for both Qwen and Gemma**, reasoning enabled, 2,048 thinking tokens and 8,192 total output tokens, on port 48763. See [the model comparison](CONTEXT-COMPARISON.md) for the newer capacity, VRAM, TPS and strict five-needle recall results. The original Qwen-only baseline below preserves its historical settings.
 

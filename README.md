@@ -42,6 +42,7 @@ Research and desktop tools are optional profiles. Research defaults to one quick
 - [Existing harnesses and LSP comparison](docs/EXISTING-HARNESSES.md).
 - [Automated evals and measured local results](docs/EVALS.md).
 - [Qwen versus Gemma: context, VRAM, speed and exact recall](docs/CONTEXT-COMPARISON.md).
+- [Coding-agent comparison with clean and 100k unrelated context](docs/CODING-SUITE.md): Gemma finished more tasks correctly in the first paired run; Qwen generated faster. Includes the throttled OmniCoder/GPT-OSS download queue.
 
 ## Recommendation
 
