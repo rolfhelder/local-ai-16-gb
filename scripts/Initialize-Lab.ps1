@@ -17,11 +17,14 @@ if (-not (Test-Path -LiteralPath $configPath)) {
         PiExecutable = $piPath
         LlamaExecutable = $llamaPath
         ModelsDirectory = (Join-Path $assetsRoot 'models')
-        RouterUrl = 'http://127.0.0.1:8080'
-        Port = 8080
-        ContextSize = 32768
+        RouterUrl = 'http://127.0.0.1:48763'
+        Port = 48763
+        ContextSize = 204800
         GpuLayers = 999
         ParallelSlots = 1
+        Reasoning = $true
+        ReasoningBudget = 2048
+        MaxTokens = 8192
     } | ConvertTo-Json | Set-Content -LiteralPath $configPath -Encoding UTF8
     Write-Output 'Created machine.local.json; check executable and model paths.'
 } else { Write-Output 'Preserved existing machine.local.json.' }

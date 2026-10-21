@@ -11,9 +11,9 @@ See [installed stack](INSTALLED-STACK.md) and [validation](../evaluation/SETUP-2
 
 ## Next operational work
 
-1. Qwen is complete and hash-verified. Native coding and recall trials passed through 94,460 prompt tokens; see EVALS.md. `pia` is installed, default 32k; the guard/LSP standard profile passes its current contract.
-2. Extend coding evals to compile/test/repair cycles and difficult repository tasks. Test compaction and multi-needle retrieval before treating a large context as dependable reasoning capacity.
-3. Research quick mode ran on local Qwen but failed the first source-fidelity audit. Compare a lean direct search/fetch pipeline, add granular provenance/citation graders, and validate the BM25 store before promoting it.
+1. Qwen and Gemma are hash-verified and both default to 200k (204,800 tokens) to leave headroom below the measured 256k capacity. See [the comparison](CONTEXT-COMPARISON.md). The guard/LSP standard profile passes 9/9; Pi shows absolute context usage.
+2. Both models passed a real test/fix/retest coding fixture. Expand to difficult repository tasks, repeated trials and compaction. Five-needle recall is measured separately from capacity; its failures are recorded rather than hidden by partial-match grading.
+3. Research quick mode failed its first source-fidelity audit. The lean web candidate passes fetch/find checks but fails live DuckDuckGo parsing (13/14 overall). Compare another CLI/API search backend, add claim-to-source graders, and validate the BM25 store before promoting either pipeline.
 4. Test a harmless Windows app action and verify it. Helper diagnostics alone do not establish reliable GUI use.
 5. Test transcript retrieval and one complete research → lesson → quiz workflow.
 6. Add durable fact/procedure/task artifacts from the architecture plan before installing more orchestration packages.

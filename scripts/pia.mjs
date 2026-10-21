@@ -4,21 +4,36 @@ import { root, nodeExe, piEntry, machine, environment, acquireInferenceLock, ens
 const args = process.argv.slice(2);
 const value = (flag, fallback) => { const index = args.indexOf(flag); if (index < 0) return fallback; const result = args[index + 1]; args.splice(index, 2); if (!result) throw new Error(`${flag} requires a value`); return result; };
 const flag = name => { const index = args.indexOf(name); if (index < 0) return false; args.splice(index, 1); return true; };
+if (flag('--help')) {
+  console.log('pia [--local-model qwen|gemma] [--context TOKENS] [--profile standard|native|guard|lsp|lsp-windows|research|desktop|web]\n    [--reasoning-budget TOKENS] [--no-reasoning] [--browser] [--cwd PATH] [--dry-run] [--probe] [Pi arguments]\nDefaults: Qwen, 204800 context, reasoning on, 2048 thinking tokens, loopback port 48763.\n--dry-run prints both full process commands without starting the model.');
+  process.exit(0);
+}
 const profile = value('--profile', 'standard');
 const dryRun = flag('--dry-run');
 const probeOnly = flag('--probe');
 const browser = flag('--browser');
 const context = value('--context', undefined);
+const localModel = value('--local-model', undefined);
+const noReasoning = flag('--no-reasoning');
+const reasoningBudget = value('--reasoning-budget', undefined);
 const cwd = path.resolve(value('--cwd', process.cwd()));
 let release, server;
 try {
-  const config = await machine();
+  const config = await machine(localModel);
+  if (noReasoning) config.Reasoning = false;
+  if (reasoningBudget !== undefined) {
+    if (!/^\d+$/.test(reasoningBudget) || Number(reasoningBudget) > 32768) throw new Error('--reasoning-budget must be 0..32768');
+    config.ReasoningBudget = Number(reasoningBudget);
+    config.MaxTokens = Math.max(config.MaxTokens, config.ReasoningBudget + 2048);
+  }
+  const piArgs = [piEntry, '--provider', 'local-llama', '--model', config.ModelId, '--thinking', config.Reasoning === false ? 'off' : 'medium', ...args];
+  if (profile === 'native') piArgs.push('--no-extensions', '--no-skills', '--no-prompt-templates', '--no-context-files');
   if (context !== undefined) {
-    if (!/^\d+$/.test(context) || Number(context) < 8192 || Number(context) > 102400) throw new Error('--context must be between 8192 and 102400');
+    if (!/^\d+$/.test(context) || Number(context) < 8192 || Number(context) > 1048576) throw new Error('--context must be between 8192 and 1048576; sizes above the model native window are experimental');
     config.ContextSize = Number(context);
   }
   if (dryRun) {
-    console.log(JSON.stringify({ profile, cwd, executable: nodeExe, pi: piEntry, model: `local-llama/${config.ModelId}`, server: config.LlamaExecutable, arguments: serverArguments(config), browser, singleSession: true }, null, 2));
+    console.log(JSON.stringify({ profile, cwd, executable: nodeExe, pi: piEntry, piArguments: piArgs, model: `local-llama/${config.ModelId}`, server: config.LlamaExecutable, arguments: serverArguments(config), browser, singleSession: true }, null, 2));
   } else {
     release = await acquireInferenceLock();
     const prepared = await prepareProfile(profile, config, cwd);
@@ -29,8 +44,6 @@ try {
       const browserEntry = path.join(root, 'node_modules/@playwright/cli/playwright-cli.js');
       if (browser) await exec(nodeExe, [browserEntry, '-s=pia-browser', 'open', 'about:blank', '--browser', 'msedge', '--headed'], { cwd, env: environment(), windowsHide: true });
       try {
-        const piArgs = [piEntry, '--provider', 'local-llama', '--model', config.ModelId, '--thinking', 'off', ...args];
-        if (profile === 'native') piArgs.push('--no-extensions', '--no-skills', '--no-prompt-templates', '--no-context-files');
         const pi = spawn(nodeExe, piArgs, { cwd, env: prepared.env, stdio: 'inherit' });
         const interrupt = () => pi.kill('SIGINT');
         process.on('SIGINT', interrupt);

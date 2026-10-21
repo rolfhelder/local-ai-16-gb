@@ -80,5 +80,27 @@
     ],
     "activeSchemaCharacters": 10918,
     "errors": ""
+  },
+  {
+    "profile": "web",
+    "activeTools": [
+      "read",
+      "powershell",
+      "edit",
+      "write",
+      "grep",
+      "find",
+      "ls",
+      "lsp_diagnostics",
+      "lsp_hover",
+      "lsp_definition",
+      "lsp_references",
+      "lsp_rename",
+      "read_url_content",
+      "find_text_in_url_content",
+      "search_web"
+    ],
+    "activeSchemaCharacters": 7790,
+    "errors": "Warning: Extension package \"<repo>\\node_modules\\@arcanemachine\\pi-web-search\\package.json\": Host-provided extension packages must be declared in peerDependencies with a \"*\" range, not dependencies: @sinclair/typebox. Installed copies can bypass the extension loader and create duplicate runtime modules."
   }
 ]

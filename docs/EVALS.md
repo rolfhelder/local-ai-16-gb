@@ -1,5 +1,11 @@
 # Evaluation protocol and first evidence
 
+Current defaults are **200k (204,800 tokens) for both Qwen and Gemma**, reasoning enabled, 2,048 thinking tokens and 8,192 total output tokens, on port 48763. See [the model comparison](CONTEXT-COMPARISON.md) for the newer capacity, VRAM, TPS and strict five-needle recall results. The original Qwen-only baseline below preserves its historical settings.
+
+The current unit suite passes **53/53** checks, covering policy, context-status formatting, exact recall grading, server timing parsing and generation budgets. The real 80-column Pi TUI displays the added context status. Four LSP freshness cases pass: initial error, clearing after a fix, detecting a newly introduced error, and references excluding a same-text string. The latest tool matrix still passes 9/9 for `standard`.
+
+The optional `web` profile adds `@arcanemachine/pi-web-search@3.0.0` without model-based summaries or paid fallback. Its isolated scripted trial passes **13/14** checks, including UTF-8 extraction, bounded output, caching, pagination, literal find, redirect provenance, rejected file URLs, HTTP errors and an official Pi document fetch. Live DuckDuckGo search fails with `parse_failed` (invalid title or URL in a result). This is an observed failure, so the module remains optional. The loader also warns about its TypeBox dependency declaration. See [the sanitized trial](../evaluation/MODULE-TRIALS-2026-10-21.json). No model tokens were used in this tool trial.
+
 2026-10-21. Run from the repository after activating portable tools:
 
 ```powershell
@@ -10,6 +16,11 @@ node evals/guard-integration.mjs
 pnpm eval:tools
 node evals/browser.mjs
 pnpm eval:live
+pnpm eval:statusline
+node evals/lsp-freshness.mjs
+pnpm eval:web
+pnpm eval:coding
+node evals/context-limits.mjs --models=qwen,gemma --contexts=262144 --pattern=words --reasoning-budget=2048 --output-tokens=8192 --no-refine
 node evals/live.mjs --contexts=65536,102400
 node evals/live.mjs --contexts=102400 --fill=0.93
 ```
@@ -31,7 +42,7 @@ Current matrix has **nine checks**: UTF-8 read, bounded read, exact edit, headle
 | lsp-windows | 8/9 | Diagnostic URI fix adds type-error detection; no guard in this profile |
 | standard | 9/9 | Combined adapters satisfy current checks |
 
-There are also **37** PowerShell policy/approval tests, **five** real parsed-Bash guard tests and **seven** native-hook integration checks. TUI approval callbacks are unit-tested, not an end-to-end terminal dialog usability test. Cold LSP failures remain in ignored traces; warm navigation does not establish reliable cold project discovery. Changed-file diagnostic freshness, shadowed-symbol references and larger-language-server comparisons need additional cases.
+There are also **37** PowerShell policy/approval tests, **five** real parsed-Bash guard tests and **seven** native-hook integration checks. TUI approval callbacks are unit-tested, not an end-to-end terminal dialog usability test. Cold LSP failures remain in ignored traces; warm navigation does not establish reliable cold project discovery. Changed-file freshness now has four passing cases; shadowed-symbol references and larger-language-server comparisons still need additional cases.
 
 ## Real Qwen baseline
 
@@ -50,7 +61,7 @@ Verified GGUF SHA256: `03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853da
 
 The recall task hides one code in unique synthetic records. Each size has one successful trial. This establishes an initial capacity/recall envelope, not robust long-context reasoning, multi-needle retrieval, resistance to distractors, or complex repository coding. The native coding trial passed a real read → exact edit → final report cycle and preserved UTF-8 lines. The final `pia` standard-profile print run also read the fixture successfully. No paid/cloud inference was needed.
 
-Default launcher context is **32,768**. `pia --context 102400` is available for measured larger tasks. Output is capped at 2,048 tokens per model response; compaction reserves 4,096 and keeps 6,000 recent tokens. Compaction quality and very long generated answers have not been validated. Large context capacity does not remove the need for evidence files, bounded fetches and short working summaries.
+Those original runs used a 32,768 launcher default, a 2,048 output cap and a 4,096 compaction reserve. Current settings supersede them: **204,800 context**, 8,192 total output tokens, 2,048 thinking tokens, compaction reserving 8,192 and keeping 6,000 recent tokens. Compaction quality and very long generated answers have not been validated. Large context capacity does not remove the need for evidence files, bounded fetches and short working summaries.
 
 ## Research trial: working pipeline, failed synthesis accuracy
 

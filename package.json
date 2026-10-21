@@ -6,17 +6,22 @@
   "packageManager": "pnpm@12.14.0",
   "scripts": {
     "browser": "playwright-cli",
-    "test": "node --test evals/policy.test.mjs",
+    "test": "node --test evals/policy.test.mjs evals/context-status.test.mjs evals/recall-grader.test.mjs evals/timings.test.mjs evals/runtime.test.mjs",
     "eval:tools": "node evals/run.mjs",
     "eval:hooks": "node evals/hooks.mjs",
     "eval:guard": "node evals/guard-integration.mjs",
     "eval:browser": "node evals/browser.mjs",
     "eval:worktrees": "node evals/worktrees.mjs",
     "eval:research": "node evals/research-live.mjs",
+    "eval:context-limits": "node evals/context-limits.mjs",
+    "eval:statusline": "node evals/statusline-tui.mjs",
+    "eval:web": "node evals/web-tools.mjs",
+    "eval:coding": "node evals/model-coding.mjs",
     "eval:live": "node evals/live.mjs",
     "pia": "node scripts/pia.mjs"
   },
   "dependencies": {
+    "@arcanemachine/pi-web-search": "3.0.0",
     "@injaneity/pi-computer-use": "0.5.1",
     "@lincoln504/pi-research": "1.7.13",
     "@playwright/cli": "0.1.22",

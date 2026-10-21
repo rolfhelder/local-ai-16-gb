@@ -2,18 +2,24 @@
 
 A portable Windows research notebook and starter configuration for Rolf's move from subscription coding agents to Pi + local models.
 
-Research date: **2026-10-21**. Baseline: **16 GB VRAM**, one inference slot, native Windows. Qwen3.5-9B Q4_K_M passed real Pi coding and context trials through **94,460 prompt tokens** at a 102,400 context setting, using about **10.3 GiB** total GPU memory. This is capacity/recall evidence, not proof of large-task reasoning quality.
+Research date: **2026-10-21**. Baseline: **16 GB VRAM**, one inference slot, native Windows. Qwen3.5-9B Q4_K_M and Gemma-4-12B-IT Q4_K_M both loaded a **262,144-token context** and processed roughly **235,000 prompt tokens**. The default is **200k (204,800 tokens)** for both to leave more VRAM headroom. Exact recall and coding results are separate measurements; see [the model comparison](docs/CONTEXT-COMPARISON.md).
 
 ## Run it
 
-Open a new terminal and type `pia`. It starts the selected local llama.cpp model, prepares the isolated profile, launches Pi and stops its owned server after Pi exits. Default: **32k context**, text-only Qwen, destructive-action guard and Windows-adapted TypeScript LSP. Ordinary commits run automatically. One shared inference lock prevents overlapping sessions. No login or manual model selection is required.
+Open a new terminal and type `pia`. It starts the selected local llama.cpp model, prepares the isolated profile, launches Pi and stops its owned server after Pi exits. Default: **200k context**, text-only Qwen, destructive-action guard and Windows-adapted TypeScript LSP. Ordinary commits run automatically. One shared inference lock prevents overlapping sessions. No login or manual model selection is required.
+
+Reasoning is **on by default**, with a 2,048-token thinking budget and up to 8,192 total generated tokens. The endpoint is **127.0.0.1:48763**. Pi shows explicit used/total context tokens in its status line. See [the full launcher commands](docs/LAUNCHER.md); `pia --dry-run` prints the exact local paths and argument arrays.
 
 ```powershell
 pia
+pia --local-model qwen
+pia --local-model gemma
+pia --local-model qwen --context 131072
 pia --context 102400
 pia --profile native
 pia --profile research --context 102400
 pia --profile desktop
+pia --profile web
 pia --browser
 pia --cwd C:\path\to\your\project
 pia --dry-run
@@ -35,6 +41,7 @@ Research and desktop tools are optional profiles. Research defaults to one quick
 - [Hooks, permissions, worktrees and browser UI](docs/HOOKS-AND-ISOLATION.md).
 - [Existing harnesses and LSP comparison](docs/EXISTING-HARNESSES.md).
 - [Automated evals and measured local results](docs/EVALS.md).
+- [Qwen versus Gemma: context, VRAM, speed and exact recall](docs/CONTEXT-COMPARISON.md).
 
 ## Recommendation
 

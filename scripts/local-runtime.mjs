@@ -8,10 +8,18 @@ export const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '
 export const exec = promisify(execFile);
 export const nodeExe = path.join(root, 'runtime/node/node.exe');
 export const piEntry = path.join(root, 'node_modules/@earendil-works/pi-coding-agent/dist/bundle/cli.js');
-export async function machine() {
+export async function machine(selection) {
   const config = JSON.parse(await readFile(path.join(root, 'machine.local.json'), 'utf8'));
+  if (selection && !['qwen','gemma'].includes(selection)) throw new Error('--local-model must be qwen or gemma');
+  if (selection) {
+    config.ModelFile = path.join(config.ModelsDirectory, selection === 'qwen' ? 'unsloth/Qwen3.5-9B-GGUF/Qwen3.5-9B-Q4_K_M.gguf' : 'unsloth/gemma-4-12b-it-GGUF/gemma-4-12b-it-Q4_K_M.gguf');
+    config.ModelId = selection + '-local';
+  }
   config.ModelFile ||= path.join(config.ModelsDirectory, 'unsloth/Qwen3.5-9B-GGUF/Qwen3.5-9B-Q4_K_M.gguf');
   config.ModelId ||= 'qwen-local';
+  config.Reasoning ??= true;
+  config.ReasoningBudget ??= 2048;
+  config.MaxTokens ??= 8192;
   return config;
 }
 export function environment(extra = {}) {
@@ -42,10 +50,14 @@ export async function acquireInferenceLock() {
   await handle.writeFile(JSON.stringify({ pid: process.pid, started: new Date().toISOString() }));
   return async () => { await handle.close(); await unlink(lockPath).catch(() => {}); };
 }
+export function generationLimits(config) {
+  const maxTokens = Math.min(config.MaxTokens || 8192, Math.floor(config.ContextSize / 4));
+  return { maxTokens, reasoningBudget: config.Reasoning === false ? 0 : Math.min(config.ReasoningBudget ?? 2048, maxTokens - Math.min(2048, Math.floor(maxTokens / 2))) };
+}
 export function serverArguments(config) {
   return ['--model', config.ModelFile, '--alias', config.ModelId, '--host', '127.0.0.1', '--port', String(config.Port),
-    '--jinja', '--chat-template-kwargs', '{"enable_thinking":false}', '--reasoning-budget', '0',
-    '-ngl', String(config.GpuLayers), '-c', String(config.ContextSize), '--parallel', '1'];
+    '--jinja', '--reasoning', config.Reasoning === false ? 'off' : 'on', '--reasoning-budget', String(generationLimits(config).reasoningBudget), '--fit', 'off', '--no-context-shift',
+    '-ngl', String(config.GpuLayers), '-c', String(config.ContextSize), '--parallel', '1', ...(config.ExtraServerArgs || [])];
 }
 async function probe(config) {
   const response = await fetch(config.RouterUrl + '/v1/models', { signal: AbortSignal.timeout(1500) });
@@ -55,14 +67,14 @@ async function probe(config) {
   const propsResponse = await fetch(config.RouterUrl + '/props', { signal: AbortSignal.timeout(1500) });
   if (!propsResponse.ok) throw new Error('PORT_IN_USE_WITH_UNVERIFIABLE_CONFIGURATION');
   const props = await propsResponse.json();
-  if (props.default_generation_settings?.n_ctx !== config.ContextSize || props.total_slots !== 1 || path.resolve(props.model_path || '') !== path.resolve(config.ModelFile)) throw new Error('PORT_IN_USE_WITH_DIFFERENT_CONFIGURATION');
+  if (props.default_generation_settings?.n_ctx !== config.ContextSize || props.total_slots !== 1 || path.resolve(props.model_path || '') !== path.resolve(config.ModelFile)) throw new Error(`PORT_IN_USE_WITH_DIFFERENT_CONFIGURATION: requested context ${config.ContextSize}, reported context ${props.default_generation_settings?.n_ctx}; check model native limits and slot configuration`);
   return data;
 }
 export async function ensureServer(config) {
-  try { await probe(config); return { owned: false, stop: async () => {} }; }
+  try { await probe(config); throw new Error('PORT_IN_USE_WITH_UNVERIFIABLE_REASONING_SETTINGS: a server is already running; stop that server before using pia so the requested thinking budget can be applied'); }
   catch (error) { if (error.message.startsWith('PORT_IN_USE')) throw error; }
   await access(config.ModelFile);
-  const logPath = path.join(root, '.state/llama-server.log');
+  const logPath = config.LogPath || path.join(root, '.state/llama-server.log');
   const log = fs.openSync(logPath, 'a');
   const server = spawn(config.LlamaExecutable, serverArguments(config), { windowsHide: true, stdio: ['ignore', log, log] });
   fs.closeSync(log);
@@ -90,6 +102,7 @@ export async function prepareProfile(name, config, cwd = root) {
     standard: ['bash-policy', 'windows-policy', 'lsp-windows'],
     research: ['bash-policy', 'windows-policy', 'lsp-windows', '@lincoln504/pi-research'],
     desktop: ['bash-policy', 'windows-policy', 'lsp-windows', '@injaneity/pi-computer-use'],
+    web: ['bash-policy', 'windows-policy', 'lsp-windows', '@arcanemachine/pi-web-search'],
   };
   if (!profiles[name]) throw new Error(`Unknown profile ${name}. Choose ${Object.keys(profiles).join(', ')}`);
   const agentDir = path.join(root, '.state/profiles', name);
@@ -97,10 +110,12 @@ export async function prepareProfile(name, config, cwd = root) {
   const packages = profiles[name].filter(value => !['windows-policy','bash-policy','lsp-windows'].includes(value)).map(value => path.join(root, 'node_modules', value));
   const settings = { defaultTools: ['read', 'powershell', 'edit', 'write', 'grep', 'find', 'ls'], packages,
     extensions: [ ...(profiles[name].includes('windows-policy') ? [path.join(root, 'extensions/windows-destructive-policy.mjs')] : []), ...(profiles[name].includes('bash-policy') ? [path.join(root, 'extensions/bash-destructive-guard.ts')] : []) ],
-    compaction: { enabled: true, reserveTokens: 4096, keepRecentTokens: 6000 }, branchSummary: { reserveTokens: 4096 } };
+    compaction: { enabled: true, reserveTokens: generationLimits(config).maxTokens, keepRecentTokens: Math.min(6000, Math.floor(config.ContextSize / 4)) }, branchSummary: { reserveTokens: generationLimits(config).maxTokens } };
   if (profiles[name].includes('lsp-windows')) settings.extensions.push(await prepareWindowsLsp());
   if (profiles[name].some(value => ['pi-lsp-extension','lsp-windows'].includes(value))) settings.defaultTools.push('lsp_diagnostics','lsp_definition','lsp_hover','lsp_references','lsp_rename');
+  if (profiles[name].includes('@arcanemachine/pi-web-search')) settings['pi-web-search'] = { backends: ['duckduckgo'], summarizationEnabled: false, readMaxChars: 3000, readMaxLimitChars: 8000, searchMaxResults: 5, searchMaxLimitResults: 10, searchMaxOutputBytes: 8000 };
   if (name !== 'native') {
+    settings.extensions.push(path.join(root, 'extensions/context-status.mjs'));
     settings.extensions.push(path.join(root, 'extensions/tool-budget.mjs'));
     settings.skills = [path.join(root, '.state/.agents/skills')];
     settings.prompts = [path.join(root, 'prompts')];
@@ -108,7 +123,7 @@ export async function prepareProfile(name, config, cwd = root) {
   await writeFile(path.join(agentDir, 'settings.json'), JSON.stringify(settings, null, 2));
   await writeFile(path.join(agentDir, 'models.json'), JSON.stringify({ providers: { 'local-llama': {
     baseUrl: config.RouterUrl + '/v1', api: 'openai-completions', apiKey: 'local-only', models: [{
-      id: config.ModelId, name: 'Local Qwen (16 GB baseline)', reasoning: false, input: ['text'], contextWindow: config.ContextSize, maxTokens: 2048,
+      id: config.ModelId, name: `Local ${config.ModelId} (16 GB baseline)`, reasoning: config.Reasoning !== false, input: ['text'], contextWindow: config.ContextSize, maxTokens: generationLimits(config).maxTokens,
       cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 } }]
   } } }, null, 2));
   if (profiles[name].some(value => ['pi-lsp-extension','lsp-windows'].includes(value))) await prepareLsp(cwd);

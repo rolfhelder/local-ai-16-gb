@@ -1,24 +1,24 @@
 # Local model operating playbook
 
-Runtime update: the lab now uses Node-based Pi 1.3.0 because the standalone executable exited silently with Pi Research during extension loading. See [installed stack](INSTALLED-STACK.md). The llama.cpp and model-sizing guidance remains unchanged.
+Runtime update: the lab uses Node-based Pi 1.3.0 because the standalone executable exited silently with Pi Research during extension loading. Both downloaded models now default to **204,800 context**, with reasoning enabled. Hardware capacity, throughput and recall are measured separately in [the model comparison](CONTEXT-COMPARISON.md). See [the launcher](LAUNCHER.md) for the current process commands.
 
 ## Baseline and sizing
 
 Use **16 GB VRAM** as the present bottleneck. Target-PC RAM was reported as 32 GB; current-PC RAM and both actual GPU memory totals should be measured before tuning. The destination's reported 24 GB is not needed to run the baseline.
 
-The existing download manifest queues Qwen3.5-9B Q4_K_M (~5.68 GB weights, decimal) and Gemma 4 12B Q4_K_M (~7.12 GB), each with an mmproj file. These are existing candidates, not a claim that they are today's best models. Start with Qwen to avoid another download and compare Gemma later using identical tasks. [Qwen quantization source](https://huggingface.co/unsloth/Qwen3.5-9B-GGUF).
+Qwen3.5-9B Q4_K_M (~5.68 GB weights, decimal) and Gemma 4 12B Q4_K_M (~7.12 GB) are downloaded and hash-verified, each with an mmproj file. Projectors are not loaded in these text-only measurements. These are existing candidates, not a claim that they are today's best models. [Qwen quantization source](https://huggingface.co/unsloth/Qwen3.5-9B-GGUF).
 
 Weight size is only part of memory use. Leave room for runtime buffers, attention/recurrent state, vision processing, desktop VRAM use, and the loaded context. The architecture, quantization, cache precision and number of slots all matter. A nominal 100k context specification does not prove that 100k fits in available memory or is useful for research.
 
-Initial experiment: 16,384 context tokens, one slot, one loaded model. If stable, test 32,768 on the same tasks. Increase only after recording memory and latency. This is a conservative starting experiment, not a fit guarantee. On a later 24 GB machine, rerun the measurements before selecting a larger model or longer context.
+The initial experiments started at 16,384 tokens. Both models have since loaded 262,144 and processed roughly 235k input tokens on this 16 GB GPU. The default is now 200k (204,800 tokens) for both to leave more VRAM headroom, as requested. Repeat the measurements on the destination PC; capacity does not establish retrieval or reasoning quality.
 
 ## Native integration first
 
-The launcher starts llama.cpp in router mode: no `-m` or `-hf`; a model directory, `--no-models-autoload`, `--models-max 1`, `--jinja`, loopback binding, explicit context and one parallel slot. In Pi, configure `/login llama.cpp`, load through `/llama`, then select through `/model`. Keep the provider base URL at `http://127.0.0.1:8080`, without `/v1`, for this native router workflow. [Pi llama.cpp guide](https://github.com/earendil-works/pi/blob/main/packages/coding-agent/docs/llama-cpp.md).
+The current `pia` launcher starts a single model on port **48763**, writes an isolated OpenAI-compatible provider at `http://127.0.0.1:48763/v1`, and selects it automatically. No login or manual load is needed. The earlier `Start-Llama.ps1` / `Start-Pi.ps1` scripts retain a manual router alternative; that workflow uses the root endpoint without `/v1`. Do not run it alongside `pia`. [Pi llama.cpp guide](https://github.com/earendil-works/pi/blob/main/packages/coding-agent/docs/llama-cpp.md).
 
-If the router cannot be used, a separate `models.json` OpenAI-compatible configuration is a fallback. Its Chat Completions base usually ends in `/v1`; its model ID must match the server. Do not apply the fallback's URL conventions to the native router setup. Configure the advertised context to match the server allocation. [Compatible endpoint reference](https://github.com/earendil-works/pi/blob/main/packages/coding-agent/docs/models.md).
+`pia` generates `models.json` with the selected alias, context and output limits matching the server. Its provider is `local-llama`. The endpoint convention differs from the optional native router provider. [Compatible endpoint reference](https://github.com/earendil-works/pi/blob/main/packages/coding-agent/docs/models.md).
 
-The installed b11669 build recognizes the launch flags, but its CUDA 12.4 asset has not been inference-tested here. Do not assume that copying the same backend build is optimal for a different GPU generation. Validate a suitable llama.cpp backend and driver on each PC; preserve the working version/hash afterward. [Builds](https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md), [server reference](https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md).
+The installed b11669 CUDA build has passed local inference and tool-use trials with both models. Validate a suitable llama.cpp backend and driver on the destination PC; preserve the working version/hash afterward. [Builds](https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md), [server reference](https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md).
 
 ## Tool use before intelligence benchmarks
 
