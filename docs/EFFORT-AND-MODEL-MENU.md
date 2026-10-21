@@ -9,6 +9,7 @@ Implemented 2026-10-21 as a native Pi extension, not a skill or prompt. Start a 
 /effort low
 /effort medium
 /effort high
+/effort high --save     also save a default for future sessions
 /effort off            Qwen, Gemma and OmniCoder only
 ```
 
@@ -38,7 +39,7 @@ The hook changes actual outgoing `reasoning_budget_tokens` and template paramete
 
 ## Persistence and model switching
 
-Effort selections persist per model in ignored `.state/effort-preferences.json`; no model weights or user prompt is modified. Initial model selection remains `pia --model NAME`, with OmniCoder as default. `/model NAME` requests a controlled restart from the parent launcher: stop the current Pi process, unload the owned server, load the selected GGUF, then resume the latest session in the same project with the selected model. The shared inference lock is held throughout. Model switching leaves the launcher default unchanged.
+Effort selections apply to the current session by default. `/effort high --save` explicitly saves a per-model default in ignored `.state/effort-preferences.json`; no model weights or user prompt is modified. Initial model selection remains `pia --model NAME`, with OmniCoder as default. `/model NAME` requests a controlled restart from the parent launcher: stop the current Pi process, unload the owned server, load the selected GGUF, then resume the latest session in the same project with the selected model. The shared inference lock is held throughout. Model switching leaves the launcher default unchanged.
 
 Changing effort while streaming is declined; stop the response first. A model switch is also allowed only while idle. A client not launched by `pia` receives the relevant `pia --model NAME` command instead of trying to take ownership of an unrelated server. pi-app's own model selector and bundled SDK are separate from the CLI editor; that GUI has been downloaded, but has not been configured or validated against the lab profile yet.
 
@@ -47,6 +48,6 @@ The user-created `prompts/effort.md` was preserved, but is excluded from generat
 ## Validation
 
 - Unit checks cover budget changes, supported levels, GPT-OSS off rejection, answer space and `/model` routing.
-- A real Pi RPC process registered the commands, changed/persisted effort without a provider call, and sent a 4,096-token budget on the next request to a scripted local endpoint. [Result](../evaluation/EFFORT-RUNTIME-2026-10-21.json).
+- A real Pi RPC process registered the commands, changed effort without a provider call or a saved preference, sent a 4,096-token budget on the next request to a scripted local endpoint, and separately verified explicit `--save`. [Result](../evaluation/EFFORT-RUNTIME-2026-10-21.json).
 - A real terminal UI accepted normal input through the custom editor and displayed the effort footer. [Result](../evaluation/EFFORT-TUI-2026-10-21.json).
 - A live llama.cpp/Pi test loaded OmniCoder, generated a short conversation, switched to Gemma, verified the server alias and preserved message history, then exited cleanly. [Result](../evaluation/MODEL-SWITCH-2026-10-21.json). This was a lifecycle test at 32k, not another coding-quality benchmark.

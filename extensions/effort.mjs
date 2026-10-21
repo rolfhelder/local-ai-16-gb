@@ -12,16 +12,16 @@ export default function(pi){
  const describe=(model,level)=>`${names[model]||model}: ${level}; ${model==='gpt-oss'?'native effort + ':'local '}thinking budget ${customBudget??budgets[level]} tokens; total response cap ${process.env.PI_LOCAL_OUTPUT_CAP||8192}.`;
  const notify=(ctx,text)=>ctx.ui.notify(text,'info');
  const showStatus=ctx=>{if(ctx.mode==='tui')ctx.ui.setStatus('01-effort',`Effort: ${canonical(pi.getThinkingLevel())} [${modelKey(ctx.model?.id)==='gpt-oss'?'native + budget':'budget preset'}]`);};
- const set=async(level,ctx)=>{
+ const set=async(level,ctx,persist=false)=>{
   const model=modelKey(ctx.model?.id);level=canonical(level.trim().toLowerCase());
   if(!names[model]||!levels(model).includes(level)){notify(ctx,`Supported: ${levels(model).join(', ')}. ${model==='gpt-oss'?'GPT-OSS has native low/medium/high; reasoning off is unsupported.':'These are local token-budget presets, not native model effort levels.'}`);return;}
   if(!ctx.isIdle()){notify(ctx,'Stop the current response before changing effort.');return;}
   customBudget=undefined;pi.setThinkingLevel(level);previous=level;
-  const saved=JSON.parse(await readFile(preferences,'utf8').catch(()=>'{}'));saved[model]=level;await writeFile(preferences,JSON.stringify(saved,null,2)+'\n');
-  showStatus(ctx);notify(ctx,describe(model,level)+' Saved for future pia sessions.');
+  if(persist){const saved=JSON.parse(await readFile(preferences,'utf8').catch(()=>'{}'));saved[model]=level;await writeFile(preferences,JSON.stringify(saved,null,2)+'\n');}
+  showStatus(ctx);notify(ctx,describe(model,level)+(persist?' Saved for future pia sessions.':' Applied to the current session only.'));
  };
  pi.registerCommand('effort',{description:'Set real local thinking effort: off/low/medium/high; no argument opens picker',getArgumentCompletions:prefix=>Object.keys(budgets).filter(x=>x.startsWith(prefix)).map(value=>({value,label:value})),handler:async(args,ctx)=>{
-  const model=modelKey(ctx.model?.id);if(args.trim()){await set(args,ctx);return;}
+  const model=modelKey(ctx.model?.id);if(args.trim()){const parts=args.trim().split(/\s+/);if(parts.length>2||(parts.length===2&&parts[1]!=='--save')){notify(ctx,'Usage: /effort off|low|medium|high [--save]. Without --save, changes apply to this session only.');return;}await set(parts[0],ctx,parts[1]==='--save');return;}
   const level=await ctx.ui.select(describe(model,canonical(pi.getThinkingLevel())),levels(model).map(x=>`${x} — ${budgets[x]} thinking tokens`));
   if(level)await set(level.split(' ')[0],ctx);
  }});

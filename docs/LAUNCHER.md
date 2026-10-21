@@ -41,4 +41,4 @@ GPT-OSS profiles load a local token-budget compatibility hook. Before a request,
 
 `--model` selects the local weights and the matching Pi endpoint together. `--local-model` remains accepted as a compatibility alias for old commands. Plain `pia` selects OmniCoder at 204,800 tokens with reasoning enabled; this default is in tracked launcher code and carries to a new PC.
 
-In a fresh standard session, `/model` opens the local-model and effort menu; `/effort low|medium|high` changes the real next-request thinking budget and persists the choice. See [model/effort controls and capability distinctions](EFFORT-AND-MODEL-MENU.md).
+In a fresh standard session, `/model` opens the local-model and effort menu; `/effort low|medium|high` changes the real next-request thinking budget for this session. Add `--save` to explicitly persist a per-model default. See [model/effort controls and capability distinctions](EFFORT-AND-MODEL-MENU.md).

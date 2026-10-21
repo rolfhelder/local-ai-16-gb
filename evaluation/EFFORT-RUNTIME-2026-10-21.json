@@ -1,7 +1,8 @@
 {
   "commandsRegistered": true,
   "noLlmCallForEffort": true,
-  "effortPersisted": true,
+  "sessionOnlyByDefault": true,
+  "explicitSavePersists": true,
   "highBudgetTransmitted": 4096,
   "modelRestartRequested": true,
   "stderr": ""
