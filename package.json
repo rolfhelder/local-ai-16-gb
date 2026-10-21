@@ -1,0 +1,7 @@
+{
+  "name": "rolfhelder-pi-local-lab",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Windows local-model Pi research and reusable workflow prompts",
+  "pi": { "prompts": ["./prompts"] }
+}

@@ -1,0 +1,30 @@
+[
+  {
+    "Repo": "unsloth/Qwen3.5-9B-GGUF",
+    "SHA256": "03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+    "Size": 5680522464,
+    "Revision": "3885219b6810b007914f3a7950a8d1b469d598a5",
+    "File": "Qwen3.5-9B-Q4_K_M.gguf"
+  },
+  {
+    "Repo": "unsloth/Qwen3.5-9B-GGUF",
+    "SHA256": "f70dc3509053962b0d0d3ee8a7eacebf5d60aa560cad78254ae8698516ae029f",
+    "Size": 918166080,
+    "Revision": "3885219b6810b007914f3a7950a8d1b469d598a5",
+    "File": "mmproj-F16.gguf"
+  },
+  {
+    "Repo": "unsloth/gemma-4-12b-it-GGUF",
+    "SHA256": "0a270ec9fe6b34f4a0d33992b6135117b484ebc4766ab76b51d4ae8c457e4c42",
+    "Size": 7121861440,
+    "Revision": "fc034cfff751157913579611efad8462ac1be606",
+    "File": "gemma-4-12b-it-Q4_K_M.gguf"
+  },
+  {
+    "Repo": "unsloth/gemma-4-12b-it-GGUF",
+    "SHA256": "91f086971e56d7a7d8d39e271873fccdb49541bd259d6e02c401a4f1cb7a219e",
+    "Size": 175115840,
+    "Revision": "fc034cfff751157913579611efad8462ac1be606",
+    "File": "mmproj-F16.gguf"
+  }
+]

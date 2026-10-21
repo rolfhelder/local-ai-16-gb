@@ -1,0 +1,10 @@
+{
+  "PiExecutable": "C:\\AI\\pi\\pi.exe",
+  "LlamaExecutable": "C:\\AI\\llama.cpp\\llama-server.exe",
+  "ModelsDirectory": "C:\\AI\\models",
+  "RouterUrl": "http://127.0.0.1:8080",
+  "Port": 8080,
+  "ContextSize": 16384,
+  "GpuLayers": 999,
+  "ParallelSlots": 1
+}

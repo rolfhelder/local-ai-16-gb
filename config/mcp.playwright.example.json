@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "browser": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@REPLACE_WITH_TESTED_VERSION", "--browser", "msedge", "--isolated"],
+      "exposure": "deferred",
+      "enabled": false,
+      "description": "Browser navigation and accessibility snapshots for testing personal software"
+    }
+  }
+}

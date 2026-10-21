@@ -1,0 +1,10 @@
+{
+  "defaultTools": ["read", "powershell", "edit", "write", "grep", "find", "ls"],
+  "compaction": {
+    "enabled": true,
+    "reserveTokens": 4096,
+    "keepRecentTokens": 6000
+  },
+  "branchSummary": { "reserveTokens": 4096 },
+  "packages": []
+}
