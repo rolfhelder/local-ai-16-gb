@@ -60,3 +60,9 @@ Playwright CLI is the chosen browser route. The disabled MCP example is retained
 The repository is initialized on `main`. No remote is configured. Later: install GitHub CLI, authenticate as `rolfhelder`, inspect `git status` and tracked files, choose visibility (private is a sensible initial choice), make the initial commit if still needed, then create/push `pi-local-lab`. Do not put private backups into GitHub just because the repository is private.
 
 No license was selected for the user's original work; decide before public distribution. Upstream components retain their own licenses. No third-party source code has been vendored here.
+
+## Shell starting directory and GUI download
+
+This PC has separate `C:\Users\heyde\Documents` and `C:\Users\heyde\OneDrive\Documents` directories. The workspace is in the latter, under `Code`. `scripts/Set-PowerShellStartDirectory.ps1` installs a marked startup block in all-host PowerShell 7 and Windows PowerShell profiles in both possible Documents roots, preserving existing content with a backup. It changes a default Home/Documents/System32 start to the workspace parent Code directory, while preserving an explicitly selected project working directory. Run it again on the new PC; the target is derived from the clone location, or pass `-CodeDirectory PATH`. The current Windows PowerShell execution policy was already RemoteSigned and was not changed. A fresh Windows PowerShell launched from Home was verified to start in the actual Code folder.
+
+`Download-PiApp.ps1` recreates the pinned portable GUI download. Effort selections are private local preferences under `.state/effort-preferences.json`; back them up separately if desired. [Model and effort controls](EFFORT-AND-MODEL-MENU.md).

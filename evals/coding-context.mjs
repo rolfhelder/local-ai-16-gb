@@ -49,6 +49,7 @@ try {
         const publicTest=publicSource(task);await writeFile(path.join(cwd,'check.cjs'),publicTest);await writeFile(path.join(cwd,'README.md'),spec);
         const hidden=path.join(base,`${model}-${task.id}-${condition}-${repeat}-grader.cjs`);await writeFile(hidden,hiddenSource(task));
         const prepared=await prepareProfile('standard',config,cwd);
+        prepared.env.PI_EFFORT_PREFERENCES=path.join(cwd,'effort-preferences.json');
         // Prevent a small native window from silently discarding the 100k prefix.
         prepared.settings.compaction.enabled=false;
         await writeFile(path.join(prepared.env.PI_CODING_AGENT_DIR,'settings.json'),JSON.stringify(prepared.settings,null,2));

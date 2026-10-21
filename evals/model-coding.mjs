@@ -13,7 +13,7 @@ try {
     await writeFile(path.join(cwd,'math.cjs'),'exports.add = (a, b) => a - b;\n');
     const checkSource='const assert=require("node:assert/strict");const {add}=require("./math.cjs");assert.equal(add(2,3),5);assert.equal(add(-2,3),1);assert.equal(add(0,0),0);console.log("3 assertions passed");\n';
     await writeFile(path.join(cwd,'check.cjs'),checkSource);
-    const prepared=await prepareProfile('standard',config,cwd); server=await ensureServer(config);
+    const prepared=await prepareProfile('standard',config,cwd);prepared.env.PI_EFFORT_PREFERENCES=path.join(cwd,'effort-preferences.json'); server=await ensureServer(config);
     const entry={name,context:32768,reasoning:true,reasoningBudget:config.ReasoningBudget}; const started=performance.now();
     try {
       const run=await new PiIntegrationTest({testName:name+'-repair',transport:'rpc',cwd,artifactsDir:path.join(base,'traces'),

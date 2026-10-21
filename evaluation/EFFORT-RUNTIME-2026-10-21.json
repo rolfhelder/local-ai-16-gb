@@ -1,0 +1,8 @@
+{
+  "commandsRegistered": true,
+  "noLlmCallForEffort": true,
+  "effortPersisted": true,
+  "highBudgetTransmitted": 4096,
+  "modelRestartRequested": true,
+  "stderr": ""
+}

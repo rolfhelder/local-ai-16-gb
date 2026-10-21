@@ -1,6 +1,6 @@
 import { spawn, execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import { readFile, writeFile, mkdir, open, unlink, access } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, open, unlink, access,readdir } from 'node:fs/promises';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -129,19 +129,21 @@ export async function prepareProfile(name, config, cwd = root) {
   if (name !== 'native') {
     settings.extensions.push(path.join(root, 'extensions/context-status.mjs'));
     settings.extensions.push(path.join(root, 'extensions/tool-budget.mjs'));
+    settings.extensions.push(path.join(root,'extensions/effort.mjs'));
     settings.skills = [path.join(root, '.state/.agents/skills')];
-    settings.prompts = [path.join(root, 'prompts')];
+    settings.prompts = (await readdir(path.join(root,'prompts'))).filter(name=>name.endsWith('.md')&&name!=='effort.md').map(name=>path.join(root,'prompts',name));
   }
   await writeFile(path.join(agentDir, 'settings.json'), JSON.stringify(settings, null, 2));
   await writeFile(path.join(agentDir, 'models.json'), JSON.stringify({ providers: { 'local-llama': {
     baseUrl: config.RouterUrl + '/v1', api: 'openai-completions', apiKey: 'local-only', models: [{
       id: config.ModelId, name: `Local ${config.ModelId} (16 GB baseline)`, reasoning: config.Reasoning !== false, input: ['text'], contextWindow: config.ContextSize, maxTokens: generationLimits(config).maxTokens,
+      thinkingLevelMap:{off:config.ModelId==='gpt-oss-local'?null:'off',minimal:null,low:'low',medium:'medium',high:'high',xhigh:null,max:null},
       cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 } }]
   } } }, null, 2));
   if (profiles[name].some(value => ['pi-lsp-extension','lsp-windows'].includes(value))) await prepareLsp(cwd);
   const guardRules = await readFile(path.join(root, 'config/guard.rules.json'), 'utf8');
   return { agentDir, settings, env: environment({ PI_CODING_AGENT_DIR: agentDir, PI_GUARD: guardRules, PI_RESEARCH_MODEL: 'local-llama/' + config.ModelId,
-    PI_LOCAL_TOKENIZER_URL:config.RouterUrl,PI_LOCAL_CONTEXT:String(config.ContextSize),PI_LOCAL_OUTPUT_CAP:String(generationLimits(config).maxTokens),PI_LOCAL_BUDGET_LOG:config.LogPath?config.LogPath+'.budget.jsonl':'' }) };
+    PI_LOCAL_TOKENIZER_URL:config.RouterUrl,PI_LOCAL_CONTEXT:String(config.ContextSize),PI_LOCAL_OUTPUT_CAP:String(generationLimits(config).maxTokens),PI_LOCAL_THINKING_BUDGET:String(generationLimits(config).reasoningBudget),PI_LOCAL_BUDGET_LOG:config.LogPath?config.LogPath+'.budget.jsonl':'' }) };
 }
 export async function prepareWindowsLsp() {
   // Preserve the pinned upstream file. Its adjacent generated copy resolves the same dependencies.

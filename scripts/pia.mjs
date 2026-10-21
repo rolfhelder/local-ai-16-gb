@@ -1,5 +1,7 @@
 import { spawn } from 'node:child_process';
 import path from 'node:path';
+import {randomUUID} from 'node:crypto';
+import {readFile,unlink} from 'node:fs/promises';
 import { root, nodeExe, piEntry, machine, environment, acquireInferenceLock, ensureServer, serverArguments, prepareProfile, exec } from './local-runtime.mjs';
 const args = process.argv.slice(2);
 const value = (flag, fallback) => { const index = args.indexOf(flag); if (index < 0) return fallback; const result = args[index + 1]; args.splice(index, 2); if (!result) throw new Error(`${flag} requires a value`); return result; };
@@ -23,7 +25,9 @@ const cwd = path.resolve(value('--cwd', process.cwd()));
 let release, server;
 try {
   if(requestedModel&&legacyModel&&requestedModel!==legacyModel)throw new Error('Conflicting --model and --local-model selections');
-  const config = await machine(localModel);
+  let selectedModel=localModel,resume=false;
+  for(;;){
+  const config = await machine(selectedModel);
   if(!['f16','q8_0'].includes(kv))throw new Error('--kv must be f16 or q8_0');
   if(kv==='q8_0')config.ExtraServerArgs=[...(config.ExtraServerArgs||[]),'--cache-type-k','q8_0','--cache-type-v','q8_0','--flash-attn','on'];
   if (noReasoning) config.Reasoning = false;
@@ -44,8 +48,11 @@ try {
   if (dryRun) {
     console.log(JSON.stringify({ profile, cwd, executable: nodeExe, pi: piEntry, piArguments: piArgs, model: `local-llama/${config.ModelId}`, server: config.LlamaExecutable, arguments: serverArguments(config), browser, singleSession: true }, null, 2));
   } else {
-    release = await acquireInferenceLock();
+    release ??= await acquireInferenceLock();
     const prepared = await prepareProfile(profile, config, cwd);
+    const restartPath=path.join(root,'.state','pia-restart-'+randomUUID()+'.json');
+    prepared.env.PI_LOCAL_RESTART_REQUEST=restartPath;
+    if(resume&&!piArgs.includes('--continue'))piArgs.push('--continue');
     console.error('pia: preparing one local model; first load can take a little time.');
     server = await ensureServer(config);
     if (probeOnly) console.log(JSON.stringify({ ready: true, owned: server.owned, model: config.ModelId, context: config.ContextSize, profile }));
@@ -61,6 +68,12 @@ try {
         finally { process.off('SIGINT', interrupt); process.off('SIGTERM', interrupt); }
       } finally { if (browser) await exec(nodeExe, [browserEntry, '-s=pia-browser', 'close'], { cwd, env: environment(), windowsHide: true }).catch(() => {}); }
     }
+    await server?.stop();server=undefined;
+    const requested=JSON.parse(await readFile(restartPath,'utf8').catch(()=>'{}'));
+    await unlink(restartPath).catch(error=>{if(error.code!=='ENOENT')throw error;});
+    if(requested.model&&!probeOnly){selectedModel=requested.model;resume=true;continue;}
+  }
+  break;
   }
 } catch (error) { console.error(`pia: ${error.message}`); process.exitCode = 1; }
 finally { await server?.stop(); await release?.(); }

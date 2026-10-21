@@ -40,3 +40,5 @@ OmniCoder uses the verified 9B Q4_K_M file and the same 204,800-token default. G
 GPT-OSS profiles load a local token-budget compatibility hook. Before a request, llama.cpp applies its own template and tokenizes the formatted messages/tools; the response cap uses actual remaining context instead of Pi’s inaccurate first-turn character estimate. The model window remains 131,072. See [four-model results and investigation](CODING-FOUR-MODELS.md). Portable fd/ripgrep are installed by `Bootstrap-Toolchain.ps1` and available in every launcher profile.
 
 `--model` selects the local weights and the matching Pi endpoint together. `--local-model` remains accepted as a compatibility alias for old commands. Plain `pia` selects OmniCoder at 204,800 tokens with reasoning enabled; this default is in tracked launcher code and carries to a new PC.
+
+In a fresh standard session, `/model` opens the local-model and effort menu; `/effort low|medium|high` changes the real next-request thinking budget and persists the choice. See [model/effort controls and capability distinctions](EFFORT-AND-MODEL-MENU.md).
