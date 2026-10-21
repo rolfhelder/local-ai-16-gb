@@ -28,6 +28,8 @@ Keep the model's tool surface small initially. Native read, PowerShell, edit/wri
 
 ## Context and compaction
 
+**Measured update (2026-10-21):** Qwen's completed Q4_K_M hash matches the download plan. Real Pi recall trials passed at 8k, 16k, 32k, 64k and 102,400 context settings, including a 94,460-token prompt at about 10.3 GiB sampled total GPU use. Native read/edit also passed. See EVALS.md for raw usage interpretation and limits. `pia` now manages the direct local endpoint, model selection and cleanup; start with its 32k default and use `--context 102400` deliberately. The older router instructions below are an alternative, not required for `pia`.
+
 The inspected Pi 1.3.0 defaults reserve 16,384 tokens and retain 20,000 recent tokens, which are unsuitable starting values for a 16k experiment. The starter uses reserve 4,096, recent 6,000, and branch-summary reserve 4,096. These are lab choices, not model-vendor tuning recommendations. Bound tool output, keep research evidence on disk, and verify that the model metadata reports the actual available context. [Compaction reference](https://github.com/earendil-works/pi/blob/main/packages/coding-agent/docs/compaction.md).
 
 Long thinking consumes output budget and time. Start with short bounded tasks, preserve the model author's recommended sampling parameters, and change one parameter at a time. Do not copy temperature/reasoning presets across architectures without evidence.

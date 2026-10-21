@@ -1,5 +1,7 @@
 # Research-pass verification — 2026-10-21
 
+**Historical first pass.** Later installation, real-model trials and automated comparisons are recorded in [EVALS.md](../docs/EVALS.md) and [the sanitized baseline](BASELINE-2026-10-21.json). The pending-model and untested-inference statements below describe the earlier check only.
+
 ## Passed
 
 - Observed local Pi package metadata and executable version: `@earendil-works/pi-coding-agent` 1.3.0.

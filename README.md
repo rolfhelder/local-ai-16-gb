@@ -2,7 +2,24 @@
 
 A portable Windows research notebook and starter configuration for Rolf's move from subscription coding agents to Pi + local models.
 
-Research date: **2026-10-21**. Current baseline: **16 GB VRAM**, one inference slot, native Windows. The other PC's reported 24 GB VRAM / 32 GB RAM is a later tuning target. Actual model performance and extension compatibility still require local trials.
+Research date: **2026-10-21**. Baseline: **16 GB VRAM**, one inference slot, native Windows. Qwen3.5-9B Q4_K_M passed real Pi coding and context trials through **94,460 prompt tokens** at a 102,400 context setting, using about **10.3 GiB** total GPU memory. This is capacity/recall evidence, not proof of large-task reasoning quality.
+
+## Run it
+
+Open a new terminal and type `pia`. It starts the selected local llama.cpp model, prepares the isolated profile, launches Pi and stops its owned server after Pi exits. Default: **32k context**, text-only Qwen, destructive-action guard and Windows-adapted TypeScript LSP. Ordinary commits run automatically. One shared inference lock prevents overlapping sessions. No login or manual model selection is required.
+
+```powershell
+pia
+pia --context 102400
+pia --profile native
+pia --profile research --context 102400
+pia --profile desktop
+pia --browser
+pia --cwd C:\path\to\your\project
+pia --dry-run
+```
+
+Research and desktop tools are optional profiles. Research defaults to one quick pass, one query, two scraped URLs and BM25 retrieval; deep teams and standalone subagent modules are not enabled. `--browser` opens a separate headed Edge window through Playwright CLI. An embedded desktop browser is researched separately. Images/projectors and audio transcription are not enabled by this launcher.
 
 ## Read first
 
@@ -15,14 +32,17 @@ Research date: **2026-10-21**. Current baseline: **16 GB VRAM**, one inference s
 - [Ordered next steps](docs/NEXT-STEPS.md): what to do after this research pass.
 - [Installed stack and commands](docs/INSTALLED-STACK.md): pnpm, Playwright CLI, Research and computer use.
 - [Architecture study](docs/ARCHITECTURE-RESEARCH.md): March 2026 Claude Code source, Hermes and Grok Bot.
+- [Hooks, permissions, worktrees and browser UI](docs/HOOKS-AND-ISOLATION.md).
+- [Existing harnesses and LSP comparison](docs/EXISTING-HARNESSES.md).
+- [Automated evals and measured local results](docs/EVALS.md).
 
 ## Recommendation
 
-Start with Pi's existing llama.cpp integration, the Qwen3.5 9B Q4 model already queued for download, and small sequential tasks. Add **one** search extension, transcript retrieval, browser automation, and Windows computer use in separate trials. Use saved Markdown research batches before attempting large agent teams.
+Start with `pia` and small sequential tasks. Add search, transcript retrieval, browser automation and Windows computer use in separate trials. Save Markdown evidence batches for learning and software work. No subagent or plan-mode modules are needed.
 
-The most interesting research package is [@lincoln504/pi-research](https://github.com/Lincoln504/pi-research); its documented 100k+ context requirement makes it an experiment after the small-context baseline works. [Playwright MCP](https://github.com/microsoft/playwright-mcp) offers browser accessibility snapshots without requiring a vision model. The Windows candidate for desktop applications is [@injaneity/pi-computer-use](https://github.com/injaneity/pi-computer-use).
+The installed research candidate is [@lincoln504/pi-research](https://github.com/Lincoln504/pi-research), browser automation uses [Playwright CLI](https://github.com/microsoft/playwright-cli), and Windows computer use uses [@injaneity/pi-computer-use](https://github.com/injaneity/pi-computer-use).
 
-**Setup update:** Playwright CLI 0.1.22, Pi Research 1.7.13 and Pi Computer Use 0.5.1 are installed with locked dependencies. Both extensions load under Node-based Pi 1.3.0. Playwright passed a local form test; the Windows helper passed a protocol diagnostic. Research inference and desktop task performance remain untested. No cloud model or paid search service is configured by these scripts. Internet research still contacts websites/search engines.
+**Setup update:** pinned portable Node/pnpm, Pi 1.3.0, Playwright CLI, Research, computer use, pi-guard and LSP are installed. Combined guard/LSP passes 9/9 current checks; native Pi passes 3/9, exposing the intended gaps. Browser automation passes local DOM/session checks. Research completed one real local quick-mode trial but failed the initial synthesis-quality audit. Desktop action quality, transcripts and ASR remain unvalidated. No cloud model or paid search service is configured; web tools contact websites/search engines.
 
 ## Starter commands
 
@@ -32,17 +52,20 @@ From this folder, use PowerShell:
 .\scripts\Initialize-Lab.ps1
 .\scripts\Bootstrap-Toolchain.ps1
 .\scripts\Setup-Integrations.ps1
+.\scripts\Install-Pia.ps1
 . .\scripts\Activate-Tools.ps1
 .\scripts\Test-Lab.ps1
-.\scripts\Start-Llama.ps1 -DryRun
-.\scripts\Start-Pi.ps1 -DryRun
+.\bin\pia.cmd --dry-run
+pnpm test
+pnpm eval:hooks
+pnpm eval:tools
 ```
 
 Initialization creates ignored `machine.local.json` and `.state/agent/settings.json`. It detects existing sibling `local-ai` assets, or uses ignored `runtime/` and `models/` directories on a new machine. Bootstrap downloads checksum-verified Node and locked pnpm. Integration setup restores locked packages and browser/helper assets, installs the official Playwright skill into the isolated profile, and selects Node-based Pi. The Research browser download is about 1.3 GB. Edit `machine.local.json` for the model/server paths on the new machine.
 
-When a complete model is available, run `Start-Llama.ps1` in one terminal and `Start-Pi.ps1` in another. In Pi use `/login llama.cpp`, `/llama` to load one model, and `/model` to select it. The launcher sets the router URL for that process as well. See the playbook before increasing context.
+`pia` is the primary launcher. The older `Start-Llama.ps1` / `Start-Pi.ps1` router workflow remains an advanced alternative; it requires manual login/load/selection and should not run alongside `pia`. On a moved clone, regenerate local state using setup and register the new `bin` path. Model weights and llama.cpp binaries must be copied/restored separately; they are not in Git.
 
-The launcher uses an isolated Pi profile under `.state/agent`, preserving your existing personal Pi configuration. The scripts restore process environment variables when Pi exits. The profile loads reusable research/teach/build prompts, official Playwright skill instructions, and the two native Pi extensions. Browser work uses CLI; computer use's browser access is disabled in the launcher. Research uses BM25 retrieval and one researcher/worker at a time. Its documented large-context requirement still needs evaluation on the 16 GB baseline.
+`pia` generates separate profiles under `.state/profiles/`. It preserves your personal Pi settings and sets tool/browser/model paths for its child process. Browser work uses CLI, and computer use's browser bridge is disabled. The raw `native`, `guard-module` and `lsp` profiles preserve comparison points; `standard` applies the tested Windows adapters. See the eval guide for remaining limitations.
 
 ## Repository boundaries
 

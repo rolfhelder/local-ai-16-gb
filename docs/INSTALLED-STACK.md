@@ -1,5 +1,7 @@
 # Installed CLI-first stack — 2026-10-21
 
+**Operational update:** `pia` is now the primary launcher with isolated profiles, a destructive-action guard, Windows-adapted LSP and automatic local model startup. See [current evals](EVALS.md) for real Qwen/context/Research evidence and [hooks/isolation](HOOKS-AND-ISOLATION.md) for approvals and browser behavior. Older router commands below remain optional alternatives.
+
 ## Selected versions
 
 | Component | Installed version / route | Verification |

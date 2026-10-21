@@ -175,10 +175,25 @@ importers:
       '@playwright/cli':
         specifier: 0.1.22
         version: 0.1.22
+      pi-guard:
+        specifier: 1.6.0
+        version: 1.6.0(@earendil-works/pi-coding-agent@1.3.0(@aws-sdk/credential-provider-node@3.972.87)(@smithy/signature-v4@5.7.4)(supports-color@7.2.0)(ws@8.22.0))(@earendil-works/pi-tui@1.3.0)(typebox@1.3.27)
+      pi-lsp-extension:
+        specifier: 1.4.0
+        version: 1.4.0(@earendil-works/pi-coding-agent@1.3.0(@aws-sdk/credential-provider-node@3.972.87)(@smithy/signature-v4@5.7.4)(supports-color@7.2.0)(ws@8.22.0))(@earendil-works/pi-tui@1.3.0)(typebox@1.3.27)
     devDependencies:
       '@earendil-works/pi-coding-agent':
         specifier: 1.3.0
         version: 1.3.0(@aws-sdk/credential-provider-node@3.972.87)(@smithy/signature-v4@5.7.4)(supports-color@7.2.0)(ws@8.22.0)
+      pi-coding-agent-test:
+        specifier: 0.1.4
+        version: 0.1.4(@aws-sdk/credential-provider-node@3.972.87)(@smithy/signature-v4@5.7.4)(supports-color@7.2.0)(undici@8.12.3)(ws@8.22.0)
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+      typescript-language-server:
+        specifier: 6.0.2
+        version: 6.0.2
 
 packages:
 
@@ -1052,6 +1067,9 @@ packages:
   '@webgpu/types@0.1.74':
     resolution: {integrity: sha512-lgiI4hbuLcI9unnm2cL/tvCaQU45dp0xcLWJh5uB/9MBGvIA4F8XIk7nSiBeg+K4xWGYwgZKn80LmERI5CxoTA==}
 
+  '@xterm/headless@6.0.0':
+    resolution: {integrity: sha512-5Yj1QINYCyzrZtf8OFIHi47iQtI+0qYFPHmouEfG8dHNxbZ9Tb9YGSuLcsEwj9Z+OL75GJqPyJbyoFer80a2Hw==}
+
   abort-controller@3.0.0:
     resolution: {integrity: sha512-h8lQ8tacZYnR3vNQTgibj+tODHI5/+l06Au2Pcriv/Gmet0eaj4TwWH41sO9wnHDiQsEj19q0drzdWdeAHtweg==}
     engines: {node: '>=6.5'}
@@ -1352,6 +1370,11 @@ packages:
     resolution: {integrity: sha512-buewHzMvYL29jdeQTVILecSaZKnt/RJWjoZCF5OW60Z67/GmSLBkOFM7qh1PI3zFNtJbaZL5eQu1vLfazOwj4g==}
     engines: {node: '>=12.20.0'}
 
+  fsevents@2.3.2:
+    resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
+    engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
+    os: [darwin]
+
   function-bind@1.1.2:
     resolution: {integrity: sha512-7XHNxH7qX9xG5mIwxkhumTox/MIRNcOgDrxWsMt2pAr23WHp6MrRlN7FBSFpCpr+oVO0F744iUgR82nJMfG2SA==}
 
@@ -1634,6 +1657,9 @@ packages:
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
 
+  node-addon-api@7.1.1:
+    resolution: {integrity: sha512-5m3bsyrjFWE1xf7nz7YXdN4udnVtXK6/Yfgn5qnahL6bCkf2yKt4k3nuTKAtT4r3IG8JNR2ncsIMdZuAzJjHQQ==}
+
   node-domexception@1.0.0:
     resolution: {integrity: sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==}
     engines: {node: '>=10.5.0'}
@@ -1658,6 +1684,9 @@ packages:
 
   node-html-parser@6.1.13:
     resolution: {integrity: sha512-qIsTMOY4C/dAa5Q5vsobRpOOvPfC4pB61UVW2uSwZNUp0QU/jCekTal1vMmbO0DgdHeLUJpv/ARmDqErVxA3Sg==}
+
+  node-pty@1.1.0:
+    resolution: {integrity: sha512-20JqtutY6JPXTUnL0ij1uad7Qe1baT46lyolh2sSENDd4sTzKZ4nmAFkeAARDKwmlLjPx6XKRlwRUxwjOy+lUg==}
 
   nth-check@2.1.1:
     resolution: {integrity: sha512-lqjrjmaOoAnWfMmBPL+XNnynZh2+swxiX3WUE0s4yEHI6m+AwrK2UZOimIRl3X/4QctVqS8AiZjFqyOGrMXb/w==}
@@ -1738,6 +1767,26 @@ packages:
     resolution: {integrity: sha512-TL03MdYIJqVuHsOetqDokYotwIIMkcGJNIndLxeutR4uaEcBJqqJeXUgk4k0ytEFNqxLDTBLYUHpn4DnJyl6Kg==}
     engines: {node: '>=18'}
 
+  pi-coding-agent-test@0.1.4:
+    resolution: {integrity: sha512-7SQ41LHXCod6l3Hd+He+QL7C9zvL6eh+gcahU5a3BXHvF6JYVBMOFtmZa0AjXIWbu4zyzxB7zciG2VbHzE8asQ==}
+    engines: {node: '>=22.19.0'}
+    hasBin: true
+
+  pi-guard@1.6.0:
+    resolution: {integrity: sha512-/E+voL3To25QVTFh6ykZ1pSuDYWX3VyF+vy43qtwQCirSsj30fWng/4pByzot1g4pVH8vsenHFAAC/xyxST6kQ==}
+    peerDependencies:
+      '@earendil-works/pi-coding-agent': '*'
+      '@earendil-works/pi-tui': '*'
+      typebox: '*'
+
+  pi-lsp-extension@1.4.0:
+    resolution: {integrity: sha512-FOwGIivoZt5YfVY/LGqQZf4+wPXT+73loKOQ3Lu6zeG2UAPCxelHT21zXG/qCVD32epq8FymH9dJ8EnotXkv4Q==}
+    engines: {node: '>=22.19.0'}
+    peerDependencies:
+      '@earendil-works/pi-coding-agent': '*'
+      '@earendil-works/pi-tui': '*'
+      typebox: '*'
+
   platform@1.3.6:
     resolution: {integrity: sha512-fnWVljUchTro6RiCFvCXBbNhJc2NijN7oIQxbwsyL0buWJPG85v81ehlHI9fXrJsMNgTofEoWIQeClKpgxFLrg==}
 
@@ -1748,6 +1797,11 @@ packages:
 
   playwright-core@1.64.0-alpha-1790635538000:
     resolution: {integrity: sha512-pNwaXirhXMRLaRQs4NQ18EpTdtDoFwyPH9FOaaDC7YXG4hpwE2xmwCic/1srbuExVQC7zT9LJSJpDBAru+Vo9A==}
+    engines: {node: '>=20'}
+    hasBin: true
+
+  playwright@1.62.1:
+    resolution: {integrity: sha512-0M+L3LAD8/nm554LOla9Ayx0j0tmFZ0FBcoQ7F1VuVHpM/XpiC8RcDzBQB8W5+hA8L22THxELzeF+2WcUzvcLg==}
     engines: {node: '>=20'}
     hasBin: true
 
@@ -1898,6 +1952,9 @@ packages:
     resolution: {integrity: sha512-BcDSDW+SIGWVOns1Zm6Yg91q9AEj7eaID0QDY9oIqJD1A8dscNwMcl9Sms2DeuWCNov1X0/oXanHGYQBSLwZsg==}
     engines: {node: ^22.14.0 || >=24.0.0}
 
+  tree-sitter-wasms@0.1.13:
+    resolution: {integrity: sha512-wT+cR6DwaIz80/vho3AvSF0N4txuNx/5bcRKoXouOfClpxh/qqrF4URNLQXbbt8MaAxeksZcZd1j8gcGjc+QxQ==}
+
   ts-algebra@2.0.0:
     resolution: {integrity: sha512-FPAhNPFMrkwz76P7cdjdmiShwMynZYN6SgOujD1urY4oNm80Ou9oMdmbR45LotcKOXoy7wSmHkRFE6Mxbrhefw==}
 
@@ -1911,6 +1968,16 @@ packages:
   typebox@1.3.27:
     resolution: {integrity: sha512-zu+jc1pcy4UiNThxikUr36f0Rybk9PEeCg/NE6adeWr/SKsdNO4EzZHYRDlv2YCVAfj3Odq3dESSo/jNyoBXzA==}
 
+  typescript-language-server@6.0.2:
+    resolution: {integrity: sha512-Ph7Ql+xkUJvMamnkh1h+aKP6HxLR7lrWIYkPn9/LZBkJdJZgtIj7OoVhkDYtQ7zFPTPmqZHOVXaUKGyz9M2q1Q==}
+    engines: {node: '>=22.22.2'}
+    hasBin: true
+
+  typescript@5.9.3:
+    resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
   typical@7.3.0:
     resolution: {integrity: sha512-ya4mg/30vm+DOWfBg4YK3j2WD6TWtRkCbasOJr40CseYENzCUby/7rIvXA99JGsQHeNxLbnXdyLLxKSv3tauFw==}
     engines: {node: '>=12.17'}
@@ -1921,6 +1988,10 @@ packages:
   ua-parser-js@2.0.10:
     resolution: {integrity: sha512-t+3Ktbq0Ies2vaSezfOaWiolH4OigQIO1dk+1xDpOydB1COVPocVYOrEV5rqZ0kFY9XYG1v9LutCyMgYBpABcw==}
     hasBin: true
+
+  unbash@4.0.12:
+    resolution: {integrity: sha512-PnKvRX+Fbxl/usVlTr/31tXIOVAH+8OdC9qaxUQcvurwEnoc3Vk/ipi2Ce8IjMxzK9byfSGdsUBjqqJGc1o5lw==}
+    engines: {node: '>=14'}
 
   undici-types@5.26.5:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
@@ -1939,6 +2010,20 @@ packages:
     resolution: {integrity: sha512-+fdndUTwBP86cVjihTp21hZHo7d6oj1c/47XPA3lL8mM0XHs+C4EkcjmgRsFnFk2f/UONGDy9ItBItmXsLOQHw==}
     engines: {node: '>=22.19.0'}
 
+  vscode-jsonrpc@5.0.1:
+    resolution: {integrity: sha512-JvONPptw3GAQGXlVV2utDcHx0BiY34FupW/kI6mZ5x06ER5DdPG/tXWMVHjTNULF5uKPOUUD0SaXg5QaubJL0A==}
+    engines: {node: '>=8.0.0 || >=10.0.0'}
+
+  vscode-jsonrpc@9.0.3:
+    resolution: {integrity: sha512-qETYf9PCl1lVfwR+oBmMfc4vP2nqLNA35ABxorw3j06+xlKRgDVxbLgKm4Y/xPL0YWdeDjLoI4ImICIT3nB0zQ==}
+    engines: {node: '>=14.0.0'}
+
+  vscode-languageserver-protocol@3.18.4:
+    resolution: {integrity: sha512-CCXbyr99dafRJzJH/0Ryk7ly5T8XPmSR0//OuF2w4m+9JiOin7zcAT5iET8GRE7Z9taFBejb3GbM0a0mbjdbrg==}
+
+  vscode-languageserver-types@3.18.4:
+    resolution: {integrity: sha512-nQsacoiijvl0fRf2q28uFDrAVwRhdCa3QveiF7/CX0r18mLR5FU/1WskSsCKOjmEbtteKUnY8x8Yzxop+k0zwg==}
+
   w3c-xmlserializer@6.0.0:
     resolution: {integrity: sha512-4Nsy8K5Tr6SPDH9jhKJOHf7ChDrc1zufZTVSF7x72hwuEXBqxqk9G6cK+K2NRUtB3iELRJqjXb4JPDMBjMTl2Q==}
     engines: {node: ^22.22.2 || ^24.15.0 || >=26.0.0}
@@ -1950,6 +2035,9 @@ packages:
   web-streams-polyfill@4.0.0-beta.3:
     resolution: {integrity: sha512-QW95TCTaHmsYfHDybGMwO5IJIM93I/6vTRk+daHTWFPhwh+C8Cg7j7XyKrwrj8Ib6vYXe0ocYNrmzY4xAAN6ug==}
     engines: {node: '>= 14'}
+
+  web-tree-sitter@0.24.7:
+    resolution: {integrity: sha512-CdC/TqVFbXqR+C51v38hv6wOPatKEUGxa39scAeFSm98wIhZxAYonhRQPSMmfZ2w7JDI0zQDdzdmgtNk06/krQ==}
 
   webgpu@0.6.2:
     resolution: {integrity: sha512-3L4GfmqJLvYUIEWJngEQY+2HQiUlAFkg8+P8NDDj3Xx5hHHIFO/r8JW+ynfqBj7kHN4mbnwO74uB+lrRtLhp4Q==}
@@ -2904,6 +2992,8 @@ snapshots:
   '@webgpu/types@0.1.74':
     optional: true
 
+  '@xterm/headless@6.0.0': {}
+
   abort-controller@3.0.0:
     dependencies:
       event-target-shim: 5.0.1
@@ -3236,6 +3326,9 @@ snapshots:
     dependencies:
       fetch-blob: 3.2.0
 
+  fsevents@2.3.2:
+    optional: true
+
   function-bind@1.1.2:
     optional: true
 
@@ -3540,6 +3633,8 @@ snapshots:
 
   ms@2.1.3: {}
 
+  node-addon-api@7.1.1: {}
+
   node-domexception@1.0.0: {}
 
   node-fetch@2.7.0:
@@ -3561,6 +3656,10 @@ snapshots:
     dependencies:
       css-select: 5.2.2
       he: 1.2.0
+
+  node-pty@1.1.0:
+    dependencies:
+      node-addon-api: 7.1.1
 
   nth-check@2.1.1:
     dependencies:
@@ -3658,12 +3757,55 @@ snapshots:
 
   pdf-oxide-wasm@0.3.77: {}
 
+  pi-coding-agent-test@0.1.4(@aws-sdk/credential-provider-node@3.972.87)(@smithy/signature-v4@5.7.4)(supports-color@7.2.0)(undici@8.12.3)(ws@8.22.0):
+    dependencies:
+      '@earendil-works/pi-ai': 1.3.0(@aws-sdk/credential-provider-node@3.972.87)(@smithy/signature-v4@5.7.4)(supports-color@7.2.0)(undici@8.12.3)(ws@8.22.0)
+      '@xterm/headless': 6.0.0
+      cross-spawn: 7.0.6
+      node-pty: 1.1.0
+      playwright: 1.62.1
+    transitivePeerDependencies:
+      - '@aws-sdk/credential-provider-node'
+      - '@modelcontextprotocol/sdk'
+      - '@smithy/hash-node'
+      - '@smithy/signature-v4'
+      - bufferutil
+      - kerberos
+      - supports-color
+      - undici
+      - utf-8-validate
+      - ws
+      - zod
+
+  pi-guard@1.6.0(@earendil-works/pi-coding-agent@1.3.0(@aws-sdk/credential-provider-node@3.972.87)(@smithy/signature-v4@5.7.4)(supports-color@7.2.0)(ws@8.22.0))(@earendil-works/pi-tui@1.3.0)(typebox@1.3.27):
+    dependencies:
+      '@earendil-works/pi-coding-agent': 1.3.0(@aws-sdk/credential-provider-node@3.972.87)(@smithy/signature-v4@5.7.4)(supports-color@7.2.0)(ws@8.22.0)
+      '@earendil-works/pi-tui': 1.3.0
+      minimatch: 10.2.6
+      typebox: 1.3.27
+      unbash: 4.0.12
+
+  pi-lsp-extension@1.4.0(@earendil-works/pi-coding-agent@1.3.0(@aws-sdk/credential-provider-node@3.972.87)(@smithy/signature-v4@5.7.4)(supports-color@7.2.0)(ws@8.22.0))(@earendil-works/pi-tui@1.3.0)(typebox@1.3.27):
+    dependencies:
+      '@earendil-works/pi-coding-agent': 1.3.0(@aws-sdk/credential-provider-node@3.972.87)(@smithy/signature-v4@5.7.4)(supports-color@7.2.0)(ws@8.22.0)
+      '@earendil-works/pi-tui': 1.3.0
+      tree-sitter-wasms: 0.1.13
+      typebox: 1.3.27
+      vscode-languageserver-protocol: 3.18.4
+      web-tree-sitter: 0.24.7
+
   platform@1.3.6:
     optional: true
 
   playwright-core@1.62.1: {}
 
   playwright-core@1.64.0-alpha-1790635538000: {}
+
+  playwright@1.62.1:
+    dependencies:
+      playwright-core: 1.62.1
+    optionalDependencies:
+      fsevents: 2.3.2
 
   playwright@1.64.0-alpha-1790635538000:
     dependencies:
@@ -3850,6 +3992,8 @@ snapshots:
     dependencies:
       punycode: 2.3.1
 
+  tree-sitter-wasms@0.1.13: {}
+
   ts-algebra@2.0.0: {}
 
   tslib@2.8.1: {}
@@ -3858,6 +4002,13 @@ snapshots:
     optional: true
 
   typebox@1.3.27: {}
+
+  typescript-language-server@6.0.2:
+    dependencies:
+      vscode-jsonrpc: 5.0.1
+      vscode-languageserver-protocol: 3.18.4
+
+  typescript@5.9.3: {}
 
   typical@7.3.0: {}
 
@@ -3868,6 +4019,8 @@ snapshots:
       detect-europe-js: 0.1.2
       is-standalone-pwa: 0.1.1
       ua-is-frozen: 0.1.2
+
+  unbash@4.0.12: {}
 
   undici-types@5.26.5:
     optional: true
@@ -3880,6 +4033,17 @@ snapshots:
 
   undici@8.12.3: {}
 
+  vscode-jsonrpc@5.0.1: {}
+
+  vscode-jsonrpc@9.0.3: {}
+
+  vscode-languageserver-protocol@3.18.4:
+    dependencies:
+      vscode-jsonrpc: 9.0.3
+      vscode-languageserver-types: 3.18.4
+
+  vscode-languageserver-types@3.18.4: {}
+
   w3c-xmlserializer@6.0.0:
     dependencies:
       xml-name-validator: 5.0.0
@@ -3888,6 +4052,8 @@ snapshots:
 
   web-streams-polyfill@4.0.0-beta.3:
     optional: true
+
+  web-tree-sitter@0.24.7: {}
 
   webgpu@0.6.2(supports-color@7.2.0):
     dependencies:

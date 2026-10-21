@@ -5,3 +5,4 @@ storeDir: .state/pnpm-store
 allowBuilds: {}
 minimumReleaseAgeExclude:
   - '@lincoln504/pi-research@1.7.13'
+  - pi-coding-agent-test@0.1.4

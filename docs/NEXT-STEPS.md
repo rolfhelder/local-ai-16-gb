@@ -11,13 +11,13 @@ See [installed stack](INSTALLED-STACK.md) and [validation](../evaluation/SETUP-2
 
 ## Next operational work
 
-1. Finish and hash-check one queued GGUF; existing downloads are managed separately.
-2. Run baseline coding acceptance with 16 GB VRAM, 16k context and one inference slot.
-3. Run a bounded Research test with an explicitly local model. Check whether quick mode is viable before attempting its documented 100k+ context workflow. Test source accuracy and the BM25 store, including the Arrow peer warning.
+1. Qwen is complete and hash-verified. Native coding and recall trials passed through 94,460 prompt tokens; see EVALS.md. `pia` is installed, default 32k; the guard/LSP standard profile passes its current contract.
+2. Extend coding evals to compile/test/repair cycles and difficult repository tasks. Test compaction and multi-needle retrieval before treating a large context as dependable reasoning capacity.
+3. Research quick mode ran on local Qwen but failed the first source-fidelity audit. Compare a lean direct search/fetch pipeline, add granular provenance/citation graders, and validate the BM25 store before promoting it.
 4. Test a harmless Windows app action and verify it. Helper diagnostics alone do not establish reliable GUI use.
 5. Test transcript retrieval and one complete research → lesson → quiz workflow.
 6. Add durable fact/procedure/task artifacts from the architecture plan before installing more orchestration packages.
-7. Add one-child-at-a-time delegation only when the workflow benefits and model/cancellation tests pass.
+7. Keep subagent modules and plan mode out. Worktrees can isolate sequential tasks using Git alone; see HOOKS-AND-ISOLATION.md. Trial an embedded browser desktop client separately if desired.
 
 ## Before sale / publication
 

@@ -1,5 +1,7 @@
 # Evidence and acceptance tasks
 
+Current implemented suites and measured results are in [EVALS.md](EVALS.md); the broader tasks below remain the acceptance roadmap, not a claim that every capability has passed.
+
 ## Evidence levels
 
 - **Researched:** primary README/docs inspected; claims not run locally.

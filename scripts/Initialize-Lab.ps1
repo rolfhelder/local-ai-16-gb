@@ -19,7 +19,7 @@ if (-not (Test-Path -LiteralPath $configPath)) {
         ModelsDirectory = (Join-Path $assetsRoot 'models')
         RouterUrl = 'http://127.0.0.1:8080'
         Port = 8080
-        ContextSize = 16384
+        ContextSize = 32768
         GpuLayers = 999
         ParallelSlots = 1
     } | ConvertTo-Json | Set-Content -LiteralPath $configPath -Encoding UTF8

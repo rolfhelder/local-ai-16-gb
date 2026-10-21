@@ -3,6 +3,9 @@
 This repository records a Windows-first, local-model setup. Read README.md and docs/VALIDATION.md before changing it.
 
 - Budget for 16 GB VRAM. Start one model and one inference request at a time.
+- Do not add subagent modules or plan mode. Research batches run sequentially.
+- Allow ordinary local commits. Prompt for file/repository deletion, history rewriting and force pushes; guardrails are not an OS sandbox.
+- Start with native Pi conformance failures, then change one module. Keep expected baseline gaps visible. Separate scripted tool tests from real-model evals.
 - Verify installed Pi documentation before adopting examples from old @mariozechner packages. The observed installation is @earendil-works/pi-coding-agent 1.3.0.
 - Distinguish researched, installed, smoke-tested, and task-validated features. Never promote a candidate without evidence.
 - Prefer a small explicit tool surface for small models; add extensions independently and preserve a rollback path.

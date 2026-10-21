@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "rules": ["Same model and fixture per comparison", "One inference session at a time", "Missing tools are failures, not skipped passes", "Scripted tests measure tools/hooks, not model intelligence", "Never score an assistant success claim as evidence"],
+  "capabilities": {
+    "files": ["UTF-8 read", "bounded reads", "exact edit", "ambiguous edit rejection", "outside-file preservation"],
+    "guard": ["allow reads/builds/normal edits/ordinary commits", "ask on file deletion", "nested Bash deletion", "PowerShell aliases", "Git history rewrite", "force push", "Git metadata writes", "no action without approval in headless mode", "no prompt for quoted danger words"],
+    "lsp": ["semantic type diagnostics, not syntax-only fallback", "barrel/alias definition", "cross-file references excluding strings/shadowed symbols", "inferred-type hover", "rename preview leaves files unchanged", "changed-file diagnostics", "Windows server startup", "result-size bounds"],
+    "browser": ["session isolation", "semantic form interaction", "DOM verification", "recovery from stale target", "bounded snapshot", "visible side window distinct from embedded browser"],
+    "search": ["primary-source discovery", "date constraints", "query ambiguity", "fetch plus provenance", "inaccessible-page handling", "redirects", "bounded extraction", "citation-to-claim support", "cache behavior"],
+    "transcripts": ["manual vs automatic captions", "language selection", "timestamp preservation", "missing captions", "external ASR fallback without concurrent LLM/ASR GPU use"],
+    "hooks": ["before-agent customization", "pre-tool block", "post-tool result transform", "turn lifecycle", "settled state", "shutdown cleanup", "failure behavior"],
+    "optional": ["image grounding", "audio transcription", "worktree isolation", "embedded desktop browser"]
+  },
+  "metrics": ["correctness", "tool errors/retries", "result characters", "declared schema characters", "system-prompt characters", "estimated tokens explicitly labeled", "actual input/output/cache tokens in live runs", "duration", "peak VRAM when sampled"],
+  "plannedNotImplementedYet": ["live web-search provider comparisons", "transcript/ASR fixture adapters", "desktop UI action fixtures", "embedded browser GUI automation", "second LSP adapter"]
+}
