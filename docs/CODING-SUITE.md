@@ -1,5 +1,7 @@
 # Coding suite: paired clean and 100k background
 
+For the consolidated comparison and current recommendation, read [the four-model verdict](MODEL-VERDICT.md).
+
 2026-10-21. The original Qwen/Gemma paired run completed 12 trials. OmniCoder and GPT-OSS subsequently completed six trials each. The [four-model results](CODING-FOUR-MODELS.md) include candidate results and the GPT-OSS setup investigation; the original paired evidence below is preserved. Preflight confirmed all three faulty fixtures fail public checks and at least one withheld group, while all three reference repairs pass public checks and 6/6 withheld groups.
 
 ## Observed results

@@ -9,6 +9,10 @@
 
 See [installed stack](INSTALLED-STACK.md) and [validation](../evaluation/SETUP-2026-10-21.md) for commands and limits. CLI/API-first is a recorded project preference.
 
+## Current model recommendation
+
+All four initial suites and the GPT-OSS setup investigation are complete. The provisional primary for the long-context workflow is OmniCoder, with Gemma for general coding and more memory headroom; GPT-OSS is a speed specialist. [Full comparison and verdict](MODEL-VERDICT.md). The next quality step is repeated matched runs under the repaired search environment, followed by real repository tasks and a research/teaching eval. Plain `pia` remains Qwen until a deliberate runtime-default change.
+
 ## Next operational work
 
 1. Qwen and Gemma are hash-verified and both default to 200k (204,800 tokens) to leave headroom below the measured 256k capacity. See [the comparison](CONTEXT-COMPARISON.md). The guard/LSP standard profile passes 9/9; Pi shows absolute context usage.

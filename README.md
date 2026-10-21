@@ -4,6 +4,8 @@ A portable Windows research notebook and starter configuration for Rolf's move f
 
 Research date: **2026-10-21**. Baseline: **16 GB VRAM**, one inference slot, native Windows. Qwen3.5-9B Q4_K_M and Gemma-4-12B-IT Q4_K_M both loaded a **262,144-token context** and processed roughly **235,000 prompt tokens**. The default is **200k (204,800 tokens)** for both to leave more VRAM headroom. Exact recall and coding results are separate measurements; see [the model comparison](docs/CONTEXT-COMPARISON.md).
 
+For this context-heavy workflow, the current provisional recommendation is **OmniCoder**, with **Gemma** as the general-coding and lower-memory alternative. GPT-OSS is fastest but uses more VRAM and showed protocol failures. See [the full four-model comparison and verdict](docs/MODEL-VERDICT.md). Plain `pia` still defaults to Qwen.
+
 ## Run it
 
 Open a new terminal and type `pia`. It starts the selected local llama.cpp model, prepares the isolated profile, launches Pi and stops its owned server after Pi exits. Default: **200k context**, text-only Qwen, destructive-action guard and Windows-adapted TypeScript LSP. Ordinary commits run automatically. One shared inference lock prevents overlapping sessions. No login or manual model selection is required.

@@ -1,5 +1,7 @@
 # Four local coding models and GPT-OSS investigation
 
+For the consolidated comparison and current recommendation, read [the four-model verdict](MODEL-VERDICT.md).
+
 2026-10-21, RTX 4090 Laptop, 16,376 MiB GPU memory, native Windows, Pi 1.3.0 and llama.cpp b11669. One inference slot, reasoning enabled, 2,048 thinking-token budget and 8,192 total response cap. Three disposable repair projects, each clean and with exactly 100,000 unrelated field-journal tokens. Six minutes per trial; preserved tests, all hidden checks and normal completion are required. Single trials are exploratory evidence.
 
 ## Initial results
@@ -23,7 +25,7 @@ The implementation uses llama.cpp's documented [apply-template and tokenize endp
 
 ## Separate recall issue
 
-The initial GPT-OSS 64k recall trial generated reasoning but failed with `The model produced output that does not match the expected peg-native format`. At 128k it returned valid JSON with all five values wrong. These were not allocation failures; the f16 cache loaded successfully, peaking near 15.8 GiB total GPU use. Neither symptom is explained by the coding trial's one-token clamp alone. Recall is being repeated separately, preserving the original [64k/128k evidence](../evaluation/archive/CONTEXT-GPT-OSS-2026-10-21-INITIAL.json). A parsing failure must be reported separately from a wrong answer.
+The initial GPT-OSS 64k recall trial generated reasoning but failed with `The model produced output that does not match the expected peg-native format`. At 128k it returned valid JSON with all five values wrong. These were not allocation failures; the f16 cache loaded successfully, peaking near 15,800 MiB total GPU use. Neither symptom is explained by the coding trial's one-token clamp alone. Recall was repeated separately; the completed controls below preserve the original [64k/128k evidence](../evaluation/archive/CONTEXT-GPT-OSS-2026-10-21-INITIAL.json). A parsing failure must be reported separately from a wrong answer.
 
 OmniCoder passed 5/5 exact recall at each selected window: 65,536 (58.33 TPS, 9,856 MiB), 131,072 (47.03 TPS, 11,968 MiB), 204,800 (38.87 TPS, 14,349 MiB). Its actual prompt occupancy was about 90%. Qwen/Gemma's historical 256k allocation and recall tests used different windows and are preserved in [the context comparison](CONTEXT-COMPARISON.md); their 256k recall was 0/5 each. These results do not establish an allocation maximum for OmniCoder or GPT-OSS.
 
