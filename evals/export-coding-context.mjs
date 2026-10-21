@@ -1,6 +1,7 @@
 import {readdir,readFile,writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {root} from '../scripts/local-runtime.mjs';
+import {codingCases} from './coding-cases.mjs';
 const parent=path.join(root,'.state/evals');
 const folders=(await readdir(parent,{withFileTypes:true})).filter(x=>x.isDirectory()&&/^coding-context-\d+$/.test(x.name)).map(x=>x.name).sort();
 if(!folders.length)throw Error('No coding-context reports');
@@ -20,11 +21,9 @@ for(const trial of report.trials.filter(x=>x.stage==='complete')){
  const text=await readFile(path.join(directory,'partial-trace.jsonl'),'utf8').catch(()=>readFile(path.join(directory,'run.jsonl'),'utf8').catch(()=>''));
  const rows=text.trim().split('\n').filter(Boolean).flatMap(line=>{try{const row=JSON.parse(line);return [row.kind?row.event:row].filter(Boolean);}catch{return [];}});
  const calls=rows.filter(x=>x.type==='tool_call').map(x=>x.event);
- const firstCheck=calls.findIndex(x=>x.toolName==='powershell'&&JSON.stringify(x.input).includes('check.cjs'));
- const firstEdit=calls.findIndex(x=>['edit','write'].includes(x.toolName));
- const check=firstCheck<0?null:calls[firstCheck];
- const result=check?rows.find(x=>x.type==='tool_execution_end'&&x.event?.toolCallId===check.toolCallId)?.event?.result:null;
- const reproduced=firstCheck>=0&&(firstEdit<0||firstCheck<firstEdit)&&(result?.structuredContent?.exit_code>0||result?.isError===true);
+ const sourceFiles=Object.keys(codingCases.find(x=>x.id===trial.case).files);
+ const firstEdit=calls.findIndex(x=>['edit','write'].includes(x.toolName)&&sourceFiles.includes(path.basename((x.input?.path||'').replaceAll('\\','/'))));
+ const reproduced=calls.some((check,index)=>{if((firstEdit>=0&&index>=firstEdit)||check.toolName!=='powershell'||!JSON.stringify(check.input).includes('check.cjs'))return false;const result=rows.find(x=>x.type==='tool_execution_end'&&x.event?.toolCallId===check.toolCallId)?.event?.result;return result?.structuredContent?.exit_code>0||result?.isError===true;});
  if(reproduced!==trial.initialFailureObserved)trial.legacyAssertionOnlyFailureObserved=trial.initialFailureObserved;
  trial.initialFailureObserved=reproduced;trial.initialFailureBeforeEdit=reproduced;
 }
@@ -35,7 +34,7 @@ for(const model of ['qwen','gemma'])for(const condition of ['clean','loaded']){
  summary.push({model,condition,completed:trials.length,passed:trials.filter(x=>x.passed).length,functionallyCorrect:trials.filter(x=>x.functionalPassed).length,agentSettled:trials.filter(x=>x.agentSettled).length,hiddenGroupsPassed:trials.reduce((s,x)=>s+(x.hidden?.passed||0),0),hiddenGroupsGraded:trials.reduce((s,x)=>s+(x.hidden?.total||0),0),durationSeconds:trials.reduce((s,x)=>s+x.durationMs/1000,0),generationTpsMean:generations.length?generations.reduce((s,x)=>s+x.tps,0)/generations.length:null,generationTpsWeighted:milliseconds?generations.reduce((s,x)=>s+Math.max(0,x.tokens-1),0)/(milliseconds/1000):null,peakGpuMiB:trials.length?Math.max(...trials.map(x=>x.peakGpuMiB)):null,outputTokens:trials.flatMap(x=>x.usage||[]).reduce((s,x)=>s+x.output,0)});
 }
 const clean=value=>typeof value==='string'?value.replaceAll(root,'<repo>').replaceAll(root.replaceAll('\\','/'),'<repo>'):Array.isArray(value)?value.map(clean):value&&typeof value==='object'?Object.fromEntries(Object.entries(value).map(([k,v])=>[k,clean(v)])):value;
-const aggregate=clean({run,...report,notes:['Single exploratory run per case/condition unless repeat >1.','Throttled model downloads run concurrently; network/disk activity may affect timing.','GPU memory includes desktop and is sampled, not an exact allocation maximum.','Timeout usage totals recover completed responses; an unfinished final response may be omitted.','Initial failure is audited from a nonzero public-check invocation before the first edit/write, not an AssertionError-only text match. This observation is separate from the pass score.'],summary});
+const aggregate=clean({run,...report,notes:['Single exploratory run per case/condition unless repeat >1.','Throttled model downloads run concurrently; network/disk activity may affect timing.','GPU memory includes desktop and is sampled, not an exact allocation maximum.','Timeout usage totals recover completed responses; an unfinished final response may be omitted.','Initial failure is audited from a nonzero public-check invocation before the first source-file edit/write, not an AssertionError-only text match. This observation is separate from the pass score.'],summary});
 await writeFile(path.join(root,'evaluation/CODING-CONTEXT-2026-10-21.json'),JSON.stringify(aggregate,null,2)+'\n');
 const completed=aggregate.trials.filter(x=>x.stage==='complete');
 const markdown=['# Coding results — 2026-10-21','',`Run status: **${report.status}**. Finished ${completed.length}/12 planned trials (one repetition). See [protocol](../docs/CODING-SUITE.md).`,'',

@@ -11,6 +11,12 @@ $queueLock=[IO.File]::Open($lockPath,[IO.FileMode]::OpenOrCreate,[IO.FileAccess]
 $statusPath=Join-Path $stateDirectory 'coding-downloads.json'
 $status=[ordered]@{Pid=$PID;Started=(Get-Date).ToUniversalTime().ToString('o');RateLimit=$RateLimit;Order='sequential';State='running';Files=@()}
 function Save-QueueStatus { $status | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $statusPath -Encoding UTF8 }
+function Get-ModelSha256([string]$ModelPath) {
+    $modelStream=[IO.File]::OpenRead($ModelPath)
+    $algorithm=[Security.Cryptography.SHA256]::Create()
+    try { return ([BitConverter]::ToString($algorithm.ComputeHash($modelStream))).Replace('-','').ToLowerInvariant() }
+    finally { $algorithm.Dispose();$modelStream.Dispose() }
+}
 try {
     foreach($item in $queue) {
         if($item.Repo -notmatch '^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$' -or $item.File -notmatch '^[A-Za-z0-9_.-]+\.gguf$' -or $item.Revision -notmatch '^[a-f0-9]{40}$') { throw 'Invalid model manifest entry' }
@@ -22,7 +28,7 @@ try {
         $status.Files+=,$entry;Save-QueueStatus
         Write-Output ('Downloading '+$item.File+' at cap '+$RateLimit)
         if(Test-Path -LiteralPath $target) {
-            if((Get-Item -LiteralPath $target).Length -ne $item.Size -or (Get-FileHash -LiteralPath $target -Algorithm SHA256).Hash.ToLowerInvariant() -ne $item.SHA256) { throw 'Existing final model has unexpected size or hash; preserved it.' }
+            if((Get-Item -LiteralPath $target).Length -ne $item.Size -or (Get-ModelSha256 $target) -ne $item.SHA256) { throw 'Existing final model has unexpected size or hash; preserved it.' }
             $entry.State='already-verified';Save-QueueStatus;continue
         }
         $alreadyComplete=(Test-Path -LiteralPath $partial) -and (Get-Item -LiteralPath $partial).Length -eq $item.Size
@@ -33,7 +39,7 @@ try {
         }
         $entry.State='verifying';Save-QueueStatus
         if((Get-Item -LiteralPath $partial).Length -ne $item.Size) { throw 'Downloaded size mismatch; partial retained.' }
-        $actualHash=(Get-FileHash -LiteralPath $partial -Algorithm SHA256).Hash.ToLowerInvariant()
+        $actualHash=Get-ModelSha256 $partial
         if($actualHash -ne $item.SHA256) { throw 'Downloaded SHA256 mismatch; partial retained.' }
         Move-Item -LiteralPath $partial -Destination $target
         $entry.State='verified';$entry.Finished=(Get-Date).ToUniversalTime().ToString('o');Save-QueueStatus

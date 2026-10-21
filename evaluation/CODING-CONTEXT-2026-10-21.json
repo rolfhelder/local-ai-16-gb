@@ -1755,9 +1755,8 @@
         "write",
         "powershell"
       ],
-      "initialFailureObserved": false,
-      "legacyAssertionOnlyFailureObserved": true,
-      "initialFailureBeforeEdit": false,
+      "initialFailureObserved": true,
+      "initialFailureBeforeEdit": true,
       "functionalPassed": true,
       "agentSettled": false
     },
@@ -2321,9 +2320,8 @@
         "edit",
         "powershell"
       ],
-      "initialFailureObserved": false,
-      "legacyAssertionOnlyFailureObserved": true,
-      "initialFailureBeforeEdit": false,
+      "initialFailureObserved": true,
+      "initialFailureBeforeEdit": true,
       "functionalPassed": false,
       "agentSettled": false
     },
@@ -2518,7 +2516,7 @@
         "toolUse",
         "stop"
       ],
-      "initialFailureObserved": false,
+      "initialFailureObserved": true,
       "contextConditionValid": true,
       "durationMs": 125875,
       "timings": {
@@ -2645,8 +2643,7 @@
         ]
       },
       "passed": false,
-      "legacyAssertionOnlyFailureObserved": true,
-      "initialFailureBeforeEdit": false,
+      "initialFailureBeforeEdit": true,
       "functionalPassed": false,
       "agentSettled": true
     },
@@ -2858,7 +2855,7 @@
         "toolUse",
         "stop"
       ],
-      "initialFailureObserved": false,
+      "initialFailureObserved": true,
       "contextConditionValid": true,
       "durationMs": 68880,
       "timings": {
@@ -2995,8 +2992,7 @@
         ]
       },
       "passed": true,
-      "legacyAssertionOnlyFailureObserved": true,
-      "initialFailureBeforeEdit": false,
+      "initialFailureBeforeEdit": true,
       "functionalPassed": true,
       "agentSettled": true
     },
@@ -5034,7 +5030,7 @@
     "Throttled model downloads run concurrently; network/disk activity may affect timing.",
     "GPU memory includes desktop and is sampled, not an exact allocation maximum.",
     "Timeout usage totals recover completed responses; an unfinished final response may be omitted.",
-    "Initial failure is audited from a nonzero public-check invocation before the first edit/write, not an AssertionError-only text match. This observation is separate from the pass score."
+    "Initial failure is audited from a nonzero public-check invocation before the first source-file edit/write, not an AssertionError-only text match. This observation is separate from the pass score."
   ],
   "summary": [
     {
