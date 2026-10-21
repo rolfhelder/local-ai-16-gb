@@ -32,7 +32,7 @@ export async function machine(selection) {
 }
 export function environment(extra = {}) {
   return { ...process.env, PI_OFFLINE: '1', PI_TELEMETRY: '0', PI_SKIP_VERSION_CHECK: '1',
-    PATH: [path.join(root, 'runtime/node'), path.join(root, 'runtime/pnpm/node_modules/.bin'), path.join(root, 'node_modules/.bin'), process.env.PATH].join(path.delimiter),
+    PATH: [path.join(root, 'runtime/search/fd-v10.5.0-x86_64-pc-windows-msvc'),path.join(root, 'runtime/search/ripgrep-15.2.0-x86_64-pc-windows-msvc'),path.join(root, 'runtime/node'), path.join(root, 'runtime/pnpm/node_modules/.bin'), path.join(root, 'node_modules/.bin'), process.env.PATH].join(path.delimiter),
     CAMOUFOX_INSTALL_DIR: path.join(root, 'runtime/research-browser-cache'), PLAYWRIGHT_BROWSERS_PATH: path.join(root, 'runtime/playwright-cache'),
     PI_RESEARCH_STATE_DIR: path.join(root, '.state/research'), PI_RESEARCH_KNOWLEDGE_STORE_RETRIEVAL: 'bm25',
     PI_RESEARCH_MAX_RESEARCHERS: '1', PI_RESEARCH_WORKER_THREADS: '1', PI_RESEARCH_WORKER_CONCURRENCY: '1', PI_RESEARCH_MAX_CONCURRENT_SCRAPES: '1',
@@ -119,6 +119,12 @@ export async function prepareProfile(name, config, cwd = root) {
   const settings = { defaultTools: ['read', 'powershell', 'edit', 'write', 'grep', 'find', 'ls'], packages,
     extensions: [ ...(profiles[name].includes('windows-policy') ? [path.join(root, 'extensions/windows-destructive-policy.mjs')] : []), ...(profiles[name].includes('bash-policy') ? [path.join(root, 'extensions/bash-destructive-guard.ts')] : []) ],
     compaction: { enabled: true, reserveTokens: generationLimits(config).maxTokens, keepRecentTokens: Math.min(6000, Math.floor(config.ContextSize / 4)) }, branchSummary: { reserveTokens: generationLimits(config).maxTokens } };
+  if(config.ModelId==='gpt-oss-local'){
+    settings.extensions.push(path.join(root,'extensions/local-token-budget.mjs'));
+    // The same first-turn character estimate can trigger premature compaction.
+    // Keep manual /compact available; actual server overflow recovery still exists.
+    settings.compaction.enabled=false;
+  }
   if (profiles[name].includes('lsp-windows')) settings.extensions.push(await prepareWindowsLsp());
   if (profiles[name].some(value => ['pi-lsp-extension','lsp-windows'].includes(value))) settings.defaultTools.push('lsp_diagnostics','lsp_definition','lsp_hover','lsp_references','lsp_rename');
   if (profiles[name].includes('@arcanemachine/pi-web-search')) settings['pi-web-search'] = { backends: ['duckduckgo'], summarizationEnabled: false, readMaxChars: 3000, readMaxLimitChars: 8000, searchMaxResults: 5, searchMaxLimitResults: 10, searchMaxOutputBytes: 8000 };
@@ -136,7 +142,8 @@ export async function prepareProfile(name, config, cwd = root) {
   } } }, null, 2));
   if (profiles[name].some(value => ['pi-lsp-extension','lsp-windows'].includes(value))) await prepareLsp(cwd);
   const guardRules = await readFile(path.join(root, 'config/guard.rules.json'), 'utf8');
-  return { agentDir, settings, env: environment({ PI_CODING_AGENT_DIR: agentDir, PI_GUARD: guardRules, PI_RESEARCH_MODEL: 'local-llama/' + config.ModelId }) };
+  return { agentDir, settings, env: environment({ PI_CODING_AGENT_DIR: agentDir, PI_GUARD: guardRules, PI_RESEARCH_MODEL: 'local-llama/' + config.ModelId,
+    PI_LOCAL_TOKENIZER_URL:config.RouterUrl,PI_LOCAL_CONTEXT:String(config.ContextSize),PI_LOCAL_OUTPUT_CAP:String(generationLimits(config).maxTokens),PI_LOCAL_BUDGET_LOG:config.LogPath?config.LogPath+'.budget.jsonl':'' }) };
 }
 export async function prepareWindowsLsp() {
   // Preserve the pinned upstream file. Its adjacent generated copy resolves the same dependencies.

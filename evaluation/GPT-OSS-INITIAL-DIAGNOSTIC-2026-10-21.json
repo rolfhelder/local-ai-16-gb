@@ -1,0 +1,40 @@
+{
+  "run": "coding-context-1792616600870",
+  "evidence": [
+    {
+      "type": "message_end",
+      "stopReason": "length",
+      "usage": {
+        "input": 101928,
+        "output": 1,
+        "cacheRead": 0,
+        "cacheWrite": 0,
+        "reasoning": 0,
+        "totalTokens": 101929,
+        "cost": {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "total": 0
+        }
+      }
+    },
+    {
+      "type": "compaction_end",
+      "reason": "overflow",
+      "error": "Context overflow recovery failed: Turn prefix summarization failed: generation hit the token cap and the summary is incomplete"
+    }
+  ],
+  "recall64k": {
+    "providerError": "The model produced output that does not match the expected peg-native format",
+    "rawFinal": "```json\r\n{\r\n  \"N1\": \"cobalt-1984866\",\r\n  \"N2\": \"amber-12946479\",\r\n  \"N3\": \"cedar-10851422\",\r\n  \"N4\": \"orbit-2982799\",\r\n  \"N5\": \"maple-10112171\"\r\n}\r\n```",
+    "rawFinalGrade": {
+      "exact": 5,
+      "passed": true,
+      "validJson": true
+    },
+    "creditedAsPass": false,
+    "note": "Forensic server-log recovery only; the client did not receive a successful final answer."
+  }
+}

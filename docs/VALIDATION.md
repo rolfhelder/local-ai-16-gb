@@ -36,3 +36,7 @@ Use `evaluation/TRIAL-TEMPLATE.md`. Put sensitive raw logs under ignored `evalua
 One changed variable per trial: Pi upgrade, llama.cpp upgrade, model, context, sampling, or extension. Keep the previous working manifests/profile in a private backup. Remove a failed candidate's package declaration and restore the previous settings to roll back; do not delete downloaded models as a troubleshooting shortcut.
 
 Native PowerShell is part of the baseline. Test any planning/permission guard against PowerShell and custom tools, rather than assuming its Bash examples cover them. Test subprocess cancellation on Windows separately from Linux documentation.
+
+## Four-model follow-up
+
+Qwen, Gemma, OmniCoder and GPT-OSS have completed their initial coding runs. See [all four results and GPT-OSS setup repairs](CODING-FOUR-MODELS.md), including the invalid initial GPT-OSS loaded trials, portable search dependencies and exact request-token budgeting. Original artifacts are retained; rerun outcomes and separate recall controls are linked there.

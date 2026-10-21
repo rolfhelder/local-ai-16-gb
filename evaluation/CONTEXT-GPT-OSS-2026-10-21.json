@@ -1,0 +1,224 @@
+{
+  "started": "2026-10-21T21:50:58.076Z",
+  "protocol": "native Pi RPC, exact five-needle JSON recall, ~90% fill, 8192 output tokens, 2048 reasoning-token budget, f16 KV, fit off, all GPU layers, no context shift, one slot",
+  "models": [
+    {
+      "name": "gpt-oss",
+      "architecture": "gpt-oss",
+      "nativeContext": 131072,
+      "metadata": {
+        "general.architecture": "gpt-oss",
+        "general.name": "gpt-oss-20b",
+        "gpt-oss.context_length": 131072
+      },
+      "trials": [
+        {
+          "context": 65536,
+          "repeat": 0,
+          "reasoning": true,
+          "reasoningBudget": 2048,
+          "port": 48763,
+          "withinNativeContext": true,
+          "recallRequested": true,
+          "stage": "complete",
+          "sampledPeakGpuMiB": 14254,
+          "loadPassed": true,
+          "loadMs": 10715,
+          "endpointModel": "gpt-oss-local",
+          "answer": "{\"N1\":\"cobalt-1984866\",\"N2\":\"amber-12946479\",\"N3\":\"cedar-10851422\",\"N4\":\"orbit-2982799\",\"N5\":\"maple-10112171\"}",
+          "thinkingCharacters": 404,
+          "usage": [
+            {
+              "input": 58210,
+              "output": 167,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "reasoning": 0,
+              "totalTokens": 58377,
+              "cost": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              }
+            }
+          ],
+          "promptTokens": 58210,
+          "occupancyPercent": 88.8214111328125,
+          "needlesCorrect": 5,
+          "recallPassed": true,
+          "validJson": true,
+          "inferencePassed": true,
+          "stopReasons": [
+            "stop"
+          ],
+          "providerErrors": [],
+          "requestBudgets": [
+            {
+              "time": "2026-10-21T21:51:11.898Z",
+              "promptTokens": 58210,
+              "contextWindow": 65536,
+              "before": 8192,
+              "after": 6814,
+              "cap": 8192
+            }
+          ],
+          "expected": {
+            "N1": "cobalt-1984866",
+            "N2": "amber-12946479",
+            "N3": "cedar-10851422",
+            "N4": "orbit-2982799",
+            "N5": "maple-10112171"
+          },
+          "timings": {
+            "prompt": [
+              {
+                "milliseconds": 13579.74,
+                "tokens": 58210,
+                "tps": 4286.53
+              }
+            ],
+            "generation": [
+              {
+                "milliseconds": 1778.79,
+                "tokens": 167,
+                "tps": 93.32
+              }
+            ],
+            "promptTpsMean": 4286.53,
+            "generationTpsMean": 93.32,
+            "generationTpsWeighted": 93.32186486319353
+          },
+          "durationMs": 31932
+        },
+        {
+          "context": 131072,
+          "repeat": 0,
+          "reasoning": true,
+          "reasoningBudget": 2048,
+          "port": 48763,
+          "withinNativeContext": true,
+          "recallRequested": true,
+          "stage": "complete",
+          "sampledPeakGpuMiB": 15786,
+          "loadPassed": true,
+          "loadMs": 10674,
+          "endpointModel": "gpt-oss-local",
+          "answer": "{\"N1\":\"b5f71e08d75ce086af923c21c8d907\",\"N2\":\"699ab14\",\"N3\":\"3827c4d61a057b3fa9a14\",\"N4\":\"f001d5f6f2e49c5c6d0fba4d4fb5c0d4\",\"N5\":\"2184ec1080057e7e97a33af10691c335\"}",
+          "thinkingCharacters": 1145,
+          "usage": [
+            {
+              "input": 117194,
+              "output": 26,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "reasoning": 0,
+              "totalTokens": 117220,
+              "cost": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              }
+            },
+            {
+              "input": 51,
+              "output": 630,
+              "cacheRead": 117194,
+              "cacheWrite": 0,
+              "reasoning": 0,
+              "totalTokens": 117875,
+              "cost": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              }
+            }
+          ],
+          "promptTokens": 117194,
+          "occupancyPercent": 89.41192626953125,
+          "needlesCorrect": 0,
+          "recallPassed": false,
+          "validJson": true,
+          "inferencePassed": true,
+          "stopReasons": [
+            "toolUse",
+            "stop"
+          ],
+          "providerErrors": [],
+          "requestBudgets": [
+            {
+              "time": "2026-10-21T21:51:44.174Z",
+              "promptTokens": 117194,
+              "contextWindow": 131072,
+              "before": 8192,
+              "after": 8192,
+              "cap": 8192
+            },
+            {
+              "time": "2026-10-21T21:52:24.266Z",
+              "promptTokens": 117245,
+              "contextWindow": 131072,
+              "before": 8192,
+              "after": 8192,
+              "cap": 8192
+            }
+          ],
+          "expected": {
+            "N1": "cobalt-6251143",
+            "N2": "amber-4193882",
+            "N3": "cedar-15600229",
+            "N4": "orbit-1102844",
+            "N5": "maple-16612281"
+          },
+          "timings": {
+            "prompt": [
+              {
+                "milliseconds": 39151.96,
+                "tokens": 117194,
+                "tps": 2993.31
+              },
+              {
+                "milliseconds": 103.68,
+                "tokens": 51,
+                "tps": 491.88
+              }
+            ],
+            "generation": [
+              {
+                "milliseconds": 528.45,
+                "tokens": 26,
+                "tps": 47.31
+              },
+              {
+                "milliseconds": 8940.37,
+                "tokens": 630,
+                "tps": 70.36
+              }
+            ],
+            "promptTpsMean": 1742.595,
+            "generationTpsMean": 58.835,
+            "generationTpsWeighted": 69.06879632308988
+          },
+          "durationMs": 66055
+        }
+      ],
+      "localTokenBudget": "exact-template-tokenizer-v1",
+      "firstRecallFailure": 131072,
+      "allocationBoundary": {
+        "largestLoaded": 131072,
+        "firstFailed": null
+      }
+    }
+  ],
+  "needlePattern": "words",
+  "sampling": "default",
+  "reasoningBudget": 2048,
+  "maxTokens": 8192,
+  "kvCache": "f16",
+  "finished": "2026-10-21T21:52:36.245Z"
+}

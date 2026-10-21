@@ -4,7 +4,7 @@ import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { root, exec, machine, acquireInferenceLock, ensureServer, prepareProfile } from '../scripts/local-runtime.mjs';
 import { nativeContext } from './gguf-metadata.mjs';
-import { gradeRecall } from './recall-grader.mjs';
+import { gradeRecall,diagnoseRecall } from './recall-grader.mjs';
 import { serverTimings } from './timings.mjs';
 const base = path.join(root, '.state/evals/limits-' + new Date().toISOString().replace(/[:.]/g, '-')); await mkdir(base, { recursive: true });
 const report = { started: new Date().toISOString(), protocol: 'native Pi RPC, exact five-needle JSON recall, ~90% fill, 1024 output tokens, 512 reasoning-token budget, f16 KV, fit off, all GPU layers, no context shift, one slot', models: [] };
@@ -13,6 +13,9 @@ const pattern = process.argv.find(arg => arg.startsWith('--pattern='))?.split('=
 report.needlePattern = pattern;
 const reasoningBudget = Number(process.argv.find(arg => arg.startsWith('--reasoning-budget='))?.split('=')[1] || '512');
 const maxTokens = Number(process.argv.find(arg => arg.startsWith('--output-tokens='))?.split('=')[1] || '1024');
+const sampling=process.argv.find(arg=>arg.startsWith('--sampling='))?.split('=')[1]||'default';
+if(!['default','reference'].includes(sampling))throw Error('Invalid sampling condition');
+report.sampling=sampling;
 report.reasoningBudget = reasoningBudget; report.maxTokens = maxTokens;
 report.protocol = `native Pi RPC, exact five-needle JSON recall, ~90% fill, ${maxTokens} output tokens, ${reasoningBudget} reasoning-token budget, f16 KV, fit off, all GPU layers, no context shift, one slot`;
 const sample = async () => Number((await exec('nvidia-smi', ['--query-gpu=memory.used', '--format=csv,noheader,nounits'])).stdout.trim());
@@ -56,7 +59,7 @@ async function trial(model, config, size, recall = true, repeat = 0) {
       const prompt = 'Read the synthetic records below. Do not use tools. Remember the five authoritative lookups N1 through N5.\n' + body + '\nReturn only JSON mapping N1,N2,N3,N4,N5 to their exact lookup codes.';
       const run = await new PiIntegrationTest({ testName: config.ModelId + '-' + size + '-' + repeat, transport: 'rpc', cwd, artifactsDir: path.join(base, 'traces'),
         piCommand: path.join(root, 'node_modules/.bin/pi.cmd'), providerMode: 'user', model: 'local-llama/' + config.ModelId, thinking: config.Reasoning === false ? 'off' : 'medium',
-        isolateUserResources: true, tools: ['read','edit','write','powershell'], environment: prepared.env, timeoutMs: size >= 196608 ? 600000 : 360000 }).run(prompt);
+        isolateUserResources: true, extensions:prepared.settings.extensions, tools: ['read','edit','write','powershell'], environment: prepared.env, timeoutMs: size >= 196608 ? 600000 : 360000 }).run(prompt);
       const assistants = run.messages.filter(message => message.role === 'assistant');
       result.answer = assistants.flatMap(message => message.content.filter(part => part.type === 'text').map(part => part.text)).join('\n');
       result.thinkingCharacters = assistants.flatMap(message => message.content.filter(part => part.type === 'thinking').map(part => part.thinking || '')).join('').length;
@@ -67,8 +70,14 @@ async function trial(model, config, size, recall = true, repeat = 0) {
       result.needlesCorrect = grade.exact;
       result.recallPassed = grade.passed;
       result.validJson = grade.validJson;
+      result.recallDiagnostic=diagnoseRecall(result.answer,needles);
+      result.toolCalls=assistants.flatMap(message=>message.content.filter(part=>part.type==='toolCall').map(part=>part.name));
+      result.toolFree=result.toolCalls.length===0;
+      result.taskContractPassed=grade.passed&&result.toolFree&&assistants.every(message=>message.stopReason==='stop');
       result.inferencePassed = assistants.length > 0 && assistants.every(message => !['error','aborted'].includes(message.stopReason));
       result.stopReasons = assistants.map(message => message.stopReason);
+      result.providerErrors=assistants.filter(message=>message.errorMessage).map(message=>message.errorMessage);
+      result.requestBudgets=(await readFile(config.LogPath+'.budget.jsonl','utf8').catch(()=>'')).trim().split('\n').filter(Boolean).map(JSON.parse);
       result.expected = needles;
     }
     result.stage = 'complete';
@@ -84,10 +93,12 @@ try {
   const selection = process.argv.find(arg => arg.startsWith('--models='))?.split('=')[1] || 'qwen,gemma';
   for (const name of selection.split(',')) {
     const config = await machine(name); if (process.argv.includes('--no-reasoning')) config.Reasoning = false;
+    if(sampling==='reference')config.ExtraServerArgs=[...(config.ExtraServerArgs||[]),'--temp','1.0','--top-p','1.0','--top-k','0','--min-p','0.0'];
     if(process.argv.includes('--kv=q8_0'))config.ExtraServerArgs=[...(config.ExtraServerArgs||[]),'--cache-type-k','q8_0','--cache-type-v','q8_0','--flash-attn','on'];
     report.kvCache=process.argv.includes('--kv=q8_0')?'q8_0':'f16';report.protocol=report.protocol.replace('f16 KV',report.kvCache+' KV');
     const metadata = nativeContext(config.ModelFile);
     const model = { name, ...metadata, trials: [] }; report.models.push(model); await save();
+    model.localTokenBudget=name==='gpt-oss'?'exact-template-tokenizer-v1':'upstream-estimator';
     console.log(JSON.stringify({ model: name, ...metadata }));
     const requested = process.argv.find(arg => arg.startsWith('--contexts='))?.split('=')[1];
     const sizes = requested ? requested.split(',').map(Number) : name === 'qwen' ? [131072,196608,262144,327680,393216,524288,786432,1048576] : [32768,65536,98304,131072,196608,262144,393216,524288,1048576];
@@ -114,7 +125,8 @@ try {
 } finally { await server?.stop(); await release(); report.finished = new Date().toISOString(); await save(); }
 console.log('Report: ' + path.join(base, 'report.json'));
 if(report.models.length&&report.models.every(model=>['omnicoder','gpt-oss'].includes(model.name))){
-  const basename='CONTEXT-'+report.models.map(model=>model.name.toUpperCase()).join('-')+'-2026-10-21.json';
+  const basename=(process.argv.find(arg=>arg.startsWith('--output-basename='))?.slice('--output-basename='.length)||'CONTEXT-'+report.models.map(model=>model.name.toUpperCase()).join('-')+'-2026-10-21')+'.json';
+  if(!/^[A-Za-z0-9_-]+\.json$/.test(basename))throw Error('Invalid export basename');
   const clean=JSON.stringify(report,null,2).replaceAll(root.replaceAll('\\','\\\\'),'<repo>').replaceAll(root.replaceAll('\\','/'),'<repo>');
   await writeFile(path.join(root,'evaluation',basename),clean+'\n');
 }

@@ -594,5 +594,224 @@
         }
       }
     ]
+  },
+  {
+    "run": "coding-1792616571235",
+    "cases": [
+      {
+        "name": "gpt-oss",
+        "context": 32768,
+        "reasoning": true,
+        "reasoningBudget": 2048,
+        "usage": [
+          {
+            "input": 1392,
+            "output": 49,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 1441,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          {
+            "input": 214,
+            "output": 29,
+            "cacheRead": 1410,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 1653,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          {
+            "input": 96,
+            "output": 30,
+            "cacheRead": 1635,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 1761,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          {
+            "input": 47,
+            "output": 65,
+            "cacheRead": 1742,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 1854,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          {
+            "input": 67,
+            "output": 122,
+            "cacheRead": 1819,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 2008,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          {
+            "input": 74,
+            "output": 59,
+            "cacheRead": 1954,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 2087,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          }
+        ],
+        "toolCalls": [
+          {
+            "name": "powershell",
+            "arguments": {
+              "command": "Get-ChildItem -Recurse -File",
+              "timeout": 10
+            }
+          },
+          {
+            "name": "read",
+            "arguments": {
+              "path": "check.cjs"
+            }
+          },
+          {
+            "name": "read",
+            "arguments": {
+              "path": "math.cjs"
+            }
+          },
+          {
+            "name": "edit",
+            "arguments": {
+              "path": "math.cjs",
+              "edits": [
+                {
+                  "oldText": "a - b",
+                  "newText": "a + b"
+                }
+              ]
+            }
+          },
+          {
+            "name": "powershell",
+            "arguments": {
+              "command": "& \"<repo>\\runtime\\node\\node.exe\" check.cjs",
+              "timeout": 10
+            }
+          }
+        ],
+        "answer": "The bug in `math.cjs` was that the addition function incorrectly performed subtraction.  \nI updated the function to use `+` instead of `-`.\n\n**Result after running `check.cjs`:**\n\n```\n3 assertions passed\n```\n\nAll tests now succeed.",
+        "thinkingCharacters": 390,
+        "actualTestPassed": true,
+        "testFilePreserved": true,
+        "observedAndReranTests": false,
+        "initialFailureObserved": false,
+        "durationMs": 17624,
+        "timings": {
+          "prompt": [
+            {
+              "milliseconds": 801.46,
+              "tokens": 1392,
+              "tps": 1736.84
+            },
+            {
+              "milliseconds": 99,
+              "tokens": 214,
+              "tps": 2161.62
+            },
+            {
+              "milliseconds": 69.21,
+              "tokens": 96,
+              "tps": 1387.02
+            },
+            {
+              "milliseconds": 59.41,
+              "tokens": 47,
+              "tps": 791.1
+            },
+            {
+              "milliseconds": 56.46,
+              "tokens": 67,
+              "tps": 1186.68
+            },
+            {
+              "milliseconds": 86.61,
+              "tokens": 74,
+              "tps": 854.39
+            }
+          ],
+          "generation": [
+            {
+              "milliseconds": 363.77,
+              "tokens": 49,
+              "tps": 131.95
+            },
+            {
+              "milliseconds": 321.06,
+              "tokens": 29,
+              "tps": 87.21
+            },
+            {
+              "milliseconds": 215.2,
+              "tokens": 30,
+              "tps": 134.76
+            },
+            {
+              "milliseconds": 468.96,
+              "tokens": 65,
+              "tps": 136.47
+            },
+            {
+              "milliseconds": 873.66,
+              "tokens": 122,
+              "tps": 138.5
+            },
+            {
+              "milliseconds": 448.89,
+              "tokens": 59,
+              "tps": 129.21
+            }
+          ],
+          "promptTpsMean": 1352.9416666666668,
+          "generationTpsMean": 126.35000000000001,
+          "generationTpsWeighted": 129.29401012060012
+        }
+      }
+    ]
   }
 ]

@@ -1,0 +1,165 @@
+{
+  "started": "2026-10-21T21:07:41.636Z",
+  "protocol": "native Pi RPC, exact five-needle JSON recall, ~90% fill, 8192 output tokens, 2048 reasoning-token budget, f16 KV, fit off, all GPU layers, no context shift, one slot",
+  "models": [
+    {
+      "name": "gpt-oss",
+      "architecture": "gpt-oss",
+      "nativeContext": 131072,
+      "metadata": {
+        "general.architecture": "gpt-oss",
+        "general.name": "gpt-oss-20b",
+        "gpt-oss.context_length": 131072
+      },
+      "trials": [
+        {
+          "context": 65536,
+          "repeat": 0,
+          "reasoning": true,
+          "reasoningBudget": 2048,
+          "port": 48763,
+          "withinNativeContext": true,
+          "recallRequested": true,
+          "stage": "complete",
+          "sampledPeakGpuMiB": 14176,
+          "loadPassed": true,
+          "loadMs": 10715,
+          "endpointModel": "gpt-oss-local",
+          "answer": "",
+          "thinkingCharacters": 4104,
+          "usage": [
+            {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "totalTokens": 0,
+              "cost": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              }
+            }
+          ],
+          "promptTokens": 0,
+          "occupancyPercent": 0,
+          "needlesCorrect": 0,
+          "recallPassed": false,
+          "validJson": false,
+          "inferencePassed": false,
+          "stopReasons": [
+            "error"
+          ],
+          "expected": {
+            "N1": "cobalt-1984866",
+            "N2": "amber-12946479",
+            "N3": "cedar-10851422",
+            "N4": "orbit-2982799",
+            "N5": "maple-10112171"
+          },
+          "timings": {
+            "prompt": [
+              {
+                "milliseconds": 13067.39,
+                "tokens": 58210,
+                "tps": 4454.6
+              }
+            ],
+            "generation": [
+              {
+                "milliseconds": 26656.02,
+                "tokens": 2657,
+                "tps": 99.64
+              }
+            ],
+            "promptTpsMean": 4454.6,
+            "generationTpsMean": 99.64,
+            "generationTpsWeighted": 99.63978118263717
+          },
+          "durationMs": 56252
+        },
+        {
+          "context": 131072,
+          "repeat": 0,
+          "reasoning": true,
+          "reasoningBudget": 2048,
+          "port": 48763,
+          "withinNativeContext": true,
+          "recallRequested": true,
+          "stage": "complete",
+          "sampledPeakGpuMiB": 15776,
+          "loadPassed": true,
+          "loadMs": 10194,
+          "endpointModel": "gpt-oss-local",
+          "answer": "```json\n{\n  \"N1\": \"b5f71e08d75ce086af923c21c8d907\",\n  \"N2\": \"699ab14\",\n  \"N3\": \"3827c4d61a057b3fa9a14\",\n  \"N4\": \"f001d5f6f2e49c5c6d0fba4d4fb5c0d4\",\n  \"N5\": \"2184ec1080057e7e97a33af10691c335\"\n}\n```\n",
+          "thinkingCharacters": 1333,
+          "usage": [
+            {
+              "input": 117194,
+              "output": 689,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "reasoning": 0,
+              "totalTokens": 117883,
+              "cost": {
+                "input": 0,
+                "output": 0,
+                "cacheRead": 0,
+                "cacheWrite": 0,
+                "total": 0
+              }
+            }
+          ],
+          "promptTokens": 117194,
+          "occupancyPercent": 89.41192626953125,
+          "needlesCorrect": 0,
+          "recallPassed": false,
+          "validJson": true,
+          "inferencePassed": true,
+          "stopReasons": [
+            "stop"
+          ],
+          "expected": {
+            "N1": "cobalt-6251143",
+            "N2": "amber-4193882",
+            "N3": "cedar-15600229",
+            "N4": "orbit-1102844",
+            "N5": "maple-16612281"
+          },
+          "timings": {
+            "prompt": [
+              {
+                "milliseconds": 36830.24,
+                "tokens": 117194,
+                "tps": 3182
+              }
+            ],
+            "generation": [
+              {
+                "milliseconds": 8877.61,
+                "tokens": 689,
+                "tps": 77.5
+              }
+            ],
+            "promptTpsMean": 3182,
+            "generationTpsMean": 77.5,
+            "generationTpsWeighted": 77.49833570071223
+          },
+          "durationMs": 61842
+        }
+      ],
+      "firstRecallFailure": 65536,
+      "allocationBoundary": {
+        "largestLoaded": 131072,
+        "firstFailed": null
+      }
+    }
+  ],
+  "needlePattern": "words",
+  "reasoningBudget": 2048,
+  "maxTokens": 8192,
+  "kvCache": "f16",
+  "finished": "2026-10-21T21:09:39.889Z"
+}

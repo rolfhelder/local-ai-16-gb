@@ -30,10 +30,13 @@ try {
     config.MaxTokens = Math.max(config.MaxTokens, config.ReasoningBudget + 2048);
   }
   const piArgs = [piEntry, '--provider', 'local-llama', '--model', config.ModelId, '--thinking', config.Reasoning === false ? 'off' : 'medium', ...args];
-  if (profile === 'native') piArgs.push('--no-extensions', '--no-skills', '--no-prompt-templates', '--no-context-files');
+  if (profile === 'native') {
+    piArgs.push('--no-extensions', '--no-skills', '--no-prompt-templates', '--no-context-files');
+    if(config.ModelId==='gpt-oss-local')piArgs.push('--extension',path.join(root,'extensions/local-token-budget.mjs'));
+  }
   if (context !== undefined) {
     if (!/^\d+$/.test(context) || Number(context) < 8192 || Number(context) > 1048576) throw new Error('--context must be between 8192 and 1048576; sizes above the model native window are experimental');
-    config.ContextSize = Number(context);
+    config.ContextSize = config.ModelId==='gpt-oss-local'?Math.min(Number(context),config.NativeContext):Number(context);
   }
   if (dryRun) {
     console.log(JSON.stringify({ profile, cwd, executable: nodeExe, pi: piEntry, piArguments: piArgs, model: `local-llama/${config.ModelId}`, server: config.LlamaExecutable, arguments: serverArguments(config), browser, singleSession: true }, null, 2));

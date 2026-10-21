@@ -58,3 +58,7 @@ Run `Initialize-Lab.ps1`, `Bootstrap-Toolchain.ps1`, then `Setup-Integrations.ps
 The package-manager installation may need its normal per-user operation lock and internet access. A repository-local package store does not remove every per-user package-manager cache/lock. Browser runtime assets are separate from the pnpm dependency lock; preserve the runtime backup and observed version manifest for offline reproduction.
 
 No inference run, full research report, or application-control task is claimed as validated yet. The Research README's 100k+ context requirement remains a practical open issue on this 16 GB baseline. Start with bounded/quick experiments only after the local model passes basic tool use.
+
+## Four-model follow-up
+
+Qwen, Gemma, OmniCoder and GPT-OSS have completed their initial coding runs. See [all four results and GPT-OSS setup repairs](CODING-FOUR-MODELS.md), including the invalid initial GPT-OSS loaded trials, portable search dependencies and exact request-token budgeting. Original artifacts are retained; rerun outcomes and separate recall controls are linked there.

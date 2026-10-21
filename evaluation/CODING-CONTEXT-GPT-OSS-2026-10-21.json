@@ -1,0 +1,3049 @@
+{
+  "run": "coding-context-1792618864396",
+  "started": "2026-10-21T21:41:04.398Z",
+  "suiteVersion": 1,
+  "status": "complete",
+  "contextWindow": 131072,
+  "backgroundTargetTokens": 100000,
+  "reasoningBudget": 2048,
+  "maxOutputTokens": 8192,
+  "timeoutMs": 360000,
+  "trials": [
+    {
+      "model": "gpt-oss",
+      "case": "csv-records",
+      "condition": "clean",
+      "repeat": 0,
+      "contextWindow": 131072,
+      "kvCache": "f16",
+      "backgroundTokens": 0,
+      "backgroundSha256": null,
+      "peakGpuMiB": 15806,
+      "stage": "complete",
+      "usage": [
+        {
+          "input": 1888,
+          "output": 38,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 1926,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 52,
+          "output": 37,
+          "cacheRead": 1904,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 1993,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 70,
+          "output": 6467,
+          "cacheRead": 1967,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 8504,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 6482,
+          "output": 42,
+          "cacheRead": 2032,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 8556,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 145,
+          "output": 108,
+          "cacheRead": 8532,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 8785,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 80,
+          "output": 147,
+          "cacheRead": 8731,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 8958,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 75,
+          "output": 138,
+          "cacheRead": 8905,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 9118,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 103,
+          "output": 160,
+          "cacheRead": 9041,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 9304,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 243,
+          "output": 172,
+          "cacheRead": 9221,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 9636,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 117,
+          "output": 93,
+          "cacheRead": 9552,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 9762,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 240,
+          "output": 87,
+          "cacheRead": 9683,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 10010,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 49,
+          "output": 106,
+          "cacheRead": 9985,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 10140,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 118,
+          "output": 158,
+          "cacheRead": 10049,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 10325,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 50,
+          "output": 103,
+          "cacheRead": 10295,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 10448,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 119,
+          "output": 140,
+          "cacheRead": 10356,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 10615,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        }
+      ],
+      "initialPromptTokens": 1888,
+      "responses": 15,
+      "toolCalls": [
+        "ls",
+        "read",
+        "write",
+        "read",
+        "powershell",
+        "powershell",
+        "powershell",
+        "powershell",
+        "powershell",
+        "powershell",
+        "write",
+        "powershell",
+        "write",
+        "powershell"
+      ],
+      "stopReasons": [
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "stop"
+      ],
+      "providerErrors": [],
+      "initialFailureObserved": false,
+      "contextConditionValid": true,
+      "durationMs": 95867,
+      "timings": {
+        "prompt": [
+          {
+            "milliseconds": 569.42,
+            "tokens": 1888,
+            "tps": 3315.65
+          },
+          {
+            "milliseconds": 59.62,
+            "tokens": 52,
+            "tps": 872.13
+          },
+          {
+            "milliseconds": 70.41,
+            "tokens": 70,
+            "tps": 994.12
+          },
+          {
+            "milliseconds": 1207.7,
+            "tokens": 6482,
+            "tps": 5367.24
+          },
+          {
+            "milliseconds": 83.03,
+            "tokens": 145,
+            "tps": 1746.42
+          },
+          {
+            "milliseconds": 73.24,
+            "tokens": 80,
+            "tps": 1092.25
+          },
+          {
+            "milliseconds": 80.85,
+            "tokens": 75,
+            "tps": 927.68
+          },
+          {
+            "milliseconds": 96.48,
+            "tokens": 103,
+            "tps": 1067.62
+          },
+          {
+            "milliseconds": 119.02,
+            "tokens": 243,
+            "tps": 2041.69
+          },
+          {
+            "milliseconds": 103.23,
+            "tokens": 117,
+            "tps": 1133.37
+          },
+          {
+            "milliseconds": 125.24,
+            "tokens": 240,
+            "tps": 1916.27
+          },
+          {
+            "milliseconds": 60.39,
+            "tokens": 49,
+            "tps": 811.43
+          },
+          {
+            "milliseconds": 101.5,
+            "tokens": 118,
+            "tps": 1162.62
+          },
+          {
+            "milliseconds": 58.81,
+            "tokens": 50,
+            "tps": 850.12
+          },
+          {
+            "milliseconds": 109.66,
+            "tokens": 119,
+            "tps": 1085.13
+          }
+        ],
+        "generation": [
+          {
+            "milliseconds": 344.48,
+            "tokens": 38,
+            "tps": 107.41
+          },
+          {
+            "milliseconds": 329.13,
+            "tokens": 37,
+            "tps": 109.38
+          },
+          {
+            "milliseconds": 55761.11,
+            "tokens": 6467,
+            "tps": 115.96
+          },
+          {
+            "milliseconds": 356.9,
+            "tokens": 42,
+            "tps": 114.88
+          },
+          {
+            "milliseconds": 929.63,
+            "tokens": 108,
+            "tps": 115.1
+          },
+          {
+            "milliseconds": 1299.03,
+            "tokens": 147,
+            "tps": 112.39
+          },
+          {
+            "milliseconds": 1220.2,
+            "tokens": 138,
+            "tps": 112.28
+          },
+          {
+            "milliseconds": 1368.1,
+            "tokens": 160,
+            "tps": 116.22
+          },
+          {
+            "milliseconds": 1468.76,
+            "tokens": 172,
+            "tps": 116.42
+          },
+          {
+            "milliseconds": 870.22,
+            "tokens": 93,
+            "tps": 105.72
+          },
+          {
+            "milliseconds": 791.02,
+            "tokens": 87,
+            "tps": 108.72
+          },
+          {
+            "milliseconds": 961.23,
+            "tokens": 106,
+            "tps": 109.24
+          },
+          {
+            "milliseconds": 1520.74,
+            "tokens": 158,
+            "tps": 103.24
+          },
+          {
+            "milliseconds": 885.52,
+            "tokens": 103,
+            "tps": 115.19
+          },
+          {
+            "milliseconds": 1328.12,
+            "tokens": 140,
+            "tps": 104.66
+          }
+        ],
+        "promptTpsMean": 1625.5826666666665,
+        "generationTpsMean": 111.12066666666668,
+        "generationTpsWeighted": 114.94337299823042
+      },
+      "requestBudgets": [
+        {
+          "time": "2026-10-21T21:41:23.194Z",
+          "promptTokens": 1888,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:41:24.218Z",
+          "promptTokens": 1956,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:41:24.695Z",
+          "promptTokens": 2037,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:42:20.664Z",
+          "promptTokens": 8514,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:42:22.458Z",
+          "promptTokens": 8677,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:42:24.390Z",
+          "promptTokens": 8811,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:42:27.595Z",
+          "promptTokens": 8980,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:42:30.820Z",
+          "promptTokens": 9144,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:42:34.163Z",
+          "promptTokens": 9464,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:42:37.700Z",
+          "promptTokens": 9669,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:42:40.646Z",
+          "promptTokens": 9923,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:42:41.733Z",
+          "promptTokens": 10034,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:42:44.706Z",
+          "promptTokens": 10167,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:42:46.520Z",
+          "promptTokens": 10345,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:42:49.476Z",
+          "promptTokens": 10475,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        }
+      ],
+      "publicFilesPreserved": true,
+      "publicPassed": true,
+      "hidden": {
+        "passed": 6,
+        "total": 6,
+        "checks": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      "passed": true,
+      "initialFailureBeforeEdit": false,
+      "functionalPassed": true,
+      "agentSettled": true
+    },
+    {
+      "model": "gpt-oss",
+      "case": "csv-records",
+      "condition": "loaded",
+      "repeat": 0,
+      "contextWindow": 131072,
+      "kvCache": "f16",
+      "backgroundTokens": 100000,
+      "backgroundSha256": "39e21354ba31a7a64ffef374e7104e202b7b46a0ca74ba66a7318434b1d6da28",
+      "peakGpuMiB": 15809,
+      "stage": "complete",
+      "usage": [
+        {
+          "input": 101928,
+          "output": 74,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 102002,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 120,
+          "output": 38,
+          "cacheRead": 101949,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 102107,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 52,
+          "output": 37,
+          "cacheRead": 102087,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 102176,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 71,
+          "output": 2364,
+          "cacheRead": 102150,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 104585,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 542,
+          "output": 55,
+          "cacheRead": 104065,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 104662,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 66,
+          "output": 904,
+          "cacheRead": 104619,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 105589,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 1030,
+          "output": 127,
+          "cacheRead": 104680,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 105837,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 102,
+          "output": 82,
+          "cacheRead": 105768,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 105952,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 104,
+          "output": 76,
+          "cacheRead": 105880,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 106060,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 26,
+          "output": 84,
+          "cacheRead": 106059,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 106169,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 160,
+          "output": 375,
+          "cacheRead": 106168,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 106703,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 230,
+          "output": 76,
+          "cacheRead": 106626,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 106932,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 79,
+          "output": 56,
+          "cacheRead": 106877,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 107012,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 72,
+          "output": 95,
+          "cacheRead": 106967,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 107134,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 81,
+          "output": 55,
+          "cacheRead": 107079,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 107215,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 73,
+          "output": 86,
+          "cacheRead": 107169,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 107328,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 86,
+          "output": 95,
+          "cacheRead": 107263,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 107444,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 95,
+          "output": 82,
+          "cacheRead": 107375,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 107552,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 97,
+          "output": 99,
+          "cacheRead": 107481,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 107677,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 104,
+          "output": 228,
+          "cacheRead": 107605,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 107937,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 89,
+          "output": 1640,
+          "cacheRead": 107872,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 109601,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 582,
+          "output": 79,
+          "cacheRead": 109044,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 109705,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 0,
+          "output": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 0,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        }
+      ],
+      "initialPromptTokens": 101928,
+      "responses": 23,
+      "toolCalls": [
+        "read",
+        "ls",
+        "read",
+        "write",
+        "powershell",
+        "read",
+        "powershell",
+        "powershell",
+        "powershell",
+        "powershell",
+        "powershell",
+        "write",
+        "powershell",
+        "write",
+        "powershell",
+        "powershell",
+        "powershell",
+        "powershell",
+        "powershell",
+        "powershell",
+        "write",
+        "powershell"
+      ],
+      "stopReasons": [
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "error"
+      ],
+      "providerErrors": [
+        "The model produced output that does not match the expected peg-native format"
+      ],
+      "initialFailureObserved": false,
+      "contextConditionValid": true,
+      "durationMs": 178885,
+      "timings": {
+        "prompt": [
+          {
+            "milliseconds": 31912.58,
+            "tokens": 101928,
+            "tps": 3193.98
+          },
+          {
+            "milliseconds": 145.31,
+            "tokens": 120,
+            "tps": 825.84
+          },
+          {
+            "milliseconds": 84.31,
+            "tokens": 52,
+            "tps": 616.74
+          },
+          {
+            "milliseconds": 95.88,
+            "tokens": 71,
+            "tps": 740.49
+          },
+          {
+            "milliseconds": 353.56,
+            "tokens": 542,
+            "tps": 1532.97
+          },
+          {
+            "milliseconds": 118.11,
+            "tokens": 66,
+            "tps": 558.8
+          },
+          {
+            "milliseconds": 580.58,
+            "tokens": 1030,
+            "tps": 1774.1
+          },
+          {
+            "milliseconds": 163.84,
+            "tokens": 102,
+            "tps": 622.57
+          },
+          {
+            "milliseconds": 157.91,
+            "tokens": 104,
+            "tps": 658.6
+          },
+          {
+            "milliseconds": 82.56,
+            "tokens": 26,
+            "tps": 314.91
+          },
+          {
+            "milliseconds": 187.97,
+            "tokens": 160,
+            "tps": 851.21
+          },
+          {
+            "milliseconds": 220.35,
+            "tokens": 230,
+            "tps": 1043.8
+          },
+          {
+            "milliseconds": 120.07,
+            "tokens": 79,
+            "tps": 657.93
+          },
+          {
+            "milliseconds": 125.63,
+            "tokens": 72,
+            "tps": 573.12
+          },
+          {
+            "milliseconds": 123.14,
+            "tokens": 81,
+            "tps": 657.81
+          },
+          {
+            "milliseconds": 139.98,
+            "tokens": 73,
+            "tps": 521.49
+          },
+          {
+            "milliseconds": 148.16,
+            "tokens": 86,
+            "tps": 580.47
+          },
+          {
+            "milliseconds": 161.48,
+            "tokens": 95,
+            "tps": 588.3
+          },
+          {
+            "milliseconds": 163.98,
+            "tokens": 97,
+            "tps": 591.53
+          },
+          {
+            "milliseconds": 163.93,
+            "tokens": 104,
+            "tps": 634.41
+          },
+          {
+            "milliseconds": 147.94,
+            "tokens": 89,
+            "tps": 601.58
+          },
+          {
+            "milliseconds": 380.15,
+            "tokens": 582,
+            "tps": 1530.97
+          },
+          {
+            "milliseconds": 163.24,
+            "tokens": 87,
+            "tps": 532.95
+          }
+        ],
+        "generation": [
+          {
+            "milliseconds": 1086.58,
+            "tokens": 74,
+            "tps": 67.18
+          },
+          {
+            "milliseconds": 489.26,
+            "tokens": 38,
+            "tps": 75.62
+          },
+          {
+            "milliseconds": 493.54,
+            "tokens": 37,
+            "tps": 72.94
+          },
+          {
+            "milliseconds": 32109.29,
+            "tokens": 2364,
+            "tps": 73.59
+          },
+          {
+            "milliseconds": 859.94,
+            "tokens": 55,
+            "tps": 62.79
+          },
+          {
+            "milliseconds": 12369.86,
+            "tokens": 904,
+            "tps": 73
+          },
+          {
+            "milliseconds": 1718.72,
+            "tokens": 127,
+            "tps": 73.31
+          },
+          {
+            "milliseconds": 1097.33,
+            "tokens": 82,
+            "tps": 73.82
+          },
+          {
+            "milliseconds": 1031.56,
+            "tokens": 76,
+            "tps": 72.71
+          },
+          {
+            "milliseconds": 1134.44,
+            "tokens": 84,
+            "tps": 73.16
+          },
+          {
+            "milliseconds": 5131.55,
+            "tokens": 375,
+            "tps": 72.88
+          },
+          {
+            "milliseconds": 1021.96,
+            "tokens": 76,
+            "tps": 73.39
+          },
+          {
+            "milliseconds": 764.88,
+            "tokens": 56,
+            "tps": 71.91
+          },
+          {
+            "milliseconds": 1288.38,
+            "tokens": 95,
+            "tps": 72.96
+          },
+          {
+            "milliseconds": 749.44,
+            "tokens": 55,
+            "tps": 72.05
+          },
+          {
+            "milliseconds": 1204.68,
+            "tokens": 86,
+            "tps": 70.56
+          },
+          {
+            "milliseconds": 1346.84,
+            "tokens": 95,
+            "tps": 69.79
+          },
+          {
+            "milliseconds": 1145.87,
+            "tokens": 82,
+            "tps": 70.69
+          },
+          {
+            "milliseconds": 1406.37,
+            "tokens": 99,
+            "tps": 69.68
+          },
+          {
+            "milliseconds": 3131.08,
+            "tokens": 228,
+            "tps": 72.5
+          },
+          {
+            "milliseconds": 22875.69,
+            "tokens": 1640,
+            "tps": 71.65
+          },
+          {
+            "milliseconds": 1073.97,
+            "tokens": 79,
+            "tps": 72.63
+          },
+          {
+            "milliseconds": 1384.85,
+            "tokens": 100,
+            "tps": 71.49
+          }
+        ],
+        "promptTpsMean": 878.4595652173913,
+        "generationTpsMean": 71.75217391304348,
+        "generationTpsWeighted": 72.52722615598957
+      },
+      "requestBudgets": [
+        {
+          "time": "2026-10-21T21:43:00.415Z",
+          "promptTokens": 101928,
+          "contextWindow": 131072,
+          "before": 1,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:43:34.351Z",
+          "promptTokens": 102069,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:43:35.670Z",
+          "promptTokens": 102139,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:43:36.924Z",
+          "promptTokens": 102221,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:44:09.845Z",
+          "promptTokens": 104607,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:44:13.507Z",
+          "promptTokens": 104685,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:44:26.692Z",
+          "promptTokens": 105710,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:44:31.469Z",
+          "promptTokens": 105870,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:44:35.222Z",
+          "promptTokens": 105984,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:44:39.044Z",
+          "promptTokens": 106085,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:44:42.813Z",
+          "promptTokens": 106328,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:44:50.675Z",
+          "promptTokens": 106856,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:44:52.647Z",
+          "promptTokens": 106956,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:44:56.047Z",
+          "promptTokens": 107039,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:44:58.211Z",
+          "promptTokens": 107160,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:45:01.620Z",
+          "promptTokens": 107242,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:45:05.504Z",
+          "promptTokens": 107349,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:45:09.590Z",
+          "promptTokens": 107470,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:45:13.493Z",
+          "promptTokens": 107578,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:45:17.666Z",
+          "promptTokens": 107709,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:45:23.553Z",
+          "promptTokens": 107961,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:45:47.412Z",
+          "promptTokens": 109626,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:45:50.799Z",
+          "promptTokens": 109726,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        }
+      ],
+      "publicFilesPreserved": true,
+      "publicPassed": true,
+      "hidden": {
+        "passed": 6,
+        "total": 6,
+        "checks": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      "passed": false,
+      "initialFailureBeforeEdit": false,
+      "contextConditionEvidence": "formatted-request-tokenizer",
+      "functionalPassed": true,
+      "agentSettled": false
+    },
+    {
+      "model": "gpt-oss",
+      "case": "pagination-contract",
+      "condition": "loaded",
+      "repeat": 0,
+      "contextWindow": 131072,
+      "kvCache": "f16",
+      "backgroundTokens": 100000,
+      "backgroundSha256": "39e21354ba31a7a64ffef374e7104e202b7b46a0ca74ba66a7318434b1d6da28",
+      "peakGpuMiB": 15793,
+      "stage": "complete",
+      "usage": [
+        {
+          "input": 101961,
+          "output": 50,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 102011,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 56,
+          "output": 36,
+          "cacheRead": 101991,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 102083,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 86,
+          "output": 73,
+          "cacheRead": 102058,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 102217,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 76,
+          "output": 840,
+          "cacheRead": 102187,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 103103,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 195,
+          "output": 98,
+          "cacheRead": 102932,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 103225,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 111,
+          "output": 45,
+          "cacheRead": 103138,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 103294,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 140,
+          "output": 1921,
+          "cacheRead": 103265,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 105326,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 1890,
+          "output": 715,
+          "cacheRead": 103400,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 106005,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 48,
+          "output": 325,
+          "cacheRead": 105982,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 106355,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 459,
+          "output": 1868,
+          "cacheRead": 106051,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 108378,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        }
+      ],
+      "initialPromptTokens": 101961,
+      "responses": 10,
+      "toolCalls": [
+        "ls",
+        "read",
+        "read",
+        "write",
+        "write",
+        "read",
+        "write",
+        "write",
+        "read"
+      ],
+      "stopReasons": [
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "stop"
+      ],
+      "providerErrors": [],
+      "initialFailureObserved": false,
+      "contextConditionValid": true,
+      "durationMs": 132035,
+      "timings": {
+        "prompt": [
+          {
+            "milliseconds": 32071.33,
+            "tokens": 101961,
+            "tps": 3179.19
+          },
+          {
+            "milliseconds": 81.04,
+            "tokens": 56,
+            "tps": 691.04
+          },
+          {
+            "milliseconds": 121.72,
+            "tokens": 86,
+            "tps": 706.53
+          },
+          {
+            "milliseconds": 101.3,
+            "tokens": 76,
+            "tps": 750.23
+          },
+          {
+            "milliseconds": 181.63,
+            "tokens": 195,
+            "tps": 1073.59
+          },
+          {
+            "milliseconds": 112.06,
+            "tokens": 111,
+            "tps": 990.55
+          },
+          {
+            "milliseconds": 137.59,
+            "tokens": 140,
+            "tps": 1017.54
+          },
+          {
+            "milliseconds": 1047.8,
+            "tokens": 1890,
+            "tps": 1803.78
+          },
+          {
+            "milliseconds": 83.14,
+            "tokens": 48,
+            "tps": 577.34
+          },
+          {
+            "milliseconds": 252.7,
+            "tokens": 459,
+            "tps": 1816.4
+          }
+        ],
+        "generation": [
+          {
+            "milliseconds": 736.35,
+            "tokens": 50,
+            "tps": 66.54
+          },
+          {
+            "milliseconds": 502,
+            "tokens": 36,
+            "tps": 69.72
+          },
+          {
+            "milliseconds": 988.37,
+            "tokens": 73,
+            "tps": 72.85
+          },
+          {
+            "milliseconds": 11519.65,
+            "tokens": 840,
+            "tps": 72.83
+          },
+          {
+            "milliseconds": 1318.1,
+            "tokens": 98,
+            "tps": 73.59
+          },
+          {
+            "milliseconds": 632.98,
+            "tokens": 45,
+            "tps": 69.51
+          },
+          {
+            "milliseconds": 26633.39,
+            "tokens": 1921,
+            "tps": 72.09
+          },
+          {
+            "milliseconds": 9962.86,
+            "tokens": 715,
+            "tps": 71.67
+          },
+          {
+            "milliseconds": 4487.6,
+            "tokens": 325,
+            "tps": 72.2
+          },
+          {
+            "milliseconds": 25867.86,
+            "tokens": 1868,
+            "tps": 72.17
+          }
+        ],
+        "promptTpsMean": 1260.6190000000001,
+        "generationTpsMean": 71.317,
+        "generationTpsWeighted": 72.12414500038476
+      },
+      "requestBudgets": [
+        {
+          "time": "2026-10-21T21:46:00.548Z",
+          "promptTokens": 101961,
+          "contextWindow": 131072,
+          "before": 1,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:46:36.076Z",
+          "promptTokens": 102047,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:46:37.333Z",
+          "promptTokens": 102144,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:46:39.130Z",
+          "promptTokens": 102263,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:46:51.452Z",
+          "promptTokens": 103127,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:46:53.687Z",
+          "promptTokens": 103249,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:46:55.138Z",
+          "promptTokens": 103405,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:47:22.612Z",
+          "promptTokens": 105290,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:47:34.327Z",
+          "promptTokens": 106030,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:47:39.610Z",
+          "promptTokens": 106510,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        }
+      ],
+      "publicFilesPreserved": true,
+      "publicPassed": true,
+      "hidden": {
+        "passed": 6,
+        "total": 6,
+        "checks": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      "passed": true,
+      "initialFailureBeforeEdit": false,
+      "contextConditionEvidence": "formatted-request-tokenizer",
+      "functionalPassed": true,
+      "agentSettled": true
+    },
+    {
+      "model": "gpt-oss",
+      "case": "pagination-contract",
+      "condition": "clean",
+      "repeat": 0,
+      "contextWindow": 131072,
+      "kvCache": "f16",
+      "backgroundTokens": 0,
+      "backgroundSha256": null,
+      "peakGpuMiB": 15791,
+      "stage": "complete",
+      "usage": [
+        {
+          "input": 1921,
+          "output": 36,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 1957,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 56,
+          "output": 37,
+          "cacheRead": 1938,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 2031,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 86,
+          "output": 267,
+          "cacheRead": 2005,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 2358,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 76,
+          "output": 157,
+          "cacheRead": 2333,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 2566,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 140,
+          "output": 107,
+          "cacheRead": 2541,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 2788,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 464,
+          "output": 872,
+          "cacheRead": 2743,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 4079,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 255,
+          "output": 116,
+          "cacheRead": 3857,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 4228,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 134,
+          "output": 58,
+          "cacheRead": 4124,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 4316,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 66,
+          "output": 249,
+          "cacheRead": 4271,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 4586,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 116,
+          "output": 110,
+          "cacheRead": 4513,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 4739,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 106,
+          "output": 88,
+          "cacheRead": 4662,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 4856,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 106,
+          "output": 97,
+          "cacheRead": 4781,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 4984,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 106,
+          "output": 113,
+          "cacheRead": 4907,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 5126,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        }
+      ],
+      "initialPromptTokens": 1921,
+      "responses": 13,
+      "toolCalls": [
+        "ls",
+        "read",
+        "read",
+        "read",
+        "powershell",
+        "edit",
+        "edit",
+        "powershell",
+        "powershell",
+        "powershell",
+        "powershell",
+        "powershell"
+      ],
+      "stopReasons": [
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "stop"
+      ],
+      "providerErrors": [],
+      "initialFailureObserved": true,
+      "contextConditionValid": true,
+      "durationMs": 40669,
+      "timings": {
+        "prompt": [
+          {
+            "milliseconds": 437.1,
+            "tokens": 1921,
+            "tps": 4394.84
+          },
+          {
+            "milliseconds": 56.5,
+            "tokens": 56,
+            "tps": 991.08
+          },
+          {
+            "milliseconds": 71.79,
+            "tokens": 86,
+            "tps": 1197.94
+          },
+          {
+            "milliseconds": 75.52,
+            "tokens": 76,
+            "tps": 1006.4
+          },
+          {
+            "milliseconds": 78.2,
+            "tokens": 140,
+            "tps": 1790.35
+          },
+          {
+            "milliseconds": 144.62,
+            "tokens": 464,
+            "tps": 3208.3
+          },
+          {
+            "milliseconds": 103.87,
+            "tokens": 255,
+            "tps": 2455.04
+          },
+          {
+            "milliseconds": 77.92,
+            "tokens": 134,
+            "tps": 1719.82
+          },
+          {
+            "milliseconds": 60.18,
+            "tokens": 66,
+            "tps": 1096.69
+          },
+          {
+            "milliseconds": 99.47,
+            "tokens": 116,
+            "tps": 1166.15
+          },
+          {
+            "milliseconds": 111.73,
+            "tokens": 106,
+            "tps": 948.69
+          },
+          {
+            "milliseconds": 103.91,
+            "tokens": 106,
+            "tps": 1020.15
+          },
+          {
+            "milliseconds": 100.26,
+            "tokens": 106,
+            "tps": 1057.29
+          }
+        ],
+        "generation": [
+          {
+            "milliseconds": 296.62,
+            "tokens": 36,
+            "tps": 118
+          },
+          {
+            "milliseconds": 292.62,
+            "tokens": 37,
+            "tps": 123.03
+          },
+          {
+            "milliseconds": 2233.97,
+            "tokens": 267,
+            "tps": 119.07
+          },
+          {
+            "milliseconds": 1301.24,
+            "tokens": 157,
+            "tps": 119.89
+          },
+          {
+            "milliseconds": 869.21,
+            "tokens": 107,
+            "tps": 121.95
+          },
+          {
+            "milliseconds": 7384.54,
+            "tokens": 872,
+            "tps": 117.95
+          },
+          {
+            "milliseconds": 972.51,
+            "tokens": 116,
+            "tps": 118.25
+          },
+          {
+            "milliseconds": 467.52,
+            "tokens": 58,
+            "tps": 121.92
+          },
+          {
+            "milliseconds": 2118.88,
+            "tokens": 249,
+            "tps": 117.04
+          },
+          {
+            "milliseconds": 1018.18,
+            "tokens": 110,
+            "tps": 107.05
+          },
+          {
+            "milliseconds": 759.28,
+            "tokens": 88,
+            "tps": 114.58
+          },
+          {
+            "milliseconds": 852.42,
+            "tokens": 97,
+            "tps": 112.62
+          },
+          {
+            "milliseconds": 1025.35,
+            "tokens": 113,
+            "tps": 109.23
+          }
+        ],
+        "promptTpsMean": 1696.3646153846155,
+        "generationTpsMean": 116.9676923076923,
+        "generationTpsWeighted": 117.08657567192078
+      },
+      "requestBudgets": [
+        {
+          "time": "2026-10-21T21:48:13.158Z",
+          "promptTokens": 1921,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:48:16.087Z",
+          "promptTokens": 1994,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:48:16.525Z",
+          "promptTokens": 2091,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:48:18.927Z",
+          "promptTokens": 2409,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:48:20.397Z",
+          "promptTokens": 2681,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:48:23.519Z",
+          "promptTokens": 3207,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:48:31.192Z",
+          "promptTokens": 4112,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:48:32.405Z",
+          "promptTokens": 4258,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:48:34.191Z",
+          "promptTokens": 4337,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:48:38.356Z",
+          "promptTokens": 4629,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:48:41.402Z",
+          "promptTokens": 4768,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:48:44.197Z",
+          "promptTokens": 4887,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:48:47.113Z",
+          "promptTokens": 5013,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        }
+      ],
+      "publicFilesPreserved": true,
+      "publicPassed": true,
+      "hidden": {
+        "passed": 6,
+        "total": 6,
+        "checks": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      "passed": true,
+      "initialFailureBeforeEdit": true,
+      "functionalPassed": true,
+      "agentSettled": true
+    },
+    {
+      "model": "gpt-oss",
+      "case": "async-retry",
+      "condition": "clean",
+      "repeat": 0,
+      "contextWindow": 131072,
+      "kvCache": "f16",
+      "backgroundTokens": 0,
+      "backgroundSha256": null,
+      "peakGpuMiB": 15790,
+      "stage": "complete",
+      "usage": [
+        {
+          "input": 1936,
+          "output": 36,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 1972,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 36,
+          "output": 36,
+          "cacheRead": 1953,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 2025,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 125,
+          "output": 481,
+          "cacheRead": 1999,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 2605,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 125,
+          "output": 678,
+          "cacheRead": 2581,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 3384,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 334,
+          "output": 36,
+          "cacheRead": 3080,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 3450,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 36,
+          "output": 38,
+          "cacheRead": 3433,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 3507,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 137,
+          "output": 59,
+          "cacheRead": 3477,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 3673,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 66,
+          "output": 335,
+          "cacheRead": 3628,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 4029,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        }
+      ],
+      "initialPromptTokens": 1936,
+      "responses": 8,
+      "toolCalls": [
+        "find",
+        "read",
+        "read",
+        "edit",
+        "find",
+        "read",
+        "powershell"
+      ],
+      "stopReasons": [
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "stop"
+      ],
+      "providerErrors": [],
+      "initialFailureObserved": false,
+      "contextConditionValid": true,
+      "durationMs": 25359,
+      "timings": {
+        "prompt": [
+          {
+            "milliseconds": 481.69,
+            "tokens": 1936,
+            "tps": 4019.21
+          },
+          {
+            "milliseconds": 50.81,
+            "tokens": 36,
+            "tps": 708.49
+          },
+          {
+            "milliseconds": 78.3,
+            "tokens": 125,
+            "tps": 1596.34
+          },
+          {
+            "milliseconds": 75.67,
+            "tokens": 125,
+            "tps": 1651.98
+          },
+          {
+            "milliseconds": 101.28,
+            "tokens": 334,
+            "tps": 3297.79
+          },
+          {
+            "milliseconds": 48.2,
+            "tokens": 36,
+            "tps": 746.9
+          },
+          {
+            "milliseconds": 80.96,
+            "tokens": 137,
+            "tps": 1692.24
+          },
+          {
+            "milliseconds": 76.97,
+            "tokens": 66,
+            "tps": 857.52
+          }
+        ],
+        "generation": [
+          {
+            "milliseconds": 292.66,
+            "tokens": 36,
+            "tps": 119.59
+          },
+          {
+            "milliseconds": 296.4,
+            "tokens": 36,
+            "tps": 118.08
+          },
+          {
+            "milliseconds": 3973.2,
+            "tokens": 481,
+            "tps": 120.81
+          },
+          {
+            "milliseconds": 5696.53,
+            "tokens": 678,
+            "tps": 118.84
+          },
+          {
+            "milliseconds": 292.98,
+            "tokens": 36,
+            "tps": 119.46
+          },
+          {
+            "milliseconds": 343.4,
+            "tokens": 38,
+            "tps": 107.75
+          },
+          {
+            "milliseconds": 514.24,
+            "tokens": 59,
+            "tps": 112.79
+          },
+          {
+            "milliseconds": 2912.61,
+            "tokens": 335,
+            "tps": 114.67
+          }
+        ],
+        "promptTpsMean": 1821.3087500000001,
+        "generationTpsMean": 116.49875,
+        "generationTpsWeighted": 118.06993706195075
+      },
+      "requestBudgets": [
+        {
+          "time": "2026-10-21T21:48:56.128Z",
+          "promptTokens": 1936,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:48:57.542Z",
+          "promptTokens": 1989,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:48:57.980Z",
+          "promptTokens": 2124,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:49:02.125Z",
+          "promptTokens": 2706,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:49:08.017Z",
+          "promptTokens": 3414,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:49:08.589Z",
+          "promptTokens": 3469,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:49:09.089Z",
+          "promptTokens": 3614,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:49:11.579Z",
+          "promptTokens": 3694,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        }
+      ],
+      "publicFilesPreserved": true,
+      "publicPassed": true,
+      "hidden": {
+        "passed": 6,
+        "total": 6,
+        "checks": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      "passed": true,
+      "initialFailureBeforeEdit": false,
+      "functionalPassed": true,
+      "agentSettled": true
+    },
+    {
+      "model": "gpt-oss",
+      "case": "async-retry",
+      "condition": "loaded",
+      "repeat": 0,
+      "contextWindow": 131072,
+      "kvCache": "f16",
+      "backgroundTokens": 100000,
+      "backgroundSha256": "39e21354ba31a7a64ffef374e7104e202b7b46a0ca74ba66a7318434b1d6da28",
+      "peakGpuMiB": 15799,
+      "stage": "complete",
+      "usage": [
+        {
+          "input": 101976,
+          "output": 41,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 102017,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 52,
+          "output": 24,
+          "cacheRead": 101997,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 102073,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 125,
+          "output": 751,
+          "cacheRead": 102049,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 102925,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 258,
+          "output": 189,
+          "cacheRead": 102690,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 103137,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 137,
+          "output": 750,
+          "cacheRead": 103108,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 103995,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 983,
+          "output": 964,
+          "cacheRead": 103240,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 105187,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        {
+          "input": 238,
+          "output": 439,
+          "cacheRead": 104974,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 105651,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        }
+      ],
+      "initialPromptTokens": 101976,
+      "responses": 7,
+      "toolCalls": [
+        "ls",
+        "read",
+        "write",
+        "read",
+        "read",
+        "write"
+      ],
+      "stopReasons": [
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "toolUse",
+        "stop"
+      ],
+      "providerErrors": [],
+      "initialFailureObserved": false,
+      "contextConditionValid": true,
+      "durationMs": 88668,
+      "timings": {
+        "prompt": [
+          {
+            "milliseconds": 32097.63,
+            "tokens": 101976,
+            "tps": 3177.06
+          },
+          {
+            "milliseconds": 86.9,
+            "tokens": 52,
+            "tps": 598.38
+          },
+          {
+            "milliseconds": 149.79,
+            "tokens": 125,
+            "tps": 834.47
+          },
+          {
+            "milliseconds": 217.47,
+            "tokens": 258,
+            "tps": 1186.37
+          },
+          {
+            "milliseconds": 134.29,
+            "tokens": 137,
+            "tps": 1020.2
+          },
+          {
+            "milliseconds": 582.72,
+            "tokens": 983,
+            "tps": 1686.92
+          },
+          {
+            "milliseconds": 201.3,
+            "tokens": 238,
+            "tps": 1182.29
+          }
+        ],
+        "generation": [
+          {
+            "milliseconds": 633.21,
+            "tokens": 41,
+            "tps": 63.17
+          },
+          {
+            "milliseconds": 326.07,
+            "tokens": 24,
+            "tps": 70.54
+          },
+          {
+            "milliseconds": 10248.33,
+            "tokens": 751,
+            "tps": 73.18
+          },
+          {
+            "milliseconds": 2634.55,
+            "tokens": 189,
+            "tps": 71.36
+          },
+          {
+            "milliseconds": 10411.03,
+            "tokens": 750,
+            "tps": 71.94
+          },
+          {
+            "milliseconds": 13285.27,
+            "tokens": 964,
+            "tps": 72.49
+          },
+          {
+            "milliseconds": 6030.23,
+            "tokens": 439,
+            "tps": 72.63
+          }
+        ],
+        "promptTpsMean": 1383.6699999999998,
+        "generationTpsMean": 70.75857142857143,
+        "generationTpsWeighted": 72.32257843878253
+      },
+      "requestBudgets": [
+        {
+          "time": "2026-10-21T21:49:22.411Z",
+          "promptTokens": 101976,
+          "contextWindow": 131072,
+          "before": 1,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:49:55.917Z",
+          "promptTokens": 102049,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:49:56.993Z",
+          "promptTokens": 102174,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:50:08.086Z",
+          "promptTokens": 102948,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:50:11.616Z",
+          "promptTokens": 103245,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:50:22.841Z",
+          "promptTokens": 104223,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        },
+        {
+          "time": "2026-10-21T21:50:37.403Z",
+          "promptTokens": 105212,
+          "contextWindow": 131072,
+          "before": 8192,
+          "after": 8192,
+          "cap": 8192
+        }
+      ],
+      "publicFilesPreserved": true,
+      "publicPassed": true,
+      "hidden": {
+        "passed": 5,
+        "total": 6,
+        "checks": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          false
+        ]
+      },
+      "passed": false,
+      "initialFailureBeforeEdit": false,
+      "contextConditionEvidence": "formatted-request-tokenizer",
+      "functionalPassed": false,
+      "agentSettled": true
+    }
+  ],
+  "models": [
+    "gpt-oss"
+  ],
+  "conditions": [
+    "clean",
+    "loaded"
+  ],
+  "cases": [
+    "csv-records",
+    "pagination-contract",
+    "async-retry"
+  ],
+  "repeats": 1,
+  "plannedTrials": 6,
+  "contextByModel": {
+    "gpt-oss": 131072
+  },
+  "kvCache": "f16",
+  "compactionEnabled": false,
+  "localTokenBudget": "exact-template-tokenizer-v1",
+  "finished": "2026-10-21T21:50:48.563Z",
+  "notes": [
+    "Single exploratory run per case/condition unless repeat >1.",
+    "Historical batches may include concurrent throttled downloads; see per-run protocol.",
+    "GPU memory includes desktop and is sampled, not an exact allocation maximum.",
+    "Timeout usage totals recover completed responses; an unfinished final response may be omitted.",
+    "Initial failure is audited from a nonzero public-check invocation before the first source-file edit/write, not an AssertionError-only text match. This observation is separate from the pass score."
+  ],
+  "summary": [
+    {
+      "model": "gpt-oss",
+      "condition": "clean",
+      "completed": 3,
+      "passed": 3,
+      "functionallyCorrect": 3,
+      "agentSettled": 3,
+      "hiddenGroupsPassed": 18,
+      "hiddenGroupsGraded": 18,
+      "durationSeconds": 161.895,
+      "generationTpsMean": 114.42722222222223,
+      "generationTpsWeighted": 115.78295002687508,
+      "peakGpuMiB": 15806,
+      "outputTokens": 12002
+    },
+    {
+      "model": "gpt-oss",
+      "condition": "loaded",
+      "completed": 3,
+      "passed": 1,
+      "functionallyCorrect": 2,
+      "agentSettled": 2,
+      "hiddenGroupsPassed": 17,
+      "hiddenGroupsGraded": 18,
+      "durationSeconds": 399.58799999999997,
+      "generationTpsMean": 71.4695,
+      "generationTpsWeighted": 72.33625341891224,
+      "peakGpuMiB": 15809,
+      "outputTokens": 15936
+    }
+  ]
+}

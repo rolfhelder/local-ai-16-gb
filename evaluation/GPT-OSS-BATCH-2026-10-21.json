@@ -1,0 +1,63 @@
+{
+  "started": "2026-10-21T21:42:52.813Z",
+  "state": "complete",
+  "codingRun": "coding-context-1792618864396",
+  "steps": [
+    {
+      "script": "evals/export-coding-context.mjs",
+      "args": [
+        "--run=coding-context-1792618864396",
+        "--output=CODING-CONTEXT-GPT-OSS-2026-10-21"
+      ],
+      "started": "2026-10-21T21:50:53.186Z",
+      "exitCode": 0,
+      "finished": "2026-10-21T21:50:55.617Z"
+    },
+    {
+      "script": "evals/context-limits.mjs",
+      "args": [
+        "--models=gpt-oss",
+        "--contexts=65536,131072",
+        "--pattern=words",
+        "--output-tokens=8192",
+        "--no-refine",
+        "--reasoning-budget=2048"
+      ],
+      "started": "2026-10-21T21:50:55.623Z",
+      "exitCode": 0,
+      "finished": "2026-10-21T21:52:36.301Z"
+    },
+    {
+      "script": "evals/context-limits.mjs",
+      "args": [
+        "--models=gpt-oss",
+        "--contexts=65536,131072",
+        "--pattern=words",
+        "--output-tokens=8192",
+        "--no-refine",
+        "--reasoning-budget=-1",
+        "--output-basename=CONTEXT-GPT-OSS-UNRESTRICTED-2026-10-21"
+      ],
+      "started": "2026-10-21T21:52:36.306Z",
+      "exitCode": 0,
+      "finished": "2026-10-21T21:55:02.204Z"
+    },
+    {
+      "script": "evals/context-limits.mjs",
+      "args": [
+        "--models=gpt-oss",
+        "--contexts=65536,131072",
+        "--pattern=words",
+        "--output-tokens=8192",
+        "--no-refine",
+        "--reasoning-budget=-1",
+        "--sampling=reference",
+        "--output-basename=CONTEXT-GPT-OSS-REFERENCE-2026-10-21"
+      ],
+      "started": "2026-10-21T21:55:02.208Z",
+      "exitCode": 0,
+      "finished": "2026-10-21T21:56:56.589Z"
+    }
+  ],
+  "finished": "2026-10-21T21:56:56.591Z"
+}

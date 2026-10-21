@@ -43,3 +43,4 @@ try {
     if ($actualPnpmVersion.Trim() -ne $pnpmVersion) { throw "Unexpected pnpm version: $actualPnpmVersion" }
     Write-Output "Portable Node $actualNodeVersion and pnpm $actualPnpmVersion are ready."
 } finally { $env:PATH = $oldPath }
+& (Join-Path $PSScriptRoot 'Install-SearchTools.ps1')

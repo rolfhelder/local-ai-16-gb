@@ -80,6 +80,46 @@
     ]
   },
   {
+    "model": "gpt-oss",
+    "started": "2026-10-21T21:41:04.398Z",
+    "status": "complete",
+    "source": "CODING-CONTEXT-GPT-OSS-2026-10-21.json",
+    "context": 131072,
+    "kvCache": "f16",
+    "summary": [
+      {
+        "model": "gpt-oss",
+        "condition": "clean",
+        "completed": 3,
+        "passed": 3,
+        "functionallyCorrect": 3,
+        "agentSettled": 3,
+        "hiddenGroupsPassed": 18,
+        "hiddenGroupsGraded": 18,
+        "durationSeconds": 161.895,
+        "generationTpsMean": 114.42722222222223,
+        "generationTpsWeighted": 115.78295002687508,
+        "peakGpuMiB": 15806,
+        "outputTokens": 12002
+      },
+      {
+        "model": "gpt-oss",
+        "condition": "loaded",
+        "completed": 3,
+        "passed": 1,
+        "functionallyCorrect": 2,
+        "agentSettled": 2,
+        "hiddenGroupsPassed": 17,
+        "hiddenGroupsGraded": 18,
+        "durationSeconds": 399.58799999999997,
+        "generationTpsMean": 71.4695,
+        "generationTpsWeighted": 72.33625341891224,
+        "peakGpuMiB": 15809,
+        "outputTokens": 15936
+      }
+    ]
+  },
+  {
     "model": "omnicoder",
     "started": "2026-10-21T20:32:21.213Z",
     "status": "complete",

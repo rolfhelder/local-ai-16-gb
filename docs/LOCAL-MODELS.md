@@ -56,3 +56,7 @@ For missing video captions, run speech recognition separately. Scheduling transc
 | Web tools unavailable | Isolated profile needs its own package declarations/config; old global settings aren't inherited |
 
 `PI_OFFLINE=1` in the launcher disables automatic Pi network activity. It is not a firewall and does not prevent web extensions, MCP servers, or shell commands from using the internet. Inference stays local only while the selected provider and all secondary model/summarizer settings remain local.
+
+## Four-model follow-up
+
+Qwen, Gemma, OmniCoder and GPT-OSS have completed their initial coding runs. See [all four results and GPT-OSS setup repairs](CODING-FOUR-MODELS.md), including the invalid initial GPT-OSS loaded trials, portable search dependencies and exact request-token budgeting. Original artifacts are retained; rerun outcomes and separate recall controls are linked there.

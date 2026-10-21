@@ -1,4 +1,6 @@
-# Qwen versus Gemma on the 16 GB PC
+# Local-model context measurements on the 16 GB PC
+
+The original Qwen/Gemma capacity comparison is preserved below. OmniCoder and GPT-OSS have now completed the candidate batch; see [all four coding results and setup diagnostics](CODING-FOUR-MODELS.md). OmniCoder passed exact recall at 64k, 128k and 200k. GPT-OSS loaded its native 128k window but its initial recall trials failed (one parser error and one incorrect answer); these are distinct from allocation success.
 
 Both models default to **204,800 tokens (200k)** in `pia`, leaving more VRAM headroom than the 256k stress test. Both loaded a 262,144-token window and processed approximately 235k input tokens. The 256k results below remain capacity evidence, not a quality assessment or the current default. The context budget includes prompts, tools and generated tokens.
 

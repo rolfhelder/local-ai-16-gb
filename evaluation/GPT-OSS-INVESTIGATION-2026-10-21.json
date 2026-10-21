@@ -1,0 +1,231 @@
+{
+  "date": "2026-10-21",
+  "notes": [
+    "Controls share deterministic lookup content but not a fixed random seed. Single trials do not isolate causal effects.",
+    "Diagnostic extraction never changes strict scores; tool use remains a separate contract violation.",
+    "Initial 64k final JSON was correct in the server log but rejected by the parser."
+  ],
+  "forensic": {
+    "providerError": "The model produced output that does not match the expected peg-native format",
+    "rawFinal": "```json\r\n{\r\n  \"N1\": \"cobalt-1984866\",\r\n  \"N2\": \"amber-12946479\",\r\n  \"N3\": \"cedar-10851422\",\r\n  \"N4\": \"orbit-2982799\",\r\n  \"N5\": \"maple-10112171\"\r\n}\r\n```",
+    "rawFinalGrade": {
+      "exact": 5,
+      "passed": true,
+      "validJson": true
+    },
+    "creditedAsPass": false,
+    "note": "Forensic server-log recovery only; the client did not receive a successful final answer."
+  },
+  "rows": [
+    {
+      "condition": "initial",
+      "source": "archive/CONTEXT-GPT-OSS-2026-10-21-INITIAL.json",
+      "context": 65536,
+      "thinkingBudget": 2048,
+      "sampling": "default",
+      "strictRecallPassed": false,
+      "strictExact": 0,
+      "validJson": false,
+      "strict": {
+        "exact": 0,
+        "passed": false,
+        "validJson": false
+      },
+      "diagnosticJsonExact": 0,
+      "diagnosticJsonPassed": false,
+      "formatOnlyFailure": false,
+      "diagnosticCredit": false,
+      "stopReasons": [
+        "error"
+      ],
+      "providerErrors": [],
+      "toolFree": true,
+      "generationTps": 99.64,
+      "gpuMiB": 14176
+    },
+    {
+      "condition": "initial",
+      "source": "archive/CONTEXT-GPT-OSS-2026-10-21-INITIAL.json",
+      "context": 131072,
+      "thinkingBudget": 2048,
+      "sampling": "default",
+      "strictRecallPassed": false,
+      "strictExact": 0,
+      "validJson": true,
+      "strict": {
+        "exact": 0,
+        "passed": false,
+        "validJson": true
+      },
+      "diagnosticJsonExact": 0,
+      "diagnosticJsonPassed": false,
+      "formatOnlyFailure": false,
+      "diagnosticCredit": false,
+      "stopReasons": [
+        "stop"
+      ],
+      "providerErrors": [],
+      "toolFree": true,
+      "generationTps": 77.5,
+      "gpuMiB": 15776
+    },
+    {
+      "condition": "repaired, 2048 thinking budget",
+      "source": "CONTEXT-GPT-OSS-2026-10-21.json",
+      "context": 65536,
+      "thinkingBudget": 2048,
+      "sampling": "default",
+      "strictRecallPassed": true,
+      "strictExact": 5,
+      "validJson": true,
+      "strict": {
+        "exact": 5,
+        "passed": true,
+        "validJson": true
+      },
+      "diagnosticJsonExact": 5,
+      "diagnosticJsonPassed": true,
+      "formatOnlyFailure": false,
+      "diagnosticCredit": false,
+      "stopReasons": [
+        "stop"
+      ],
+      "providerErrors": [],
+      "toolFree": true,
+      "generationTps": 93.32,
+      "gpuMiB": 14254
+    },
+    {
+      "condition": "repaired, 2048 thinking budget",
+      "source": "CONTEXT-GPT-OSS-2026-10-21.json",
+      "context": 131072,
+      "thinkingBudget": 2048,
+      "sampling": "default",
+      "strictRecallPassed": false,
+      "strictExact": 0,
+      "validJson": true,
+      "strict": {
+        "exact": 0,
+        "passed": false,
+        "validJson": true
+      },
+      "diagnosticJsonExact": 0,
+      "diagnosticJsonPassed": false,
+      "formatOnlyFailure": false,
+      "diagnosticCredit": false,
+      "stopReasons": [
+        "toolUse",
+        "stop"
+      ],
+      "providerErrors": [],
+      "toolFree": false,
+      "generationTps": 58.835,
+      "gpuMiB": 15786
+    },
+    {
+      "condition": "repaired, unrestricted thinking",
+      "source": "CONTEXT-GPT-OSS-UNRESTRICTED-2026-10-21.json",
+      "context": 65536,
+      "thinkingBudget": -1,
+      "sampling": "default",
+      "strictRecallPassed": false,
+      "strictExact": 0,
+      "validJson": true,
+      "strict": {
+        "exact": 0,
+        "passed": false,
+        "validJson": true
+      },
+      "diagnosticJsonExact": 0,
+      "diagnosticJsonPassed": false,
+      "formatOnlyFailure": false,
+      "diagnosticCredit": false,
+      "stopReasons": [
+        "stop"
+      ],
+      "providerErrors": [],
+      "toolFree": true,
+      "generationTps": 95.35,
+      "gpuMiB": 14255
+    },
+    {
+      "condition": "repaired, unrestricted thinking",
+      "source": "CONTEXT-GPT-OSS-UNRESTRICTED-2026-10-21.json",
+      "context": 131072,
+      "thinkingBudget": -1,
+      "sampling": "default",
+      "strictRecallPassed": false,
+      "strictExact": 0,
+      "validJson": false,
+      "strict": {
+        "exact": 0,
+        "passed": false,
+        "validJson": false
+      },
+      "diagnosticJsonExact": 5,
+      "diagnosticJsonPassed": true,
+      "formatOnlyFailure": true,
+      "diagnosticCredit": false,
+      "stopReasons": [
+        "toolUse",
+        "stop"
+      ],
+      "providerErrors": [],
+      "toolFree": false,
+      "generationTps": 66.25,
+      "gpuMiB": 15795
+    },
+    {
+      "condition": "repaired, unrestricted + reference sampling",
+      "source": "CONTEXT-GPT-OSS-REFERENCE-2026-10-21.json",
+      "context": 65536,
+      "thinkingBudget": -1,
+      "sampling": "reference",
+      "strictRecallPassed": true,
+      "strictExact": 5,
+      "validJson": true,
+      "strict": {
+        "exact": 5,
+        "passed": true,
+        "validJson": true
+      },
+      "diagnosticJsonExact": 5,
+      "diagnosticJsonPassed": true,
+      "formatOnlyFailure": false,
+      "diagnosticCredit": false,
+      "stopReasons": [
+        "stop"
+      ],
+      "providerErrors": [],
+      "toolFree": true,
+      "generationTps": 81.46,
+      "gpuMiB": 14261
+    },
+    {
+      "condition": "repaired, unrestricted + reference sampling",
+      "source": "CONTEXT-GPT-OSS-REFERENCE-2026-10-21.json",
+      "context": 131072,
+      "thinkingBudget": -1,
+      "sampling": "reference",
+      "strictRecallPassed": false,
+      "strictExact": 0,
+      "validJson": true,
+      "strict": {
+        "exact": 0,
+        "passed": false,
+        "validJson": true
+      },
+      "diagnosticJsonExact": 0,
+      "diagnosticJsonPassed": false,
+      "formatOnlyFailure": false,
+      "diagnosticCredit": false,
+      "stopReasons": [
+        "stop"
+      ],
+      "providerErrors": [],
+      "toolFree": true,
+      "generationTps": 61.83,
+      "gpuMiB": 15795
+    }
+  ]
+}

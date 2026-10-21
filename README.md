@@ -82,4 +82,4 @@ Commit research, prompts, example settings, version/checksum manifests, scripts,
 
 Local Git is initialized on `main`; GitHub CLI setup and a remote under `rolfhelder` are deferred. The selected packages have a reconstruction path; full model/task validation and a fresh-PC restoration test remain pending. See [the migration runbook](docs/WINDOWS-MIGRATION.md) for offline backup requirements.
 
-The [candidate test batch](docs/CANDIDATE-TESTS.md) runs OmniCoder and, after its verified download, GPT-OSS sequentially. The [coding comparison](evaluation/CODING-MODELS-2026-10-21.md) updates when each result is exported. GPT-OSS has a native 128k window and is not configured for 200k.
+Both candidate downloads are verified and their initial test batch finished. See [all four results and the GPT-OSS investigation](docs/CODING-FOUR-MODELS.md). The [coding comparison](evaluation/CODING-MODELS-2026-10-21.md) updates when each result is exported. GPT-OSS has a native 128k window and is not configured for 200k.
