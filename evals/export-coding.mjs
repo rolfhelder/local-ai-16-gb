@@ -1,7 +1,7 @@
 import { readdir,readFile,writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { root } from '../scripts/local-runtime.mjs';
-const folders=(await readdir(path.join(root,'.state/evals'),{withFileTypes:true})).filter(entry=>entry.isDirectory()&&entry.name.startsWith('coding-')).map(entry=>entry.name).sort();
+const folders=(await readdir(path.join(root,'.state/evals'),{withFileTypes:true})).filter(entry=>entry.isDirectory()&&/^coding-\d+$/.test(entry.name)).map(entry=>entry.name).sort();
 const reports=[];
 const clean=value=>typeof value==='string'?value.replaceAll(root,'<repo>').replaceAll(root.replaceAll('\\','/'),'<repo>'):Array.isArray(value)?value.map(clean):value&&typeof value==='object'?Object.fromEntries(Object.entries(value).map(([key,item])=>[key,clean(item)])):value;
 for(const folder of folders) reports.push({run:folder,cases:clean(JSON.parse(await readFile(path.join(root,'.state/evals',folder,'report.json'),'utf8')))});

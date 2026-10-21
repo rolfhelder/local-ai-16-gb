@@ -1,6 +1,6 @@
 # Coding suite: paired clean and 100k background
 
-2026-10-21. All **12 trials completed** after the initial setup-only pass. Preflight confirmed all three faulty fixtures fail public checks and at least one withheld group, while all three reference repairs pass public checks and 6/6 withheld groups. OmniCoder is downloaded and SHA256-verified; GPT-OSS is transferring in the sequential queue. Neither is a participant in this run.
+2026-10-21. All **12 trials completed** after the initial setup-only pass. Preflight confirmed all three faulty fixtures fail public checks and at least one withheld group, while all three reference repairs pass public checks and 6/6 withheld groups. OmniCoder is downloaded and SHA256-verified; GPT-OSS is transferring in the sequential queue. Neither is a participant in this original paired run. OmniCoder has since completed the same suite; see the [candidate batch](CANDIDATE-TESTS.md) and [cross-model table](../evaluation/CODING-MODELS-2026-10-21.md).
 
 ## Observed results
 

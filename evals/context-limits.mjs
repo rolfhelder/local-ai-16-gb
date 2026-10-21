@@ -84,6 +84,8 @@ try {
   const selection = process.argv.find(arg => arg.startsWith('--models='))?.split('=')[1] || 'qwen,gemma';
   for (const name of selection.split(',')) {
     const config = await machine(name); if (process.argv.includes('--no-reasoning')) config.Reasoning = false;
+    if(process.argv.includes('--kv=q8_0'))config.ExtraServerArgs=[...(config.ExtraServerArgs||[]),'--cache-type-k','q8_0','--cache-type-v','q8_0','--flash-attn','on'];
+    report.kvCache=process.argv.includes('--kv=q8_0')?'q8_0':'f16';report.protocol=report.protocol.replace('f16 KV',report.kvCache+' KV');
     const metadata = nativeContext(config.ModelFile);
     const model = { name, ...metadata, trials: [] }; report.models.push(model); await save();
     console.log(JSON.stringify({ model: name, ...metadata }));
@@ -111,3 +113,8 @@ try {
   }
 } finally { await server?.stop(); await release(); report.finished = new Date().toISOString(); await save(); }
 console.log('Report: ' + path.join(base, 'report.json'));
+if(report.models.length&&report.models.every(model=>['omnicoder','gpt-oss'].includes(model.name))){
+  const basename='CONTEXT-'+report.models.map(model=>model.name.toUpperCase()).join('-')+'-2026-10-21.json';
+  const clean=JSON.stringify(report,null,2).replaceAll(root.replaceAll('\\','\\\\'),'<repo>').replaceAll(root.replaceAll('\\','/'),'<repo>');
+  await writeFile(path.join(root,'evaluation',basename),clean+'\n');
+}

@@ -10,6 +10,10 @@ $lockPath=Join-Path $stateDirectory 'coding-downloads.lock'
 $queueLock=[IO.File]::Open($lockPath,[IO.FileMode]::OpenOrCreate,[IO.FileAccess]::ReadWrite,[IO.FileShare]::None)
 $statusPath=Join-Path $stateDirectory 'coding-downloads.json'
 $status=[ordered]@{Pid=$PID;Started=(Get-Date).ToUniversalTime().ToString('o');RateLimit=$RateLimit;Order='sequential';State='running';Files=@()}
+$rateUnit=$RateLimit.Substring($RateLimit.Length-1)
+$rateMultiplier=switch($rateUnit){'K'{1024};'M'{1048576};'G'{1073741824};default{1}}
+$rateBytes=[double]($RateLimit -replace '[KMG]$','')*$rateMultiplier
+$lowSpeedLimit=[long][math]::Max(1,[math]::Min(65536,[math]::Floor($rateBytes*0.1)))
 function Save-QueueStatus { $status | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $statusPath -Encoding UTF8 }
 function Get-ModelSha256([string]$ModelPath) {
     $modelStream=[IO.File]::OpenRead($ModelPath)
@@ -33,9 +37,30 @@ try {
         }
         $alreadyComplete=(Test-Path -LiteralPath $partial) -and (Get-Item -LiteralPath $partial).Length -eq $item.Size
         if(-not $alreadyComplete) {
-            $url='https://huggingface.co/'+$item.Repo+'/resolve/'+$item.Revision+'/'+$item.File
-            & curl.exe --fail --location --continue-at - --limit-rate $RateLimit --retry 8 --retry-delay 10 --retry-all-errors --connect-timeout 30 --speed-limit 1024 --speed-time 120 --no-progress-meter --output $partial $url
-            if($LASTEXITCODE -ne 0) { throw ('curl failed ('+$LASTEXITCODE+'); partial file retained for resume.') }
+            # Bounded ranges avoid the observed long-response CDN stall. Reuse one
+            # scratch chunk; append only fully received ranges, never partial ones.
+            $chunkPath=$partial+'.chunk'
+            $offset=if(Test-Path -LiteralPath $partial){[long](Get-Item -LiteralPath $partial).Length}else{[long]0}
+            $startingOffset=$offset
+            $transferClock=[Diagnostics.Stopwatch]::StartNew()
+            if($offset -gt $item.Size){throw 'Partial file exceeds expected size; preserved it.'}
+            while($offset -lt $item.Size){
+                $rangeEnd=[long][math]::Min([long]$item.Size-1,$offset+33554432-1)
+                $chunkBytes=$rangeEnd-$offset+1
+                $url='https://huggingface.co/'+$item.Repo+'/resolve/'+$item.Revision+'/'+$item.File+'?download=true&queue_range='+$offset+'&request='+[DateTime]::UtcNow.ToString('yyyyMMddHHmmss')
+                $httpCode=& curl.exe --fail --location --http1.1 --range ($offset.ToString()+'-'+$rangeEnd.ToString()) --limit-rate $RateLimit --retry 4 --retry-delay 10 --retry-all-errors --connect-timeout 30 --max-time 120 --max-filesize $chunkBytes --speed-limit $lowSpeedLimit --speed-time 90 --no-progress-meter --write-out '%{http_code}' --output $chunkPath $url
+                if($LASTEXITCODE -ne 0 -or $httpCode -ne '206'){throw ('Range transfer failed; partial file retained. HTTP '+$httpCode)}
+                if((Get-Item -LiteralPath $chunkPath).Length -ne $chunkBytes){throw 'Incomplete range; partial file preserved.'}
+                $destination=[IO.File]::Open($partial,[IO.FileMode]::Append,[IO.FileAccess]::Write,[IO.FileShare]::Read)
+                $source=[IO.File]::OpenRead($chunkPath)
+                try{if($destination.Length -ne $offset){throw 'Partial changed during range transfer.'};$source.CopyTo($destination)}finally{$source.Dispose();$destination.Dispose()}
+                $offset+=$chunkBytes;$entry.DownloadedBytes=$offset
+                # Curl's short-request burst allowance resets for each range.
+                # Pace the whole file as well, retaining the aggregate cap.
+                $waitSeconds=(($offset-$startingOffset)/$rateBytes)-$transferClock.Elapsed.TotalSeconds
+                if($waitSeconds -gt 0){Start-Sleep -Milliseconds ([int][math]::Ceiling($waitSeconds*1000))}
+                $entry.AverageBytesPerSecond=[long](($offset-$startingOffset)/[math]::Max(0.001,$transferClock.Elapsed.TotalSeconds));Save-QueueStatus
+            }
         }
         $entry.State='verifying';Save-QueueStatus
         if((Get-Item -LiteralPath $partial).Length -ne $item.Size) { throw 'Downloaded size mismatch; partial retained.' }

@@ -8,12 +8,20 @@ export const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '
 export const exec = promisify(execFile);
 export const nodeExe = path.join(root, 'runtime/node/node.exe');
 export const piEntry = path.join(root, 'node_modules/@earendil-works/pi-coding-agent/dist/bundle/cli.js');
+export const localModels = {
+  qwen: { file: 'unsloth/Qwen3.5-9B-GGUF/Qwen3.5-9B-Q4_K_M.gguf', context: 262144 },
+  gemma: { file: 'unsloth/gemma-4-12b-it-GGUF/gemma-4-12b-it-Q4_K_M.gguf', context: 262144 },
+  omnicoder: { file: 'Tesslate/OmniCoder-9B-GGUF/omnicoder-9b-q4_k_m.gguf', context: 262144 },
+  'gpt-oss': { file: 'ggml-org/gpt-oss-20b-GGUF/gpt-oss-20b-MXFP4.gguf', context: 131072 },
+};
 export async function machine(selection) {
   const config = JSON.parse(await readFile(path.join(root, 'machine.local.json'), 'utf8'));
-  if (selection && !['qwen','gemma'].includes(selection)) throw new Error('--local-model must be qwen or gemma');
+  if (selection && !localModels[selection]) throw new Error('--local-model must be '+Object.keys(localModels).join(', '));
   if (selection) {
-    config.ModelFile = path.join(config.ModelsDirectory, selection === 'qwen' ? 'unsloth/Qwen3.5-9B-GGUF/Qwen3.5-9B-Q4_K_M.gguf' : 'unsloth/gemma-4-12b-it-GGUF/gemma-4-12b-it-Q4_K_M.gguf');
+    config.ModelFile = path.join(config.ModelsDirectory, localModels[selection].file);
     config.ModelId = selection + '-local';
+    config.NativeContext = localModels[selection].context;
+    config.ContextSize = Math.min(config.ContextSize, config.NativeContext);
   }
   config.ModelFile ||= path.join(config.ModelsDirectory, 'unsloth/Qwen3.5-9B-GGUF/Qwen3.5-9B-Q4_K_M.gguf');
   config.ModelId ||= 'qwen-local';

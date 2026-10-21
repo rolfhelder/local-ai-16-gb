@@ -1,0 +1,84 @@
+{
+  "started": "2026-10-21T20:32:02.094Z",
+  "state": "waiting-for-download",
+  "models": [
+    {
+      "name": "omnicoder",
+      "phase": "complete",
+      "steps": [
+        {
+          "script": "evals/coding-context.mjs",
+          "args": [
+            "--run",
+            "--models=omnicoder"
+          ],
+          "started": "2026-10-21T20:32:19.079Z",
+          "log": "<repo>\\.state\\evals\\candidates-1792614722091\\omnicoder-evals-coding-context.mjs-0.log",
+          "exitCode": 0,
+          "finished": "2026-10-21T20:45:04.370Z"
+        },
+        {
+          "script": "evals/export-coding-context.mjs",
+          "args": [
+            "--run=coding-context-1792614741211",
+            "--output=CODING-CONTEXT-OMNICODER-2026-10-21"
+          ],
+          "started": "2026-10-21T20:45:04.727Z",
+          "log": "<repo>\\.state\\evals\\candidates-1792614722091\\omnicoder-evals-export-coding-context.mjs-1.log",
+          "exitCode": 0,
+          "finished": "2026-10-21T20:45:06.581Z"
+        },
+        {
+          "script": "evals/context-limits.mjs",
+          "args": [
+            "--models=omnicoder",
+            "--contexts=65536,131072,204800",
+            "--pattern=words",
+            "--reasoning-budget=2048",
+            "--output-tokens=8192",
+            "--no-refine"
+          ],
+          "started": "2026-10-21T20:45:06.927Z",
+          "log": "<repo>\\.state\\evals\\candidates-1792614722091\\omnicoder-evals-context-limits.mjs-2.log",
+          "exitCode": 0,
+          "finished": "2026-10-21T20:48:44.871Z"
+        },
+        {
+          "script": "evals/export-coding.mjs",
+          "args": [],
+          "started": "2026-10-21T20:48:45.222Z",
+          "log": "<repo>\\.state\\evals\\candidates-1792614722091\\omnicoder-evals-export-coding.mjs-3.log",
+          "exitCode": 0,
+          "finished": "2026-10-21T20:48:45.345Z"
+        }
+      ],
+      "fitAttempts": [
+        {
+          "context": 204800,
+          "cache": "f16",
+          "peakGpuMiB": 14358,
+          "passed": true
+        }
+      ],
+      "checksumVerified": true,
+      "metadata": {
+        "architecture": "qwen35",
+        "nativeContext": 262144,
+        "metadata": {
+          "general.architecture": "qwen35",
+          "general.name": "Model",
+          "qwen35.context_length": 262144
+        }
+      },
+      "context": 204800,
+      "kvCache": "f16",
+      "codingRun": "coding-context-1792614741211"
+    },
+    {
+      "name": "gpt-oss",
+      "phase": "waiting-for-verified-download",
+      "steps": [],
+      "fitAttempts": []
+    }
+  ]
+}

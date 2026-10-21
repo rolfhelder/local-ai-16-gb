@@ -5,6 +5,9 @@
 ```powershell
 pia --local-model qwen --context 204800
 pia --local-model gemma --context 204800
+pia --local-model omnicoder --context 204800
+# GPT-OSS: after verified download and compatibility tests
+pia --local-model gpt-oss --context 131072
 pia --local-model qwen --context 131072 --reasoning-budget 4096
 pia --profile web
 pia --browser
@@ -30,3 +33,5 @@ For Gemma, the GGUF and alias become `gemma-4-12b-it-Q4_K_M.gguf` and `gemma-loc
 The wrapper also regenerates an isolated profile, sets runtime/tool/browser paths, holds the shared inference lock, and stops its owned server/browser after Pi exits. Those steps make `pia` the convenient entry point rather than having to coordinate two terminals. Existing sessions must exit before changing models or launch settings. A new terminal picks up a freshly installed user PATH.
 
 The standard TUI includes an explicit status such as `Context: 8,192 / 204,800 tokens (4.0%) [estimate]`. Pi already provides a compact footer percentage; the added native hook makes absolute usage visible too. Unknown usage after compaction displays `?`, not a misleading zero. The native comparison profile omits extensions to preserve baseline behavior.
+
+OmniCoder uses the verified 9B Q4_K_M file and the same 204,800-token default. GPT-OSS uses the MXFP4 20B file and clamps the requested window to its native 131,072 tokens. `--kv q8_0` explicitly selects quantized K/V cache plus Flash Attention when required by the fit tests; f16 remains the default. Candidate test status and any fallback are documented in [the batch](CANDIDATE-TESTS.md).

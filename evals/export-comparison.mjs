@@ -5,7 +5,8 @@ const read = async name => JSON.parse(await readFile(path.join(root, 'evaluation
 const reports = await read('CONTEXT-LIMITS-2026-10-21.json');
 const final = reports.findLast(run => run.finished && run.maxTokens === 8192 && run.reasoningBudget === 2048 && ['qwen', 'gemma'].every(name => run.models.some(model => model.name === name && model.trials.some(trial => trial.context === 262144 && trial.inferencePassed))));
 if (!final) throw new Error('No completed matched 256k reasoning-on comparison');
-const coding = (await read('CODING-2026-10-21.json')).at(-1);
+const coding = (await read('CODING-2026-10-21.json')).findLast(run=>['qwen','gemma'].every(name=>run.cases.some(entry=>entry.name===name)));
+if(!coding)throw new Error('No paired Qwen/Gemma coding baseline');
 const selected = name => final.models.find(model => model.name === name).trials.find(trial => trial.context === 262144);
 const short = name => coding.cases.find(entry => entry.name === name);
 const winner = (qwen, gemma, lower = false) => qwen === gemma ? 'Tie' : (lower ? qwen < gemma : qwen > gemma) ? 'Qwen' : 'Gemma';

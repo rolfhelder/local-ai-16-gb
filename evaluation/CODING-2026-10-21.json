@@ -402,5 +402,197 @@
         }
       }
     ]
+  },
+  {
+    "run": "coding-1792614561838",
+    "cases": [
+      {
+        "name": "omnicoder",
+        "context": 32768,
+        "reasoning": true,
+        "reasoningBudget": 2048,
+        "usage": [
+          {
+            "input": 1865,
+            "output": 134,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 1999,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          {
+            "input": 392,
+            "output": 86,
+            "cacheRead": 1998,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 2476,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          {
+            "input": 91,
+            "output": 317,
+            "cacheRead": 2475,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 2883,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          {
+            "input": 28,
+            "output": 80,
+            "cacheRead": 2882,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 2990,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          {
+            "input": 19,
+            "output": 127,
+            "cacheRead": 2989,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 3135,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          }
+        ],
+        "toolCalls": [
+          {
+            "name": "powershell",
+            "arguments": {
+              "command": "& \"<repo>\\runtime\\node\\node.exe\" check.cjs"
+            }
+          },
+          {
+            "name": "read",
+            "arguments": {
+              "path": "check.cjs"
+            }
+          },
+          {
+            "name": "read",
+            "arguments": {
+              "path": "math.cjs"
+            }
+          },
+          {
+            "name": "edit",
+            "arguments": {
+              "path": "math.cjs",
+              "edits": [
+                {
+                  "oldText": "exports.add = (a, b) => a - b;",
+                  "newText": "exports.add = (a, b) => a + b;"
+                }
+              ]
+            }
+          },
+          {
+            "name": "powershell",
+            "arguments": {
+              "command": "& \"<repo>\\runtime\\node\\node.exe\" check.cjs"
+            }
+          }
+        ],
+        "answer": "The bug is clear: the `add` function is doing subtraction (`a - b`) instead of addition (`a + b`). The test expects `add(2,3)` to return `5`, but it returns `-1`.\n\nLet me fix this:\n\n\n**Bug Fixed Successfully!**\n\n**Issue:** The `add` function in `math.cjs` was performing subtraction (`a - b`) instead of addition.\n\n**Fix:** Changed `a - b` to `a + b` in `math.cjs`.\n\n**Result:** All 3 assertions now pass:\n- `add(2, 3)` = 5 ✓\n- `add(-2, 3)` = 1 ✓  \n- `add(0, 0)` = 0 ✓",
+        "thinkingCharacters": 945,
+        "actualTestPassed": true,
+        "testFilePreserved": true,
+        "observedAndReranTests": true,
+        "initialFailureObserved": true,
+        "durationMs": 21862,
+        "timings": {
+          "prompt": [
+            {
+              "milliseconds": 611.5,
+              "tokens": 1865,
+              "tps": 3049.86
+            },
+            {
+              "milliseconds": 182.03,
+              "tokens": 392,
+              "tps": 2153.49
+            },
+            {
+              "milliseconds": 108.56,
+              "tokens": 91,
+              "tps": 838.21
+            },
+            {
+              "milliseconds": 111.05,
+              "tokens": 28,
+              "tps": 252.15
+            },
+            {
+              "milliseconds": 113.05,
+              "tokens": 19,
+              "tps": 168.07
+            }
+          ],
+          "generation": [
+            {
+              "milliseconds": 1776.25,
+              "tokens": 134,
+              "tps": 74.88
+            },
+            {
+              "milliseconds": 1124.05,
+              "tokens": 86,
+              "tps": 75.62
+            },
+            {
+              "milliseconds": 4163.82,
+              "tokens": 317,
+              "tps": 75.89
+            },
+            {
+              "milliseconds": 1038.6,
+              "tokens": 80,
+              "tps": 76.06
+            },
+            {
+              "milliseconds": 1676.8,
+              "tokens": 127,
+              "tps": 75.14
+            }
+          ],
+          "promptTpsMean": 1292.356,
+          "generationTpsMean": 75.518,
+          "generationTpsWeighted": 75.56608095284842
+        }
+      }
+    ]
   }
 ]

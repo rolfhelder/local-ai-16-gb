@@ -14,6 +14,7 @@ Reasoning is **on by default**, with a 2,048-token thinking budget and up to 8,1
 pia
 pia --local-model qwen
 pia --local-model gemma
+pia --local-model omnicoder
 pia --local-model qwen --context 131072
 pia --context 102400
 pia --profile native
@@ -80,3 +81,5 @@ Initialization creates ignored `machine.local.json` and `.state/agent/settings.j
 Commit research, prompts, example settings, version/checksum manifests, scripts, and sanitized evaluation results. Keep model weights, executables, sessions, credentials, cookies, and private learning notes outside Git. `knowledge/` is ignored by default; use `knowledge.example/` as its layout reference.
 
 Local Git is initialized on `main`; GitHub CLI setup and a remote under `rolfhelder` are deferred. The selected packages have a reconstruction path; full model/task validation and a fresh-PC restoration test remain pending. See [the migration runbook](docs/WINDOWS-MIGRATION.md) for offline backup requirements.
+
+The [candidate test batch](docs/CANDIDATE-TESTS.md) runs OmniCoder and, after its verified download, GPT-OSS sequentially. The [coding comparison](evaluation/CODING-MODELS-2026-10-21.md) updates when each result is exported. GPT-OSS has a native 128k window and is not configured for 200k.

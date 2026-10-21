@@ -1,6 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { generationLimits, serverArguments } from '../scripts/local-runtime.mjs';
+import { generationLimits, serverArguments, machine, localModels } from '../scripts/local-runtime.mjs';
+test('candidate registry selects separate coding model files',()=>{assert.match(localModels.omnicoder.file,/Tesslate\/OmniCoder/);assert.match(localModels['gpt-oss'].file,/ggml-org\/gpt-oss/);});
+test('GPT-OSS cannot inherit the 200k default window',async()=>{const config=await machine('gpt-oss');assert.ok(config.ContextSize<=131072);assert.equal(config.ModelId,'gpt-oss-local');});
+test('invalid model selection is rejected before loading weights',async()=>{await assert.rejects(machine('not-a-model'),/--local-model/);});
 test('coding default reserves room for thinking and answer',()=>assert.deepEqual(generationLimits({ContextSize:32768}),{maxTokens:8192,reasoningBudget:2048}));
 test('small context caps generation and leaves answer room',()=>assert.deepEqual(generationLimits({ContextSize:8192}),{maxTokens:2048,reasoningBudget:1024}));
 test('explicit reasoning-off control',()=>assert.equal(generationLimits({ContextSize:32768,Reasoning:false}).reasoningBudget,0));
