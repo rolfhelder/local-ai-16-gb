@@ -24,11 +24,11 @@ The GPT-OSS download's long open-ended CDN response slowed to a trickle. A 16 Mi
 Get-Content .state\candidate-queue.json
 Get-Content .state\candidate-queue.stderr.log
 Get-Content .state\coding-downloads.json
-pia --local-model omnicoder
+pia --model omnicoder
 # After download and compatibility checks:
-pia --local-model gpt-oss
+pia --model gpt-oss
 # Only if the test report selected the cache fallback:
-pia --local-model gpt-oss --kv q8_0
+pia --model gpt-oss --kv q8_0
 ```
 
 Do not launch a second batch while the worker owns `.state/candidate-queue.lock`. To reproduce from scratch after it ends, `node evals/candidate-queue.mjs` runs one new batch; it does not resume previous test steps. All selected weights and binaries remain outside Git.

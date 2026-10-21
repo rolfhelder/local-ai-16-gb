@@ -6,7 +6,8 @@
     "generalCodingAndMemory": "gemma",
     "speedSpecialist": "gpt-oss",
     "comparisonBaseline": "qwen",
-    "launcherDefaultChanged": false
+    "launcherDefaultChanged": true,
+    "launcherDefault": "omnicoder"
   },
   "models": [
     {

@@ -11,7 +11,7 @@ See [installed stack](INSTALLED-STACK.md) and [validation](../evaluation/SETUP-2
 
 ## Current model recommendation
 
-All four initial suites and the GPT-OSS setup investigation are complete. The provisional primary for the long-context workflow is OmniCoder, with Gemma for general coding and more memory headroom; GPT-OSS is a speed specialist. [Full comparison and verdict](MODEL-VERDICT.md). The next quality step is repeated matched runs under the repaired search environment, followed by real repository tasks and a research/teaching eval. Plain `pia` remains Qwen until a deliberate runtime-default change.
+All four initial suites and the GPT-OSS setup investigation are complete. The provisional primary for the long-context workflow is OmniCoder, with Gemma for general coding and more memory headroom; GPT-OSS is a speed specialist. [Full comparison and verdict](MODEL-VERDICT.md). The next quality step is repeated matched runs under the repaired search environment, followed by real repository tasks and a research/teaching eval. Plain `pia` now launches OmniCoder by user request.
 
 ## Next operational work
 

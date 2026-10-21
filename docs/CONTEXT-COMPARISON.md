@@ -6,7 +6,7 @@ The original Qwen/Gemma capacity comparison is preserved below. OmniCoder and GP
 
 Both models default to **204,800 tokens (200k)** in `pia`, leaving more VRAM headroom than the 256k stress test. Both loaded a 262,144-token window and processed approximately 235k input tokens. The 256k results below remain capacity evidence, not a quality assessment or the current default. The context budget includes prompts, tools and generated tokens.
 
-Use `pia --local-model qwen` or `pia --local-model gemma`. Reasoning is enabled for both: Pi `medium`, llama.cpp thinking budget 2,048, total output cap 8,192, one slot, port **48763**. `pia --dry-run` prints the complete local commands; [the launcher guide](LAUNCHER.md) explains them. Qwen remains the default selection. Both projectors stay unloaded for text-only tests.
+Use `pia --model qwen` or `pia --model gemma`. Reasoning is enabled for both: Pi `medium`, llama.cpp thinking budget 2,048, total output cap 8,192, one slot, port **48763**. `pia --dry-run` prints the complete local commands; [the launcher guide](LAUNCHER.md) explains them. OmniCoder is now the default selection; these Qwen/Gemma measurements are historical. Both projectors stay unloaded for text-only tests.
 
 | Measured test | Qwen3.5 9B Q4_K_M | Gemma 4 12B Q4_K_M | Winner |
 |---|---:|---:|---|

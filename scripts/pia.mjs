@@ -5,7 +5,7 @@ const args = process.argv.slice(2);
 const value = (flag, fallback) => { const index = args.indexOf(flag); if (index < 0) return fallback; const result = args[index + 1]; args.splice(index, 2); if (!result) throw new Error(`${flag} requires a value`); return result; };
 const flag = name => { const index = args.indexOf(name); if (index < 0) return false; args.splice(index, 1); return true; };
 if (flag('--help')) {
-  console.log('pia [--local-model qwen|gemma|omnicoder|gpt-oss] [--context TOKENS] [--kv f16|q8_0] [--profile standard|native|guard|lsp|lsp-windows|research|desktop|web]\n    [--reasoning-budget TOKENS] [--no-reasoning] [--browser] [--cwd PATH] [--dry-run] [--probe] [Pi arguments]\nDefaults: Qwen, 204800 context (GPT-OSS capped at 131072), reasoning on, 2048 thinking tokens, loopback port 48763.\n--dry-run prints both full process commands without starting the model.');
+  console.log('pia [--model qwen|gemma|omnicoder|gpt-oss] [--context TOKENS] [--kv f16|q8_0] [--profile standard|native|guard|lsp|lsp-windows|research|desktop|web]\n    [--reasoning-budget TOKENS] [--no-reasoning] [--browser] [--cwd PATH] [--dry-run] [--probe] [Pi arguments]\nDefaults: OmniCoder, 204800 context (GPT-OSS capped at 131072), reasoning on, 2048 thinking tokens, loopback port 48763.\n--local-model remains a compatibility alias for --model.\n--dry-run prints both full process commands without starting the model.');
   process.exit(0);
 }
 const profile = value('--profile', 'standard');
@@ -13,13 +13,16 @@ const dryRun = flag('--dry-run');
 const probeOnly = flag('--probe');
 const browser = flag('--browser');
 const context = value('--context', undefined);
-const localModel = value('--local-model', undefined);
+const requestedModel = value('--model', undefined);
+const legacyModel = value('--local-model', undefined);
+const localModel = requestedModel ?? legacyModel;
 const noReasoning = flag('--no-reasoning');
 const reasoningBudget = value('--reasoning-budget', undefined);
 const kv = value('--kv', 'f16');
 const cwd = path.resolve(value('--cwd', process.cwd()));
 let release, server;
 try {
+  if(requestedModel&&legacyModel&&requestedModel!==legacyModel)throw new Error('Conflicting --model and --local-model selections');
   const config = await machine(localModel);
   if(!['f16','q8_0'].includes(kv))throw new Error('--kv must be f16 or q8_0');
   if(kv==='q8_0')config.ExtraServerArgs=[...(config.ExtraServerArgs||[]),'--cache-type-k','q8_0','--cache-type-v','q8_0','--flash-attn','on'];

@@ -54,7 +54,7 @@ The six-trial rerun `coding-context-1792618864396` kept the original 2,048 reaso
 
 GPT-OSS clean generation averaged 114.4 TPS; the loaded weighted rate was 72.3 TPS. Loaded CSV passed all six hidden groups but its later malformed tool call was rejected by llama.cpp: a protocol failure, not an incorrect repair. Loaded pagination passed fully (6/6, normal completion). Loaded async retry finished normally but missed one hidden edge group (5/6), which is a coding failure. The original 0/3 loaded result was dominated by the one-token clamp and should not be used as a model-quality ranking. [Per-case rerun](../evaluation/CODING-CONTEXT-GPT-OSS-2026-10-21.md), [JSON including per-request budgets and provider errors](../evaluation/CODING-CONTEXT-GPT-OSS-2026-10-21.json).
 
-The repaired run brings GPT-OSS close to OmniCoder on withheld groups and ahead on generation rate, while Gemma uses the least GPU memory and Gemma/OmniCoder had more full loaded passes. Different windows, one stochastic run and the portable-search repair limit a strict ranking. No default-model switch is made on this evidence.
+The repaired run brings GPT-OSS close to OmniCoder on withheld groups and ahead on generation rate, while Gemma uses the least GPU memory and Gemma/OmniCoder had more full loaded passes. Different windows, one stochastic run and the portable-search repair limit a strict ranking. The user subsequently selected OmniCoder as the launcher default.
 
 ## Finished recall controls and decision
 

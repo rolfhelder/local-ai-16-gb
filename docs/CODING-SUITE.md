@@ -80,7 +80,7 @@ The initial cap recovered from the earlier setup thread was **2,190,349 bytes/se
 Get-Content .state\coding-downloads.json
 ```
 
-The current worker runs hidden with output/error logs under ignored `.state`. Final files live under the machine's configured model directory. No projector or extra model is downloaded, and downloading does not enable a new `pia --local-model` selection or establish tool compatibility.
+The current worker runs hidden with output/error logs under ignored `.state`. Final files live under the machine's configured model directory. No projector or extra model is downloaded, and downloading does not enable a new `pia --model` selection or establish tool compatibility.
 
 ## Benchmark source check
 

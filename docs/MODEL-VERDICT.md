@@ -1,6 +1,6 @@
 # Four-model comparison and verdict
 
-2026-10-21. My provisional choice for Rolf's context-heavy coding and learning workflow is **OmniCoder as the primary model, with Gemma as the general-coding and low-memory alternative**. Gemma wins the simple count of completed coding tasks across both conditions. GPT-OSS is the speed specialist; Qwen is the comparison baseline. This is an interpretation of our local trials, not a general benchmark ranking. The launcher still defaults to Qwen; this documentation update does not change runtime settings.
+2026-10-21. My provisional choice for Rolf's context-heavy coding and learning workflow is **OmniCoder as the primary model, with Gemma as the general-coding and low-memory alternative**. Gemma wins the simple count of completed coding tasks across both conditions. GPT-OSS is the speed specialist; Qwen is the comparison baseline. This is an interpretation of our local trials, not a general benchmark ranking. By subsequent user request, the launcher now defaults to OmniCoder.
 
 ## Coding, throughput and GPU memory
 
@@ -61,7 +61,7 @@ Completed-response output tokens over the three loaded coding attempts were Qwen
 3. **GPT-OSS for fast, focused coding experiments.** It passed all clean tasks, has the highest generation rate and the most hidden groups overall. After the setup repair it is a credible coder, not the poor performer suggested by its invalid initial run. On this PC its 128k f16 configuration leaves only about 0.55 GiB of sampled headroom, has a native 128k ceiling and still showed a Harmony failure. Those constraints prevent me from choosing it as your main long-context agent. Smaller-window coding/recall has some positive evidence, but a complete tuned smaller-window suite is still outstanding.
 4. **Qwen stays as a baseline rather than my first choice today.** It has useful speed and some good historical recall, but the loaded coding run was the weakest here. The sample is too small to conclude that OmniCoder is universally better than its base model or that a different Qwen configuration could not reverse the result.
 
-Use `pia --local-model omnicoder` for the primary recommendation, `pia --local-model gemma` for the alternative, or `pia --local-model gpt-oss` for the tested GPT-OSS window. Plain `pia` still launches Qwen. The GPT-OSS token-budget hook and portable fd/ripgrep are already installed. Reasoning stays enabled. No launcher-default change is implied by this verdict.
+Use `pia --model omnicoder` for the primary recommendation, `pia --model gemma` for the alternative, or `pia --model gpt-oss` for the tested GPT-OSS window. Plain `pia` now launches OmniCoder. The GPT-OSS token-budget hook and portable fd/ripgrep are already installed. Reasoning stays enabled. The user subsequently selected OmniCoder as the launcher default.
 
 Before declaring a stable winner, rerun all four under the repaired tool environment with several seeds/repetitions, then add real repository tasks and a research-to-lesson evaluation. GPT-OSS alone benefited from the later search-dependency repair; the 100k coding workload is otherwise the same, but its smaller total window leaves less room for subsequent turns. These limits justify a provisional workflow choice, not a universal quality ranking.
 

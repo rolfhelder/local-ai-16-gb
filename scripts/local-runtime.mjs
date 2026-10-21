@@ -14,17 +14,15 @@ export const localModels = {
   omnicoder: { file: 'Tesslate/OmniCoder-9B-GGUF/omnicoder-9b-q4_k_m.gguf', context: 262144 },
   'gpt-oss': { file: 'ggml-org/gpt-oss-20b-GGUF/gpt-oss-20b-MXFP4.gguf', context: 131072 },
 };
-export async function machine(selection) {
+export async function machine(selection = 'omnicoder') {
   const config = JSON.parse(await readFile(path.join(root, 'machine.local.json'), 'utf8'));
-  if (selection && !localModels[selection]) throw new Error('--local-model must be '+Object.keys(localModels).join(', '));
+  if (selection && !localModels[selection]) throw new Error('--model must be '+Object.keys(localModels).join(', '));
   if (selection) {
     config.ModelFile = path.join(config.ModelsDirectory, localModels[selection].file);
     config.ModelId = selection + '-local';
     config.NativeContext = localModels[selection].context;
     config.ContextSize = Math.min(config.ContextSize, config.NativeContext);
   }
-  config.ModelFile ||= path.join(config.ModelsDirectory, 'unsloth/Qwen3.5-9B-GGUF/Qwen3.5-9B-Q4_K_M.gguf');
-  config.ModelId ||= 'qwen-local';
   config.Reasoning ??= true;
   config.ReasoningBudget ??= 2048;
   config.MaxTokens ??= 8192;
