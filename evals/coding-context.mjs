@@ -13,10 +13,11 @@ if(!args.includes('--run')) {
 }
 const models=option('--models','qwen,gemma').split(','), conditions=option('--conditions','clean,loaded').split(','), selected=option('--cases',codingCases.map(x=>x.id).join(',')).split(',');
 const repeats=Number(option('--repeat','1'));
+const paddingSeed=option('--seed',undefined);if(paddingSeed!==undefined&&!/^[0-9]{1,9}$/.test(paddingSeed))throw Error('Invalid padding seed');
 if(!models.every(x=>localModels[x])||!conditions.every(x=>['clean','loaded'].includes(x))||!selected.every(id=>codingCases.some(x=>x.id===id))||!Number.isInteger(repeats)||repeats<1||repeats>10)throw Error('Invalid suite selection');
 const base=path.join(root,'.state/evals/coding-context-'+Date.now());await mkdir(base,{recursive:true});
 const report={started:new Date().toISOString(),suiteVersion:1,status:'running',contextWindow:204800,backgroundTargetTokens:100000,reasoningBudget:2048,maxOutputTokens:8192,timeoutMs:360000,trials:[]};
-report.downloadsConcurrent=false;report.models=models;report.conditions=conditions;report.cases=selected;report.repeats=repeats;report.plannedTrials=models.length*conditions.length*selected.length*repeats;
+report.paddingSeed=paddingSeed??null;report.downloadsConcurrent=false;report.models=models;report.conditions=conditions;report.cases=selected;report.repeats=repeats;report.plannedTrials=models.length*conditions.length*selected.length*repeats;
 const save=()=>writeFile(path.join(base,'report.json'),JSON.stringify(report,null,2));
 const sample=async()=>Number((await exec('nvidia-smi',['--query-gpu=memory.used','--format=csv,noheader,nounits'],{windowsHide:true})).stdout.trim());
 const release=await acquireInferenceLock();let server;
@@ -34,7 +35,7 @@ try {
     if(conditions.includes('loaded')){
       const places=['willow meadow','coastal inlet','northern garden','granite hillside','old orchard','river bend'];
       const notes=['The morning mist lifted slowly above the reeds.','Small birds sheltered among the branches.','A visitor sketched the horizon in a notebook.','Clouds drifted east while the water remained calm.','Late sunlight warmed the stone beside the path.','Several flowers opened after the overnight rain.'];
-      const corpus=Array.from({length:16000},(_,i)=>`Field journal ${i+1}. At the ${places[i%places.length]}, observation ${i%97+1} was recorded in season ${i%4+1}. ${notes[i%notes.length]} ${notes[Math.floor(i/7)%notes.length]} The walk ended near landmark ${i%131+1}.`).join('\n');
+      const corpus=Array.from({length:16000},(_,i)=>`Field journal ${i+1}. At the ${places[i%places.length]}, observation ${i%97+1} was recorded in season ${i%4+1}. ${notes[i%notes.length]} ${notes[Math.floor(i/7)%notes.length]} The walk ended near landmark ${i%131+1}.${paddingSeed===undefined?'':' Journal series '+paddingSeed+'.'}`).join('\n');
       const tokens=(await post('/tokenize',{content:corpus})).tokens;
       if(tokens.length<100000)throw Error('Background is too short');
       background=(await post('/detokenize',{tokens:tokens.slice(0,100000)})).content;
