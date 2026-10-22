@@ -1,0 +1,3 @@
+export const resourceProfiles=Object.freeze({smoke:{context:32768},coding:{context:65536},'long-context':{context:204800}});
+export function applyResourceProfile(config,name){if(name===undefined)return {...config};if(!Object.hasOwn(resourceProfiles,name))throw Error('--preset must be smoke, coding or long-context');return {...config,ContextSize:Math.min(resourceProfiles[name].context,config.NativeContext??Infinity)};}
+export function effectiveResources(config){return {context:config.ContextSize,nativeContext:config.NativeContext,kv:config.ExtraServerArgs?.includes('q8_0')?'q8_0':'f16',gpuLayers:config.GpuLayers,slots:1,reasoning:config.Reasoning!==false,thinkingBudget:config.ReasoningBudget??2048,totalOutputCap:config.MaxTokens??8192};}
