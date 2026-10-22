@@ -37,7 +37,7 @@ Qwen3.8 27B recipes remain available in the model-results guide, but the tested 
 
 ```powershell
 ./scripts/Install-Core.ps1 -Check
-local-ai doctor --verify-model --public
+local-ai doctor --verify-model
 node scripts/acceptance.mjs --model gemma        # preview
 node scripts/acceptance.mjs --model gemma --run  # real inference, disposable repair
 local-ai
@@ -46,3 +46,5 @@ local-ai
 Acceptance uses a small 32768-token slot, keeps the normal production context unchanged and stops its owned server. It verifies the pinned model hash, endpoint model/context/slots, a real answer and a Pi read/edit/test loop with preserved checks and hidden assertions. Failures stop later stages. Reports and traces stay under ignored .state/acceptance/. The answer and repair stages have separate deadlines; this is a functional smoke check rather than a long-context quality benchmark.
 
 A stopped server is not a doctor failure: endpoint/backend evidence stays unknown until a running instance is checked. The doctor does not start a model, install software or modify configuration. --verify-model explicitly hashes a large file. The normal installation and live acceptance commands do change local assets/start inference; preview and doctor are the read-only choices.
+
+The doctor now defaults to a human-readable terminal report with real paths, status symbols and memory units. Use `--json` for scripts, `--public` to hide personal folders, or `--json --public` for a redacted structured export. `--no-color` and `--ascii` support simpler terminals. The result explains unverified live checks and provides next steps.

@@ -4,7 +4,7 @@ These changes are independent and opt-in. Normal local-ai still selects Gemma at
 
 ## 1. Read-only doctor
 
-Run `local-ai doctor --public`; add `--verify-model` for an explicit full GGUF checksum. It checks local tool files/versions, NVIDIA identity/free VRAM, host RAM/disk and a matching running endpoint. With the server stopped, endpoint/backend remain unknown. Actual offloaded layers are not inferred from GPU presence; backend/port-owner diagnostics are not complete yet. Invalid/missing dependency and wrong endpoint fixtures were tested.
+Run `local-ai doctor` for the readable terminal view; add `--verify-model` for an explicit full GGUF checksum. It checks local tool files/versions, NVIDIA identity/free VRAM, host RAM/disk and a matching running endpoint. With the server stopped, endpoint/backend remain unknown. Actual offloaded layers are not inferred from GPU presence; backend/port-owner diagnostics are not complete yet. Invalid/missing dependency and wrong endpoint fixtures were tested. Real paths are shown by default; `--public` hides external folders and uses relative project paths, `--json` retains machine-readable output, and `--no-color` / `--ascii` support basic terminals.
 
 ## 2. Core installation plus acceptance
 

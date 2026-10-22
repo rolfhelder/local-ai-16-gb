@@ -11,7 +11,7 @@ if ($Check) {
     $required = @('runtime/node/node.exe','runtime/pnpm/node_modules/.bin/pnpm.cmd','node_modules/@earendil-works/pi-coding-agent/package.json','machine.local.json')
     $missing = @($required | Where-Object { -not (Test-Path -LiteralPath (Join-Path $labRoot $_)) })
     if ($missing.Count) { throw ('Missing core files: ' + ($missing -join ', ')) }
-    & (Join-Path $labRoot 'runtime/node/node.exe') (Join-Path $PSScriptRoot 'doctor.mjs') --public
+    & (Join-Path $labRoot 'runtime/node/node.exe') (Join-Path $PSScriptRoot 'doctor.mjs')
     if ($LASTEXITCODE) { throw 'Doctor found a failed prerequisite. No files were changed.' }
     return
 }
@@ -57,7 +57,7 @@ try {
         $config | ConvertTo-Json | Set-Content -LiteralPath $configPath -Encoding UTF8
     }
     & (Join-Path $PSScriptRoot 'Install-LocalAI.ps1')
-    & node (Join-Path $PSScriptRoot 'doctor.mjs') --public
+    & node (Join-Path $PSScriptRoot 'doctor.mjs')
     if ($LASTEXITCODE) { Write-Warning 'Some prerequisites (usually a not-yet-downloaded model) need attention; inspect the doctor report.' }
     Write-Output 'Core installation complete. Download a model using docs/INSTALL.md section 2.1; then run local-ai doctor --verify-model.'
     if ($AcceptModel) {
