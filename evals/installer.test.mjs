@@ -15,6 +15,13 @@ test('unified installer command previews and rejects unknown flags before instal
 function run(file,args=[]) {
   return spawnSync('pwsh',['-NoProfile','-File',file,...args],{encoding:'utf8',timeout:30000});
 }
+test('installer menu defaults to no action and includes every first-run choice', {skip:process.platform!=='win32'},()=>{
+ const wrapper=path.join(root,'scripts/install-command.ps1');
+ const result=spawnSync('pwsh',['-NoProfile','-File',wrapper,'install','--no-color'],{input:'4\n0\n',encoding:'utf8',timeout:15000});
+ assert.equal(result.status,0,result.stderr);
+ for(const text of ['Preview installation','Check installation','Install core components','Preview acceptance test','Run acceptance test','Verify model + health','TEST PREVIEW'])assert.ok((result.stdout+result.stderr).includes(text),text);
+ assert.doesNotMatch(result.stdout,/ACCEPTANCE TEST|Core installation complete/);
+});
 test('installer preview is human-readable; JSON remains explicit',()=>{
   const human=run(script,['-Plan','-NoColor','-Ascii']);
   assert.equal(human.status,0,human.stderr);

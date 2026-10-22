@@ -6,7 +6,8 @@ From a fresh clone, use `.\bin\local-ai.cmd install --plan` and `.\bin\local-ai.
 
 ```powershell
 local-ai install --plan  # show actions; no installation
-local-ai install         # install core dependencies and register commands
+local-ai install         # open the setup and first-run menu
+local-ai install --run   # install directly; skip the menu
 ```
 
 Core means Node, pnpm, rg/fd, pinned Pi dependencies and official llama.cpp binaries/runtime. Dependency lifecycle scripts are disabled. Existing machine.local.json is preserved, including an existing verified-version runtime path. Optional GUI/browser/helper assets and GGUF model weights are not downloaded. The project dependency lock includes optional extension packages, but they are not all enabled or loaded.
@@ -33,6 +34,10 @@ The shared coding manifest includes multiple files. To select only one, copy its
 
 Qwen3.8 27B recipes remain available in the model-results guide, but the tested quantizations failed our minimum practical throughput gate. Treat further offload experiments separately from core installation. Review upstream model licenses/terms for your use.
 
+## Setup menu
+
+Run `local-ai install` and choose preview, inventory, installation, acceptance preview, real acceptance, or model checksum/health. Nothing installs or loads merely by opening the menu. Choose `0` to exit. Acceptance uses Gemma by default; use `local-ai install --model omnicoder` to select another installed model. Direct alternatives remain available: `local-ai install --plan`, `--check`, `--run`, `--test` (acceptance preview), and `--test --run` (real acceptance). `local-ai test --run` remains a shortcut.
+
 ## Preview, inventory and health are different
 
 `local-ai install --plan` previews installation in a human-readable dashboard. `local-ai install --check` inventories core files, Node/pnpm/Pi versions, the configured llama.cpp build and launcher registration. Both modes are read-only and load no model. Add `--json` for automation or `--no-color --ascii` for plain terminals. The inventory does not run the doctor.
@@ -41,7 +46,7 @@ Qwen3.8 27B recipes remain available in the model-results guide, but the tested 
 
 ## Prove the setup works
 
-`local-ai test` previews the checks. Add `--run` for the live dashboard: completed-check progress, an animated active step, elapsed time, measured SHA256 reading progress in GB, and a final pass/fail summary with the report path. Loading and coding indicators show activity rather than an estimated percentage. Redirected output uses periodic plain-text updates. Use `--json` for machine-readable output (no dashboard), `--no-color` to disable colors, or `--ascii` for basic symbols.
+`local-ai test` previews the checks. Add `--run` for the live dashboard: completed-check progress, an animated active step and moving bar highlight, elapsed time, measured SHA256 reading progress in GB, and a final pass/fail summary with the report path. Loading and coding indicators show activity rather than an estimated percentage. Redirected output uses periodic plain-text updates. Use `--json` for machine-readable output (no dashboard), `--no-color` to disable colors, or `--ascii` for basic symbols.
 
 ```powershell
 local-ai install --check

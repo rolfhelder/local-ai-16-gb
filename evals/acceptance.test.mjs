@@ -29,7 +29,7 @@ test('progress refresh overwrites atomically without blank frames and uses full-
   ui.start('real-answer');await new Promise(resolve=>setTimeout(resolve,300));
   const redraws=writes.filter(s=>s.startsWith('\r'));
   assert.ok(redraws.length>=2);assert.ok(redraws.every(s=>!s.includes('\x1b[2K')));
-  assert.match(redraws[0],/░{24}/);
+  assert.match(redraws[0],/▓{3}░{21}/);assert.notEqual(redraws[0],redraws[1]);
   ui.complete({name:'real-answer',status:'pass',durationMs:300});
   ui.finish({passed:true,stages:[]},'report.json');assert.ok(writes.some(s=>s.includes('██████')));
  }finally{ui.stop();}

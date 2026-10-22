@@ -15,7 +15,11 @@ export function createAcceptanceUI({stream=process.stderr,color=stream.isTTY&&!p
  function draw(){
   if(!active)return;
   const elapsed=((now()-start)/1000).toFixed(1);
- const bar=symbols.fill.repeat(done*6)+symbols.empty.repeat((4-done)*6);
+  const pending=(4-done)*6;
+  const cells=Array(pending).fill(symbols.empty);
+  // A moving highlight shows activity; only passed checks become solid fill.
+  if(pending){const cycle=Math.max(1,pending-2);const head=frame%cycle;for(let i=head;i<Math.min(head+3,pending);i++)cells[i]=ascii?'=':'▓';}
+  const bar=symbols.fill.repeat(done*6)+cells.join('');
   const text=`${symbols.frames[frame++%symbols.frames.length]} [${bar}] ${done}/4 checks · ${active} · ${elapsed}s${detail?' · '+detail:''}`;
   // Overwrite in one write; clearing first creates a visibly blank frame.
   if(stream.isTTY){stream.write('\r'+paint(clean(text).slice(0,width()).padEnd(width())));lineOpen=true;}
