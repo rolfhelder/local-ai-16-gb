@@ -10,7 +10,7 @@ Run `local-ai doctor` for the readable terminal view; add `--verify-model` for a
 
 Use `./scripts/Install-Core.ps1 -Plan` to inspect actions or `-Check` to check the current installation. The installation command itself downloads core assets and registers commands; it has not passed a clean Windows VM acceptance yet. [Installation and model choices](INSTALL.md) documents separate model selection.
 
-Preview `node scripts/acceptance.mjs --model gemma`, then add `--run` for a bounded real test. It verifies the hash, owns/checks one endpoint, requests a real answer and runs Pi on a disposable repair. It uses an isolated profile and private effort state. Completed stages, failures, timings and receipts are saved under .state/acceptance/. Gemma passed the original live four-stage test; the sandbox-only attempt failed endpoint readiness before inference. Neither result is a long-context quality score.
+Preview `local-ai test`, then run `local-ai test --run` for a bounded real test. The live dashboard shows measured hash progress, active-step elapsed time and a completed-check bar; `--json` provides structured output. It verifies the hash, owns/checks one endpoint, requests a real answer and runs Pi on a disposable repair. It uses an isolated profile and private effort state. Completed stages, failures, timings and receipts are saved under .state/acceptance/. Gemma passed the original live four-stage test; the sandbox-only attempt failed endpoint readiness before inference. Neither result is a long-context quality score.
 
 ## 3. Resource presets
 

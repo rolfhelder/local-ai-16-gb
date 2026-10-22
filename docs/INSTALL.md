@@ -41,6 +41,8 @@ Qwen3.8 27B recipes remain available in the model-results guide, but the tested 
 
 ## Prove the setup works
 
+`local-ai test` previews the checks. Add `--run` for the live dashboard: completed-check progress, an animated active step, elapsed time, measured SHA256 reading progress in GB, and a final pass/fail summary with the report path. Loading and coding indicators show activity rather than an estimated percentage. Redirected output uses periodic plain-text updates. Use `--json` for machine-readable output (no dashboard), `--no-color` to disable colors, or `--ascii` for basic symbols.
+
 ```powershell
 ./scripts/Install-Core.ps1 -Check
 local-ai doctor --verify-model

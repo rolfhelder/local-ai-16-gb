@@ -21,7 +21,7 @@ export function publicDiagnostics(value){
  if(typeof value!=='string')return value;
  return value.replace(/[A-Za-z]:[\\/]+Users[\\/]+[^\\/\s]+/gi,'<HOME>').replaceAll(os.homedir(),'<HOME>').replace(/([?&](?:token|key|api_key)=)[^&\s]+/gi,'$1<REDACTED>');
 }
-export async function hashFile(file){const hash=createHash('sha256');for await(const chunk of createReadStream(file))hash.update(chunk);return hash.digest('hex');}
+export async function hashFile(file,onProgress){const hash=createHash('sha256');let bytes=0;for await(const chunk of createReadStream(file)){hash.update(chunk);bytes+=chunk.length;onProgress?.(bytes);}return hash.digest('hex');}
 export async function collectDoctor(config,{verifyModel=false,command=exec,offload=discoverOffload,getJson=async url=>{const r=await fetch(url,{signal:AbortSignal.timeout(2000)});if(!r.ok)throw Error('HTTP '+r.status);return r.json();}}={}){
  const report={schemaVersion:1,mode:'read-only; no model startup',model:config.ModelId,endpoint:config.RouterUrl,contextTokens:config.ContextSize,modelHashRequested:verifyModel,platform:process.platform,architecture:process.arch,ram:{totalBytes:os.totalmem(),freeBytes:os.freemem()},checks:[]};
  const check=(id,status,details)=>report.checks.push({id,status,...details});

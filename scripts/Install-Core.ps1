@@ -4,7 +4,7 @@ Preview, inventory or install the pinned Windows core stack.
 .DESCRIPTION
 -Plan previews actions. -Check inspects installed components and registration.
 Both modes are read-only and load no model. Add -Json for automation.
-Use local-ai doctor for hardware/model health and acceptance.mjs --run for inference.
+Use local-ai doctor for hardware/model health and local-ai test --run for inference.
 #>
 [CmdletBinding()]
 param([switch]$Plan, [switch]$Check, [switch]$Json, [switch]$NoColor, [switch]$Ascii, [ValidateSet('gemma','qwen','omnicoder','gpt-oss')][string]$AcceptModel)
@@ -122,7 +122,7 @@ if ($Check) {
         } else { Write-Output (Paint "  $($rows.Count)/$($rows.Count) core checks passed" '32') }
         Write-Output ''
         Write-Output '  Hardware + model health  local-ai doctor'
-        Write-Output '  Actual answer + repair   node scripts/acceptance.mjs --model gemma --run'
+        Write-Output '  Actual answer + repair   local-ai test --run'
         Write-Output (Paint '  File presence and version checks do not prove inference works.' '90')
         Write-Output ''
     }
