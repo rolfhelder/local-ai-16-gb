@@ -17,19 +17,19 @@ pia --dry-run
 
 `--dry-run` prints the exact absolute paths and argument arrays for both child processes on this machine. `--no-reasoning` provides an explicit comparison condition. Reasoning is **on by default**: Pi thinking level `medium`, llama.cpp reasoning budget 2,048 tokens, total generation limit 8,192 tokens at the default **200k (204,800 tokens)** context. `--reasoning-budget` can increase that allowance. Smaller context windows cap output/thinking to leave answer space; compaction reserves the effective generation allowance.
 
-The normal OmniCoder launch expands to these two processes, with paths read from ignored `machine.local.json` and the portable toolchain:
+The normal Gemma launch expands to these two processes, with paths read from ignored `machine.local.json` and the portable toolchain:
 
 ```text
-llama-server.exe --model <omnicoder-9b-q4_k_m.gguf> --alias omnicoder-local
+llama-server.exe --model <gemma-4-12b-it-Q4_K_M.gguf> --alias gemma-local
   --host 127.0.0.1 --port 48763 --jinja --reasoning on
   --reasoning-budget 2048 --fit off --no-context-shift
   -ngl 999 -c 204800 --parallel 1
 
 node.exe <@earendil-works/pi-coding-agent/dist/bundle/cli.js>
-  --provider local-llama --model omnicoder-local --thinking medium
+  --provider local-llama --model gemma-local --thinking medium
 ```
 
-For Gemma, the GGUF and alias become `gemma-4-12b-it-Q4_K_M.gguf` and `gemma-local`. The model provider points to `http://127.0.0.1:48763/v1`. Context metadata in Pi matches the requested server slot. An already-running server is refused because its reasoning budget is not exposed by the endpoint and cannot be verified. Another listener is never killed to make room.
+For the default Gemma model, the GGUF and alias are `gemma-4-12b-it-Q4_K_M.gguf` and `gemma-local`. The model provider points to `http://127.0.0.1:48763/v1`. Context metadata in Pi matches the requested server slot. An already-running server is refused because its reasoning budget is not exposed by the endpoint and cannot be verified. Another listener is never killed to make room.
 
 The wrapper also regenerates an isolated profile, sets runtime/tool/browser paths, holds the shared inference lock, and stops its owned server/browser after Pi exits. Those steps make `pia` the convenient entry point rather than having to coordinate two terminals. Existing sessions must exit before changing models or launch settings. A new terminal picks up a freshly installed user PATH.
 
@@ -39,6 +39,6 @@ OmniCoder uses the verified 9B Q4_K_M file and the same 204,800-token default. G
 
 GPT-OSS profiles load a local token-budget compatibility hook. Before a request, llama.cpp applies its own template and tokenizes the formatted messages/tools; the response cap uses actual remaining context instead of Pi’s inaccurate first-turn character estimate. The model window remains 131,072. See [four-model results and investigation](CODING-FOUR-MODELS.md). Portable fd/ripgrep are installed by `Bootstrap-Toolchain.ps1` and available in every launcher profile.
 
-`--model` selects the local weights and the matching Pi endpoint together. `--local-model` remains accepted as a compatibility alias for old commands. Plain `pia` selects OmniCoder at 204,800 tokens with reasoning enabled; this default is in tracked launcher code and carries to a new PC.
+`--model` selects the local weights and the matching Pi endpoint together. `--local-model` remains accepted as a compatibility alias for old commands. Plain `pia` selects Gemma at 204,800 tokens with reasoning enabled; this default is in tracked launcher code and carries to a new PC.
 
 In a fresh standard session, `/model` opens the local-model and effort menu; `/effort low|medium|high` changes the real next-request thinking budget for this session. Add `--save` to explicitly persist a per-model default. See [model/effort controls and capability distinctions](EFFORT-AND-MODEL-MENU.md).

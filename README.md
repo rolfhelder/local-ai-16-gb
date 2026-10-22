@@ -4,7 +4,7 @@ A portable Windows research notebook and starter configuration for Rolf's move f
 
 Research date: **2026-10-21**. Baseline: **16 GB VRAM**, one inference slot, native Windows. Qwen3.5-9B Q4_K_M and Gemma-4-12B-IT Q4_K_M both loaded a **262,144-token context** and processed roughly **235,000 prompt tokens**. The default is **200k (204,800 tokens)** for both to leave more VRAM headroom. Exact recall and coding results are separate measurements; see [the model comparison](docs/CONTEXT-COMPARISON.md).
 
-For this context-heavy workflow, the current provisional recommendation is **OmniCoder**, with **Gemma** as the general-coding and lower-memory alternative. GPT-OSS is fastest but uses more VRAM and showed protocol failures. See [the full four-model comparison and verdict](docs/MODEL-VERDICT.md). Plain `pia` now defaults to OmniCoder.
+For this context-heavy workflow, the current provisional recommendation is **OmniCoder**, with **Gemma** as the general-coding and lower-memory alternative. GPT-OSS is fastest but uses more VRAM and showed protocol failures. See [the full four-model comparison and verdict](docs/MODEL-VERDICT.md). Plain `pia` and `pia-app` now default to **Gemma**, by user choice; the comparison remains historical evidence.
 
 The October 22 Qwen3.8-27B IQ4_XS and Q3_K_XL trials loaded but timed out during long-prompt ingestion, failing the required 131072-context throughput gate under the tested settings. Their coding quality remains unassessed. See [Qwen3.8 context results](docs/QWEN38-RESULTS.md) and the [four-model effort-command comparison](docs/EFFORT-COMPARISON.md).
 
@@ -12,7 +12,7 @@ The October 22 Qwen3.8-27B IQ4_XS and Q3_K_XL trials loaded but timed out during
 
 Qwen3.8's tested weights were removed after the failed local context gate. [Family notes](docs/QWEN38-FAMILY.md) preserve the candidates and reproduction steps for the more powerful PC.
 
-Open a new terminal and type `pia`. It starts the selected local llama.cpp model, prepares the isolated profile, launches Pi and stops its owned server after Pi exits. Default: **200k context**, text-only OmniCoder, destructive-action guard and Windows-adapted TypeScript LSP. Ordinary commits run automatically. One shared inference lock prevents overlapping sessions. No login or manual model selection is required.
+Open a new terminal and type `pia`. It starts the selected local llama.cpp model, prepares the isolated profile, launches Pi and stops its owned server after Pi exits. Default: **200k context**, text-only Gemma, destructive-action guard and Windows-adapted TypeScript LSP. Ordinary commits run automatically. One shared inference lock prevents overlapping sessions. No login or manual model selection is required.
 
 Reasoning is **on by default**, with a 2,048-token thinking budget and up to 8,192 total generated tokens. The endpoint is **127.0.0.1:48763**. Pi shows explicit used/total context tokens in its status line. See [the full launcher commands](docs/LAUNCHER.md); `pia --dry-run` prints the exact local paths and argument arrays.
 

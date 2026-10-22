@@ -55,9 +55,9 @@ Playwright CLI is the chosen browser route. The disabled MCP example is retained
 - Rebuild and run representative coding, research, transcript and GUI tasks on the other PC **before erasing this one**. Verify the backup can be opened and a model hash matches.
 - Reauthenticate on the destination. After verifying migration, sign out/revoke old-device credentials and follow the Windows reset/drive-erasure process appropriate for selling the device. Do not erase or revoke anything as part of this research pass.
 
-## GitHub later
+## GitHub
 
-The repository is initialized on `main`. No remote is configured. Later: install GitHub CLI, authenticate as `rolfhelder`, inspect `git status` and tracked files, choose visibility (private is a sensible initial choice), make the initial commit if still needed, then create/push `pi-local-lab`. Do not put private backups into GitHub just because the repository is private.
+The selected GitHub repository is `rolfhelder/local-ai-16-gb`, private, with local branch `main`. GitHub CLI installation, browser authorization and clone instructions are recorded in [GitHub setup](GITHUB.md). Do not put private backups into GitHub just because the repository is private.
 
 No license was selected for the user's original work; decide before public distribution. Upstream components retain their own licenses. No third-party source code has been vendored here.
 
@@ -67,4 +67,4 @@ This PC has separate `C:\Users\heyde\Documents` and `C:\Users\heyde\OneDrive\Doc
 
 `Download-PiApp.ps1` recreates the pinned portable GUI download. Run `powershell -NoProfile -File .\scripts\Install-PiAppShortcut.ps1` to add **Pi App** to the current user's Start menu after downloading; the installer checks its checksum and shortcut target. Recreate the shortcut on the replacement PC because its target follows the local checkout location. Explicitly saved effort defaults are private local preferences under `.state/effort-preferences.json`; ordinary `/effort` changes are session-only. Back up saved defaults separately if desired. [Model and effort controls](EFFORT-AND-MODEL-MENU.md).
 
-The shortcut now runs the local-model launcher, not the raw EXE. `pia-app --model gemma` selects Gemma; omit `--model` for OmniCoder. The existing `Install-Pia.ps1` bin-directory registration also exposes `pia-app`. The launcher recreates the app's SDK entry and provider profile using the new clone location. See [desktop setup and validation](PI-APP.md).
+The shortcut now runs the local-model launcher, not the raw EXE. `pia-app --model gemma` selects Gemma; omit `--model` for Gemma. The existing `Install-Pia.ps1` bin-directory registration also exposes `pia-app`. The launcher recreates the app's SDK entry and provider profile using the new clone location. See [desktop setup and validation](PI-APP.md).

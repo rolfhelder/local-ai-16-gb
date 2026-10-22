@@ -16,7 +16,7 @@ export const localModels = {
   omnicoder: { file: 'Tesslate/OmniCoder-9B-GGUF/omnicoder-9b-q4_k_m.gguf', context: 262144 },
   'gpt-oss': { file: 'ggml-org/gpt-oss-20b-GGUF/gpt-oss-20b-MXFP4.gguf', context: 131072 },
 };
-export async function machine(selection = 'omnicoder') {
+export async function machine(selection = 'gemma') {
   const config = JSON.parse(await readFile(path.join(root, 'machine.local.json'), 'utf8'));
   if (selection && !localModels[selection]) throw new Error('--model must be '+Object.keys(localModels).join(', '));
   if (selection) {

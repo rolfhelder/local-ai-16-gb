@@ -1,4 +1,4 @@
-param([string]$Model='omnicoder',[string]$WorkingDirectory='')
+param([string]$Model='gemma',[string]$WorkingDirectory='')
 $ErrorActionPreference='Stop'
 $labRoot=Split-Path -Parent $PSScriptRoot
 $launchArgs=@((Join-Path $labRoot 'scripts/pi-app.mjs'),'--model',$Model)

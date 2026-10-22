@@ -10,7 +10,7 @@ import {root,machine,prepareProfile,acquireInferenceLock,ensureServer,exec} from
 const args=process.argv.slice(2);
 const value=(key,fallback)=>{const at=args.indexOf(key);if(at<0)return fallback;const result=args[at+1];if(!result||result.startsWith('--'))throw Error(key+' needs a value');args.splice(at,2);return result;};
 const flag=key=>{const at=args.indexOf(key);if(at<0)return false;args.splice(at,1);return true;};
-const selected=value('--model','omnicoder'),requestedCwd=value('--cwd',undefined);
+const selected=value('--model','gemma'),requestedCwd=value('--cwd',undefined);
 const configureOnly=flag('--configure-only'),attach=flag('--attach'),debug=value('--debug-port',undefined);
 if(args.length)throw Error('Unknown arguments: '+args.join(' '));
 if(!configureOnly){

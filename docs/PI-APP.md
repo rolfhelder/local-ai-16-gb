@@ -11,7 +11,7 @@ pia-app --model qwen
 pia-app --model gpt-oss
 ```
 
-The Start shortcut runs `scripts/Start-PiApp.ps1`; `scripts/pi-app.mjs` prepares `.state/profiles/pi-app`, starts one llama.cpp model on loopback port 48763, launches the portable GUI, and stops its owned server after the app quits. OmniCoder is the default. The selected model's native limit caps the context; the usual 204800 default applies except GPT-OSS (131072). `--cwd PATH` selects a project; otherwise the last project is retained, initially the Code directory.
+The Start shortcut runs `scripts/Start-PiApp.ps1`; `scripts/pi-app.mjs` prepares `.state/profiles/pi-app`, starts one llama.cpp model on loopback port 48763, launches the portable GUI, and stops its owned server after the app quits. Gemma is the default. The selected model's native limit caps the context; the usual 204800 default applies except GPT-OSS (131072). `--cwd PATH` selects a project; otherwise the last project is retained, initially the Code directory.
 
 Quit the current Pi App from its tray before changing models. Closing the window may leave it running in the tray. The desktop model list exposes only the loaded alias: selecting a name in a GUI cannot itself load a different GGUF. The shared inference lock prevents launching another owned CLI/eval server at the same time. `--attach` is an explicit advanced option for a matching existing server; it does not take ownership, and its original owner must remain open.
 
