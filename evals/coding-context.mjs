@@ -22,7 +22,9 @@ const sample=async()=>Number((await exec('nvidia-smi',['--query-gpu=memory.used'
 const release=await acquireInferenceLock();let server;
 try {
   for(const model of models){
-    const config=await machine(model);Object.assign(config,{ContextSize:Math.min(204800,localModels[model].context),Reasoning:true,ReasoningBudget:2048,MaxTokens:8192,LogPath:path.join(base,model+'-server.log')});
+    const requestedContext=Number(option('--context',String(Math.min(204800,localModels[model].context))));
+    if(!Number.isInteger(requestedContext)||requestedContext<32768||requestedContext>localModels[model].context)throw Error('Invalid coding context');
+    const config=await machine(model);Object.assign(config,{ContextSize:requestedContext,Reasoning:true,ReasoningBudget:2048,MaxTokens:8192,LogPath:path.join(base,model+'-server.log')});
     if(args.includes('--kv=q8_0'))config.ExtraServerArgs=[...(config.ExtraServerArgs||[]),'--cache-type-k','q8_0','--cache-type-v','q8_0','--flash-attn','on'];
     report.contextByModel??={};report.contextByModel[model]=config.ContextSize;if(models.length===1)report.contextWindow=config.ContextSize;report.kvCache=args.includes('--kv=q8_0')?'q8_0':'f16';report.compactionEnabled=false;
     report.localTokenBudget=model==='gpt-oss'?'exact-template-tokenizer-v1':'upstream-estimator';

@@ -59,7 +59,7 @@ async function trial(model, config, size, recall = true, repeat = 0) {
       const prompt = 'Read the synthetic records below. Do not use tools. Remember the five authoritative lookups N1 through N5.\n' + body + '\nReturn only JSON mapping N1,N2,N3,N4,N5 to their exact lookup codes.';
       const run = await new PiIntegrationTest({ testName: config.ModelId + '-' + size + '-' + repeat, transport: 'rpc', cwd, artifactsDir: path.join(base, 'traces'),
         piCommand: path.join(root, 'node_modules/.bin/pi.cmd'), providerMode: 'user', model: 'local-llama/' + config.ModelId, thinking: config.Reasoning === false ? 'off' : 'medium',
-        isolateUserResources: true, extensions:prepared.settings.extensions, tools: ['read','edit','write','powershell'], environment: prepared.env, timeoutMs: size >= 196608 ? 600000 : 360000 }).run(prompt);
+        isolateUserResources: true, extensions:prepared.settings.extensions, tools: ['read','edit','write','powershell'], environment: prepared.env, timeoutMs: config.ModelId.startsWith('qwen38') || size >= 196608 ? 600000 : 360000 }).run(prompt);
       const assistants = run.messages.filter(message => message.role === 'assistant');
       result.answer = assistants.flatMap(message => message.content.filter(part => part.type === 'text').map(part => part.text)).join('\n');
       result.thinkingCharacters = assistants.flatMap(message => message.content.filter(part => part.type === 'thinking').map(part => part.thinking || '')).join('').length;

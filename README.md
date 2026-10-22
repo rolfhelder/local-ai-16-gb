@@ -6,6 +6,8 @@ Research date: **2026-10-21**. Baseline: **16 GB VRAM**, one inference slot, nat
 
 For this context-heavy workflow, the current provisional recommendation is **OmniCoder**, with **Gemma** as the general-coding and lower-memory alternative. GPT-OSS is fastest but uses more VRAM and showed protocol failures. See [the full four-model comparison and verdict](docs/MODEL-VERDICT.md). Plain `pia` now defaults to OmniCoder.
 
+The October 22 Qwen3.8-27B IQ4_XS and Q3_K_XL trials loaded but timed out during long-prompt ingestion, failing the required 131072-context throughput gate under the tested settings. Their coding quality remains unassessed. See [Qwen3.8 context results](docs/QWEN38-RESULTS.md) and the [four-model effort-command comparison](docs/EFFORT-COMPARISON.md).
+
 ## Run it
 
 Open a new terminal and type `pia`. It starts the selected local llama.cpp model, prepares the isolated profile, launches Pi and stops its owned server after Pi exits. Default: **200k context**, text-only OmniCoder, destructive-action guard and Windows-adapted TypeScript LSP. Ordinary commits run automatically. One shared inference lock prevents overlapping sessions. No login or manual model selection is required.

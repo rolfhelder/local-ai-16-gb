@@ -1,0 +1,358 @@
+{
+  "task": "create-effort-command",
+  "model": "gemma",
+  "contextWindow": 204800,
+  "appVersion": "0.7.6",
+  "sdkVersion": "1.3.0",
+  "initialContext": "clean; no unrelated padding",
+  "followUps": 1,
+  "scoring": "Independent full-credit Round 1 and Round 2 scores; no weighted total",
+  "score": {
+    "rows": [
+      {
+        "id": "registered",
+        "round1Pass": true,
+        "round2Pass": true
+      },
+      {
+        "id": "arguments",
+        "round1Pass": false,
+        "round2Pass": false
+      },
+      {
+        "id": "no-llm-control-turn",
+        "round1Pass": true,
+        "round2Pass": true
+      },
+      {
+        "id": "session-state",
+        "round1Pass": false,
+        "round2Pass": true
+      },
+      {
+        "id": "session-only",
+        "round1Pass": false,
+        "round2Pass": true
+      },
+      {
+        "id": "picker",
+        "round1Pass": false,
+        "round2Pass": false
+      },
+      {
+        "id": "provider-budget",
+        "round1Pass": false,
+        "round2Pass": false
+      },
+      {
+        "id": "off",
+        "round1Pass": false,
+        "round2Pass": false
+      },
+      {
+        "id": "native-effort",
+        "round1Pass": false,
+        "round2Pass": true
+      },
+      {
+        "id": "bad-input",
+        "round1Pass": false,
+        "round2Pass": false
+      },
+      {
+        "id": "sdk-client",
+        "round1Pass": false,
+        "round2Pass": false
+      },
+      {
+        "id": "resource-isolation",
+        "round1Pass": false,
+        "round2Pass": true
+      },
+      {
+        "id": "verification",
+        "round1Pass": false,
+        "round2Pass": false
+      }
+    ],
+    "round1Score": 2,
+    "round2Score": 6,
+    "maximum": 13
+  },
+  "first": {
+    "criteria": {
+      "registered": {
+        "pass": true,
+        "evidence": [
+          "effort"
+        ]
+      },
+      "arguments": {
+        "pass": false,
+        "evidence": {
+          "levels": {
+            "high": "medium",
+            "low": "medium",
+            "medium": "medium"
+          },
+          "budgets": {}
+        }
+      },
+      "no-llm-control-turn": {
+        "pass": true,
+        "evidence": {
+          "noCalls": true
+        }
+      },
+      "session-state": {
+        "pass": false,
+        "evidence": {
+          "high": "medium",
+          "low": "medium",
+          "medium": "medium"
+        }
+      },
+      "session-only": {
+        "pass": false,
+        "evidence": {
+          "freshLevel": "medium",
+          "defaultLevel": "medium",
+          "currentSessionActuallyChanged": false
+        }
+      },
+      "picker": {
+        "pass": false,
+        "evidence": []
+      },
+      "provider-budget": {
+        "pass": false,
+        "evidence": {
+          "high": {
+            "cap": 8192
+          },
+          "low": {
+            "cap": 8192
+          },
+          "medium": {
+            "cap": 8192
+          }
+        }
+      },
+      "off": {
+        "pass": false,
+        "evidence": {
+          "gemma": {
+            "level": "high"
+          },
+          "gptAfterOff": "medium"
+        }
+      },
+      "native-effort": {
+        "pass": false,
+        "evidence": {
+          "low": {
+            "effort": "medium"
+          },
+          "high": {
+            "effort": "medium"
+          },
+          "descriptionMentionsBudgetPresets": true
+        }
+      },
+      "bad-input": {
+        "pass": false,
+        "evidence": {
+          "before": "high",
+          "afterUnknown": "high",
+          "afterExtra": "high"
+        }
+      },
+      "sdk-client": {
+        "pass": false,
+        "evidence": {}
+      },
+      "resource-isolation": {
+        "pass": false,
+        "evidence": {
+          "isolatedAgentDir": true,
+          "cwdDifferent": true,
+          "commandWorksFromDifferentCwd": false
+        }
+      },
+      "verification": {
+        "pass": false,
+        "evidence": {
+          "runtimeVerificationAttemptObserved": true,
+          "successfulRuntimeCheckObserved": false,
+          "toolCallCount": 32,
+          "manualReviewRequired": true
+        }
+      }
+    },
+    "metrics": {
+      "wallSeconds": 560.391,
+      "toolCalls": 32,
+      "assistantMessages": 33,
+      "compactions": 0,
+      "peakObservedTotalVramMiB": 13735,
+      "usage": {
+        "input": 100208,
+        "output": 5683,
+        "cacheRead": 784620,
+        "cacheWrite": 0,
+        "totalTokens": 890511
+      },
+      "promptTpsMean": 833.6890909090911,
+      "generationTpsMean": 49.22151515151515,
+      "generationTpsWeighted": 47.75807298199167
+    }
+  },
+  "followup": {
+    "criteria": {
+      "registered": {
+        "pass": true,
+        "evidence": [
+          "effort"
+        ]
+      },
+      "arguments": {
+        "pass": false,
+        "evidence": {
+          "levels": {
+            "high": "high",
+            "low": "low",
+            "medium": "medium"
+          },
+          "budgets": {}
+        }
+      },
+      "no-llm-control-turn": {
+        "pass": true,
+        "evidence": {
+          "noCalls": true
+        }
+      },
+      "session-state": {
+        "pass": true,
+        "evidence": {
+          "high": "high",
+          "low": "low",
+          "medium": "medium"
+        }
+      },
+      "session-only": {
+        "pass": true,
+        "evidence": {
+          "freshLevel": "medium",
+          "defaultLevel": "medium",
+          "currentSessionActuallyChanged": true
+        }
+      },
+      "picker": {
+        "pass": false,
+        "evidence": {
+          "type": "extension_ui_request",
+          "id": "0e1d763d-5772-495c-86c9-80fd5d346f9f",
+          "method": "select",
+          "title": "Select reasoning effort",
+          "options": [
+            "OFF",
+            "LOW",
+            "MEDIUM",
+            "HIGH"
+          ]
+        }
+      },
+      "provider-budget": {
+        "pass": false,
+        "evidence": {
+          "high": {
+            "cap": 8192
+          },
+          "low": {
+            "cap": 8192
+          },
+          "medium": {
+            "cap": 8192
+          }
+        }
+      },
+      "off": {
+        "pass": false,
+        "evidence": {
+          "gemma": {
+            "level": "off"
+          },
+          "gptAfterOff": "low"
+        }
+      },
+      "native-effort": {
+        "pass": true,
+        "evidence": {
+          "low": {
+            "effort": "low"
+          },
+          "high": {
+            "effort": "high"
+          },
+          "descriptionMentionsBudgetPresets": true
+        }
+      },
+      "bad-input": {
+        "pass": false,
+        "evidence": {
+          "before": "off",
+          "afterUnknown": "off",
+          "afterExtra": "high"
+        }
+      },
+      "sdk-client": {
+        "pass": false,
+        "evidence": {}
+      },
+      "resource-isolation": {
+        "pass": true,
+        "evidence": {
+          "isolatedAgentDir": true,
+          "cwdDifferent": true,
+          "commandWorksFromDifferentCwd": true
+        }
+      },
+      "verification": {
+        "pass": false,
+        "evidence": {
+          "runtimeVerificationAttemptObserved": false,
+          "successfulRuntimeCheckObserved": false,
+          "toolCallCount": 6,
+          "manualReviewRequired": true
+        }
+      }
+    },
+    "metrics": {
+      "wallSeconds": 529.622,
+      "toolCalls": 6,
+      "assistantMessages": 7,
+      "compactions": 0,
+      "peakObservedTotalVramMiB": 13765,
+      "usage": {
+        "input": 22802,
+        "output": 7335,
+        "cacheRead": 397497,
+        "cacheWrite": 0,
+        "totalTokens": 427634
+      },
+      "promptTpsMean": 1111.9876470588235,
+      "generationTpsMean": 41.56617647058825,
+      "generationTpsWeighted": 39.80271094127743
+    }
+  },
+  "limitations": [
+    "One trial per model; not a general coding benchmark.",
+    "Behavior grading uses scripted providers in real Pi processes, not another inference model.",
+    "TPS comes from actual llama.cpp generation logs and can include candidate-initiated model self-checks.",
+    "VRAM is sampled total GPU usage, not isolated model allocation.",
+    "Hidden grading and solution withholding are procedural; no OS security sandbox is claimed.",
+    "An initial 32768-context Gemma setup run was excluded; scored Gemma run uses 204800."
+  ],
+  "candidatePromoted": false
+}

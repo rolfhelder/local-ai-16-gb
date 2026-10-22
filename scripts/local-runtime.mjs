@@ -9,6 +9,8 @@ export const exec = promisify(execFile);
 export const nodeExe = path.join(root, 'runtime/node/node.exe');
 export const piEntry = path.join(root, 'node_modules/@earendil-works/pi-coding-agent/dist/bundle/cli.js');
 export const localModels = {
+  qwen38: { file: 'unsloth/Qwen3.8-27B-GGUF/Qwen3.8-27B-UD-IQ4_XS.gguf', context: 262144 },
+  'qwen38-q3': { file: 'unsloth/Qwen3.8-27B-GGUF/Qwen3.8-27B-UD-Q3_K_XL.gguf', context: 262144 },
   qwen: { file: 'unsloth/Qwen3.5-9B-GGUF/Qwen3.5-9B-Q4_K_M.gguf', context: 262144 },
   gemma: { file: 'unsloth/gemma-4-12b-it-GGUF/gemma-4-12b-it-Q4_K_M.gguf', context: 262144 },
   omnicoder: { file: 'Tesslate/OmniCoder-9B-GGUF/omnicoder-9b-q4_k_m.gguf', context: 262144 },

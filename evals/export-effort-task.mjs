@@ -1,0 +1,11 @@
+import {readFile,writeFile} from 'node:fs/promises';
+import path from 'node:path';
+import {root} from '../scripts/local-runtime.mjs';
+import {scoreEffort} from './effort-score.mjs';
+const pointer=JSON.parse(await readFile(path.join(root,'.state/effort-task-current.json'),'utf8')),run=JSON.parse(await readFile(path.join(pointer.artifactDir,'run.json'),'utf8'));
+const load=name=>readFile(path.join(run.artifactDir,name),'utf8').then(JSON.parse);
+const first=await load('first-grade.json'),final=await load('followup-grade.json'),score=scoreEffort(first,final);
+const metric=async stage=>{const m=await load(stage+'-metrics.json');return {wallSeconds:m.wallSeconds,approvalWaitSeconds:m.approvalWaitSeconds??0,wallSecondsExcludingHostApproval:m.activeWallSeconds??m.wallSeconds,toolCalls:m.toolCalls,assistantMessages:m.assistantMessages,compactions:m.compactions,peakObservedTotalVramMiB:m.peakObservedTotalVramMiB,usage:m.usage,promptTpsMean:m.timings.promptTpsMean,generationTpsMean:m.timings.generationTpsMean,generationTpsWeighted:m.timings.generationTpsWeighted};};
+const result={task:'create-effort-command',model:run.generationModel,contextWindow:run.context,appVersion:'0.7.6',sdkVersion:'1.3.0',initialContext:'clean; no unrelated padding',followUps:1,scoring:'Independent full-credit Round 1 and Round 2 scores; no weighted total',score,first:{criteria:first.criteria,metrics:await metric('first')},followup:{criteria:final.criteria,metrics:await metric('followup')},limitations:['One trial per model; not a general coding benchmark.','Behavior grading uses scripted providers in real Pi processes, not another inference model.','TPS comes from actual llama.cpp generation logs and can include candidate-initiated model self-checks.','VRAM is sampled total GPU usage, not isolated model allocation.','Hidden grading and solution withholding are procedural; no OS security sandbox is claimed.','An initial 32768-context Gemma setup run was excluded; scored Gemma run uses 204800.'],candidatePromoted:false};
+await writeFile(path.join(root,`evaluation/EFFORT-${run.generationModel.toUpperCase()}-2026-10-21.json`),JSON.stringify(result,null,2)+'\n');
+console.log(JSON.stringify({model:run.generationModel,round1Score:score.round1Score,round2Score:score.round2Score,maximum:score.maximum}));

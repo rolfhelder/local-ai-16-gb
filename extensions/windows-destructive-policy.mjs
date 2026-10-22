@@ -2,11 +2,12 @@ import { spawn } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readFileSync } from 'node:fs';
+import { getPowerShellConfig } from '../node_modules/@earendil-works/pi-coding-agent/dist/utils/shell.js';
 const parser = fileURLToPath(new URL('../scripts/Parse-PowerShell.ps1', import.meta.url));
 const cache = new Map();
 export async function inspectPowerShell(command) {
   if (cache.has(command)) return cache.get(command);
-  const exe = process.env.PIA_POWERSHELL || 'powershell.exe';
+  const exe = process.env.PIA_POWERSHELL || getPowerShellConfig().shell;
   const parsed = await new Promise((resolve, reject) => {
     // Execute the fixed parser program, with untrusted command text only on stdin.
     // This works under Restricted execution policy without changing that policy.

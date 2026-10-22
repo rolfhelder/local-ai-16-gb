@@ -34,6 +34,7 @@
     {"id": "verification", "check": "Candidate executes runtime checks, reports their actual results, and loads without extension errors."}
   ],
   "metrics": ["pass per criterion, not just aggregate", "input/output/thinking tokens", "prompt and generation TPS separately", "wall time", "tool calls", "interventions", "context size", "model/quant/SDK/llama.cpp versions"],
-  "scoring": {"firstTryPass": 1, "newPassAfterOneFollowUp": 0.5, "finalFailure": 0, "maximumFollowUps": 1, "regressionPolicy": "A first-try pass that fails the final check earns zero; final behavior must retain earlier passes."},
+  "scoring": {"columns": ["Round 1 score", "Round 2 score"], "pointsPerPassingCriterion": 1, "maximumFollowUps": 1, "weightedTotal": false, "regressionPolicy": "Preserve each round's result independently, including regressions."},
+  "lastBatch": {"status": "complete", "models": ["gemma", "qwen", "omnicoder", "gpt-oss"], "contextWindow": 204800, "gptOssContextWindow": 131072, "initialContext": "clean, no unrelated padding", "turnWallSecondsExcludingRecordedHostWaits": 900, "excludedSetupRun": "The initial 32768-context run was stopped and excluded after the user corrected the context setting.", "qwen38": "Not run: both quantizations failed the required context-throughput gate."},
   "runner": "prepare-effort-task.mjs creates an isolated fixture and hashed backup; effort-app-trial.mjs drives generation through Pi App; grade-effort-task.mjs probes candidate extensions in real Pi RPC processes against scripted endpoints. No automatic promotion to the production profile."
 }
