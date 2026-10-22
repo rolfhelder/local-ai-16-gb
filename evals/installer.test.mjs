@@ -46,3 +46,10 @@ test('conflicting installer modes fail before installation',()=>{
     assert.notEqual(result.status,0);
   }
 });
+test('Windows PowerShell 5.1 parses and runs both dashboards', {skip:process.platform!=='win32'},()=>{
+  for (const mode of ['-Plan','-Check']) {
+    const result=spawnSync('powershell.exe',['-NoProfile','-File',script,mode,'-NoColor'],{encoding:'utf8',timeout:30000});
+    assert.equal(result.status,0,result.stderr+result.stdout);
+    assert.match(result.stdout,mode==='-Plan'?/INSTALL PREVIEW/:/CORE INVENTORY/);
+  }
+});

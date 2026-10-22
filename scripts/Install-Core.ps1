@@ -17,7 +17,10 @@ $useColor = -not ($NoColor -or $env:NO_COLOR -or [Console]::IsOutputRedirected) 
 function Paint([string]$Text, [string]$Code='38;5;80') {
     if ($useColor) { return "$([char]27)[$($Code)m$Text$([char]27)[0m" }; return $Text
 }
-$symbols = if ($Ascii) { @('+','-','|','+','+','+','OK','X','>') } else { @('╭','─','│','╮','╰','╯','✓','✗','›') }
+# Keep source ASCII so Windows PowerShell 5.1 parses UTF-8 files without a BOM.
+$symbols = if ($Ascii) { @('+','-','|','+','+','+','OK','X','>') } else {
+    @(0x256D,0x2500,0x2502,0x256E,0x2570,0x256F,0x2713,0x2717,0x203A | ForEach-Object { [string][char]$_ })
+}
 function Banner([string]$Title, [string]$Subtitle) {
     Write-Output (Paint ($symbols[0] + ($symbols[1] * 70) + $symbols[3]))
     Write-Output ((Paint $symbols[2]) + '  ' + (Paint ($Title.PadRight(68)) '1;38;5;159') + (Paint $symbols[2]))
@@ -89,7 +92,13 @@ if ($Check) {
             $llama=$configured.LlamaExecutable
             if (-not [IO.Path]::IsPathRooted($llama)) { $llama=Join-Path $labRoot $llama }
             if (-not (Test-Path -LiteralPath $llama -PathType Leaf)) { throw 'Configured runtime executable is missing' }
-            $version=(& $llama --version 2>&1 | Out-String)
+            # Windows PowerShell wraps native stderr as error records, even for
+            # successful --version output. Capture it without terminating early.
+            $previousPreference=$ErrorActionPreference
+            try {
+                $ErrorActionPreference='Continue'
+                $version=(& $llama --version 2>&1 | Out-String)
+            } finally { $ErrorActionPreference=$previousPreference }
             $valid=$LASTEXITCODE -eq 0 -and $version -match 'build 11669'
             Add-Check 'llama.cpp' $valid $(if ($valid) {'b11669 / version query only'} else {'Expected build 11669; inspect configured runtime'})
         } catch { Add-Check 'llama.cpp' $false $_.Exception.Message }
