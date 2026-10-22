@@ -10,6 +10,8 @@ The October 22 Qwen3.8-27B IQ4_XS and Q3_K_XL trials loaded but timed out during
 
 ## Run it
 
+Qwen3.8's tested weights were removed after the failed local context gate. [Family notes](docs/QWEN38-FAMILY.md) preserve the candidates and reproduction steps for the more powerful PC.
+
 Open a new terminal and type `pia`. It starts the selected local llama.cpp model, prepares the isolated profile, launches Pi and stops its owned server after Pi exits. Default: **200k context**, text-only OmniCoder, destructive-action guard and Windows-adapted TypeScript LSP. Ordinary commits run automatically. One shared inference lock prevents overlapping sessions. No login or manual model selection is required.
 
 Reasoning is **on by default**, with a 2,048-token thinking budget and up to 8,192 total generated tokens. The endpoint is **127.0.0.1:48763**. Pi shows explicit used/total context tokens in its status line. See [the full launcher commands](docs/LAUNCHER.md); `pia --dry-run` prints the exact local paths and argument arrays.

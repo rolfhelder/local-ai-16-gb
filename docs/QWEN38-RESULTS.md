@@ -1,5 +1,7 @@
 # Qwen3.8-27B context gate
 
+Retained as a candidate for the other PC: [family notes, pinned downloads and reproduction steps](QWEN38-FAMILY.md). Local weights were subsequently deleted at the user's request; the overnight scheduler was removed.
+
 2026-10-22. Windows, 16 GB VRAM baseline, llama.cpp b11669, one slot, all GPU layers requested, automatic fit off, reasoning enabled. Both Unsloth downloads passed their pinned SHA-256 checks (see manifests).
 
 Neither UD-IQ4_XS nor UD-Q3_K_XL completed the minimum 131072-token capacity trial within its time budget. Models loaded, then prompt ingestion slowed and timed out. This is a practical throughput rejection under these settings, not proof of an allocation failure, native context ceiling, or poor coding ability.
