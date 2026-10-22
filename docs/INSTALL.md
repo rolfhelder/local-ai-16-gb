@@ -44,8 +44,9 @@ Qwen3.8 27B recipes remain available in the model-results guide, but the tested 
 ```powershell
 ./scripts/Install-Core.ps1 -Check
 local-ai doctor --verify-model
-node scripts/acceptance.mjs --model gemma        # preview
-node scripts/acceptance.mjs --model gemma --run  # real inference, disposable repair
+local-ai test                        # preview
+local-ai test --run                  # real inference, disposable repair (Gemma)
+local-ai test --model omnicoder --run # choose another installed model
 local-ai
 ```
 
