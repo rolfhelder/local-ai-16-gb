@@ -1,9 +1,10 @@
 import {mkdir,writeFile,readFile} from 'node:fs/promises';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
-import {root,machine,ensureServer,acquireInferenceLock,prepareProfile,nodeExe,exec} from './local-runtime.mjs';
+import {root,machine,ensureServer,acquireInferenceLock,prepareProfile,nodeExe,exec,serverArguments} from './local-runtime.mjs';
 import {hashFile} from './doctor.mjs';
 import {serverTimings} from '../evals/timings.mjs';
+import {makeReceipt,publicReceipt} from './run-receipt.mjs';
 
 export async function runStages(stages,report,onUpdate=async()=>{}){
  for(const [name,work] of stages){const start=performance.now();try{const evidence=await work();report.stages.push({name,status:'pass',durationMs:Math.round(performance.now()-start),evidence});}catch(error){report.stages.push({name,status:'fail',durationMs:Math.round(performance.now()-start),error:error.message});report.passed=false;await onUpdate();return false;}await onUpdate();}report.passed=true;await onUpdate();return true;
@@ -30,12 +31,14 @@ export async function main(args=process.argv.slice(2)){
  ['owned-endpoint',async()=>{server=await ensureServer(config);return {model:config.ModelId,context:config.ContextSize,slots:1,owned:server.owned};}],
  ['real-answer',async()=>{const response=await fetch(config.RouterUrl+'/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:config.ModelId,messages:[{role:'user',content:'Reply with exactly LOCAL_READY_7319 and nothing else.'}],max_tokens:8192,temperature:0}),signal:AbortSignal.timeout(120000)});if(!response.ok)throw Error('Provider HTTP '+response.status);const data=await response.json();const content=data.choices?.[0]?.message?.content;if(typeof content!=='string'||content.trim()!=='LOCAL_READY_7319')throw Error('Model did not return the requested readiness marker');return {answerMatches:true,usage:data.usage};}],
  ['pi-tool-loop',async()=>{const cwd=path.join(base,'workspace');await mkdir(cwd,{recursive:true});await writeFile(path.join(cwd,'math.cjs'),'exports.add = (a,b) => a-b;\n');const check='const a=require("node:assert/strict"),{add}=require("./math.cjs");a.equal(add(2,3),5);a.equal(add(-2,3),1);console.log("checks passed");\n';await writeFile(path.join(cwd,'check.cjs'),check);
- const prepared=await prepareProfile('standard',config,cwd);prepared.env.PI_EFFORT_PREFERENCES=path.join(base,'effort-preferences.json');const {PiIntegrationTest}=await import('pi-coding-agent-test');
+ const prepared=await prepareProfile('standard',config,cwd,{agentDirectory:path.join(base,'agent')});prepared.env.PI_EFFORT_PREFERENCES=path.join(base,'effort-preferences.json');const {PiIntegrationTest}=await import('pi-coding-agent-test');
  const result=await new PiIntegrationTest({testName:'first-run-repair',transport:'rpc',cwd,artifactsDir:path.join(base,'traces'),piCommand:path.join(root,'node_modules/.bin/pi.cmd'),providerMode:'user',model:'local-llama/'+config.ModelId,thinking:'medium',isolateUserResources:true,environment:prepared.env,extensions:[...prepared.settings.packages,...prepared.settings.extensions],tools:['read','edit','write','powershell'],timeoutMs:180000}).run('Fix math.cjs. First run check.cjs and observe its failure, read the code, minimally repair math.cjs, then rerun check.cjs. Do not edit check.cjs. Node executable: '+JSON.stringify(nodeExe)+'. Invoke quoted executables with PowerShell &.');
  const sourcePreserved=(await readFile(path.join(cwd,'check.cjs'),'utf8'))===check;let hiddenPassed=false;try{await exec(nodeExe,['-e','const a=require("node:assert/strict"),{add}=require("./math.cjs");a.equal(add(7,11),18);a.equal(add(-9,4),-5);a.equal(add(0,0),0)'],{cwd,timeout:5000,windowsHide:true});hiddenPassed=true;}catch{}
  const score=gradeRepair({messages:result.messages,sourcePreserved,hiddenPassed});if(!score.passed)throw Error('Tool-loop acceptance failed: '+JSON.stringify(score));return score;}]
  ],report,save);
- }finally{await server?.stop();await release();report.timings=serverTimings(await readFile(config.LogPath,'utf8').catch(()=>''));await save();}
+ }finally{await server?.stop();await release();report.timings=serverTimings(await readFile(config.LogPath,'utf8').catch(()=>''));await save();
+ const receipt=makeReceipt({config,argv:serverArguments(config),modelHash:report.stages.find(x=>x.name==='pinned-model')?.evidence?.sha256??null,passed:report.passed,error:report.stages.find(x=>x.status==='fail')?.error??null,timings:report.timings,versions:{node:process.version,pi:JSON.parse(await readFile(path.join(root,'node_modules/@earendil-works/pi-coding-agent/package.json'),'utf8')).version}});
+ await writeFile(path.join(base,'receipt.private.json'),JSON.stringify(receipt,null,2)+'\n');await writeFile(path.join(base,'receipt.public.json'),JSON.stringify(publicReceipt(receipt),null,2)+'\n');}
  console.log(JSON.stringify({passed:report.passed,stages:report.stages,report:path.join(base,'report.json')},null,2));if(!report.passed)process.exitCode=1;
 }
-if(import.meta.url===pathToFileURL(process.argv[1]).href)await main();
+if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href)await main();

@@ -100,7 +100,7 @@ export async function ensureServer(config) {
     throw new Error('llama.cpp did not become ready within 180 seconds');
   } catch (error) { await stop(); throw error; }
 }
-export async function prepareProfile(name, config, cwd = root) {
+export async function prepareProfile(name, config, cwd = root, {agentDirectory} = {}) {
   const profiles = {
     native: [],
     guard: ['bash-policy', 'windows-policy'],
@@ -114,7 +114,8 @@ export async function prepareProfile(name, config, cwd = root) {
     web: ['bash-policy', 'windows-policy', 'lsp-windows', '@arcanemachine/pi-web-search'],
   };
   if (!profiles[name]) throw new Error(`Unknown profile ${name}. Choose ${Object.keys(profiles).join(', ')}`);
-  const agentDir = path.join(root, '.state/profiles', name);
+  const agentDir = agentDirectory ? path.resolve(agentDirectory) : path.join(root, '.state/profiles', name);
+  if(agentDirectory){const relative=path.relative(path.join(root,'.state'),agentDir);if(relative.startsWith('..')||path.isAbsolute(relative))throw new Error('Isolated agent directory must stay within local .state');}
   await mkdir(agentDir, { recursive: true });
   const packages = profiles[name].filter(value => !['windows-policy','bash-policy','lsp-windows'].includes(value)).map(value => path.join(root, 'node_modules', value));
   const settings = { defaultTools: ['read', 'powershell', 'edit', 'write', 'grep', 'find', 'ls'], packages,
