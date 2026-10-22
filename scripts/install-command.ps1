@@ -18,6 +18,30 @@ $actions=@($options.ContainsKey('Plan'),$options.ContainsKey('Check'),$test | Wh
 if ($actions.Count -gt 1 -or ($execute -and ($options.ContainsKey('Plan') -or $options.ContainsKey('Check')))) { throw 'Choose one action: --plan, --check, --run, --test or --test --run' }
 if ($options.ContainsKey('Json') -and $actions.Count -eq 0) { throw '--json requires --plan, --check or --test' }
 $project=Split-Path -Parent $PSScriptRoot
+function Browse-ModelLocation([bool]$File) {
+    $node=Join-Path $project 'runtime/node/node.exe'
+    if (-not (Test-Path -LiteralPath $node)) { throw 'Install core components first (option 1).' }
+    Add-Type -AssemblyName System.Windows.Forms
+    $dialog=$null
+    try {
+        if ($File) {
+            $dialog=New-Object System.Windows.Forms.OpenFileDialog
+            $dialog.Title='Choose a local language model (GGUF)'
+            $dialog.Filter='GGUF model (*.gguf)|*.gguf'
+            $dialog.CheckFileExists=$true
+        } else {
+            $dialog=New-Object System.Windows.Forms.FolderBrowserDialog
+            $dialog.Description='Choose a folder containing your GGUF models (subfolders are searched)'
+            $dialog.ShowNewFolderButton=$false
+        }
+        if ($dialog.ShowDialog() -ne [System.Windows.Forms.DialogResult]::OK) { Write-Host '  Selection cancelled; configuration unchanged.'; return }
+        $folder=if ($File) { Split-Path -Parent $dialog.FileName } else { $dialog.SelectedPath }
+        & $node (Join-Path $PSScriptRoot 'model-folders.mjs') $folder
+        if ($LASTEXITCODE) { throw 'Model folder was not saved; see the error above.' }
+        if ($File) { $script:model=$dialog.FileName; Write-Host ('  Selected for this menu session: ' + $script:model) }
+        Write-Host '  Models remain in their current location. No weights are copied or loaded.'
+    } finally { if ($dialog) { $dialog.Dispose() } }
+}
 function Select-InstalledModel {
     if ($model) { return $model }
     $node=Join-Path $project 'runtime/node/node.exe'
@@ -60,9 +84,11 @@ while ($true) {
     Write-Output '  2  Check installation         Inspect core files and versions'
     Write-Output '  3  Run acceptance test        Select installed model; answer + repair'
     Write-Output '  4  Verify model + health      Doctor with full model checksum'
+    Write-Output '  5  Add model folder          Browse for a folder; save search location'
+    Write-Output '  6  Browse model file         Select GGUF; remember its containing folder'
     Write-Output '  0  Exit'
     Write-Output ''
-    $choice=Read-Host '  Choose [0-4]'
+    $choice=Read-Host '  Choose [0-6]'
     if ([string]::IsNullOrWhiteSpace($choice) -or $choice -eq '0') { return }
     try {
         $view=@{}; foreach ($key in @('NoColor','Ascii')) { if ($options.ContainsKey($key)) { $view[$key]=$true } }
@@ -76,7 +102,9 @@ while ($true) {
                 $selected=Select-InstalledModel
                 & $node (Join-Path $PSScriptRoot 'doctor.mjs') --model $selected --verify-model
             }
-            default { Write-Output '  Choose a number from 0 to 4.' }
+            '5' { Browse-ModelLocation $false }
+            '6' { Browse-ModelLocation $true }
+            default { Write-Output '  Choose a number from 0 to 6.' }
         }
     } catch { Write-Output ('  Action failed: ' + $_.Exception.Message) }
 }

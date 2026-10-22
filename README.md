@@ -50,7 +50,7 @@ cd local-ai-16-gb
 .\bin\local-ai.cmd install
 ```
 
-Model weights are a separate choice. Optional desktop/browser/helper assets are separate too. The installer has preview/current-machine checks; **clean-Windows installation acceptance remains pending**.
+Model weights are a separate choice and can stay in any folder. Use the setup menu to browse for a model folder or GGUF file; it remembers the location in local configuration. Optional desktop/browser/helper assets are separate too. The installer has preview/current-machine checks; **clean-Windows installation acceptance remains pending**.
 
 Follow the [installation checklist and model-selection guide](docs/INSTALL.md) for download recipes, machine configuration, first-run checks and recovery boundaries.
 

@@ -19,7 +19,7 @@ test('installer menu defaults to no action and includes every first-run choice',
  const wrapper=path.join(root,'scripts/install-command.ps1');
  const result=spawnSync('pwsh',['-NoProfile','-File',wrapper,'install','--no-color'],{input:'0\n',encoding:'utf8',timeout:15000});
  assert.equal(result.status,0,result.stderr);
- for(const text of ['Check installation','Install core components','Run acceptance test','Verify model + health'])assert.ok((result.stdout+result.stderr).includes(text),text);
+ for(const text of ['Check installation','Install core components','Run acceptance test','Verify model + health','Add model folder','Browse model file'])assert.ok((result.stdout+result.stderr).includes(text),text);
  assert.doesNotMatch(result.stdout,/Preview installation|Preview acceptance test/);
  assert.doesNotMatch(result.stdout,/ACCEPTANCE TEST|Core installation complete/);
 });

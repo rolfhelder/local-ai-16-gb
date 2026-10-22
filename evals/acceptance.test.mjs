@@ -7,6 +7,21 @@ import {installedModels} from '../scripts/model-selection.mjs';
 import fs from 'node:fs/promises';
 import {root,machine} from '../scripts/local-runtime.mjs';
 import {activity} from '../scripts/terminal-activity.mjs';
+import {addModelFolder} from '../scripts/model-folders.mjs';
+
+test('additional model folders persist without losing settings and are discovered once',async()=>{
+ const base=await fs.mkdtemp(path.join(root,'.state/model-folder-config-'));
+ const primary=path.join(base,'primary'),extra=path.join(base,'extra models');
+ await fs.mkdir(primary);await fs.mkdir(extra);await fs.writeFile(path.join(extra,'custom.gguf'),'fixture');
+ const file=path.join(base,'machine.local.json');const original={ModelsDirectory:primary,Port:48763,Reasoning:false,CustomSetting:{keep:true}};
+ await fs.writeFile(file,JSON.stringify(original));
+ const result=await addModelFolder(file,extra,{backupDirectory:path.join(base,'backups')});
+ assert.equal(result.changed,true);assert.deepEqual(JSON.parse(await fs.readFile(result.backup,'utf8')),original);
+ const saved=JSON.parse(await fs.readFile(file,'utf8'));assert.equal(saved.Reasoning,false);assert.deepEqual(saved.CustomSetting,{keep:true});assert.deepEqual(saved.ModelDirectories,[extra]);
+ const again=await addModelFolder(file,extra);assert.equal(again.changed,false);
+ const models=await installedModels([primary,extra,extra],{});assert.equal(models.length,1);assert.equal(models[0].file,path.join(extra,'custom.gguf'));
+ const before=await fs.readFile(file,'utf8');await assert.rejects(addModelFolder(file,path.join(base,'missing')));assert.equal(await fs.readFile(file,'utf8'),before);
+});
 
 test('doctor activity displays measured hash progress without blank redraws',async()=>{
  const writes=[];const busy=activity({stream:{write:s=>writes.push(s),isTTY:true,columns:100},color:false});
