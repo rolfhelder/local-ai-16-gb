@@ -6,7 +6,7 @@
   "packageManager": "pnpm@12.14.0",
   "scripts": {
     "browser": "playwright-cli",
-    "test": "node --test evals/policy.test.mjs evals/context-status.test.mjs evals/recall-grader.test.mjs evals/timings.test.mjs evals/runtime.test.mjs evals/local-token-budget.test.mjs evals/effort.test.mjs evals/effort-score.test.mjs evals/posix-launcher.test.mjs evals/doctor.test.mjs evals/acceptance.test.mjs evals/resource-profiles.test.mjs evals/progress.test.mjs evals/run-receipt.test.mjs evals/config-plan.test.mjs evals/matched-evals.test.mjs evals/gpu-offload.test.mjs evals/installer.test.mjs",
+    "test": "node --test evals/policy.test.mjs evals/context-status.test.mjs evals/recall-grader.test.mjs evals/timings.test.mjs evals/runtime.test.mjs evals/local-token-budget.test.mjs evals/effort.test.mjs evals/effort-score.test.mjs evals/posix-launcher.test.mjs evals/doctor.test.mjs evals/acceptance.test.mjs evals/resource-profiles.test.mjs evals/progress.test.mjs evals/run-receipt.test.mjs evals/config-plan.test.mjs evals/matched-evals.test.mjs evals/gpu-offload.test.mjs evals/installer.test.mjs evals/command-ui.test.mjs",
     "eval:tools": "node evals/run.mjs",
     "eval:hooks": "node evals/hooks.mjs",
     "eval:guard": "node evals/guard-integration.mjs",
