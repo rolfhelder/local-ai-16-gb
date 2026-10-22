@@ -33,6 +33,12 @@ The shared coding manifest includes multiple files. To select only one, copy its
 
 Qwen3.8 27B recipes remain available in the model-results guide, but the tested quantizations failed our minimum practical throughput gate. Treat further offload experiments separately from core installation. Review upstream model licenses/terms for your use.
 
+## Preview, inventory and health are different
+
+`Install-Core.ps1 -Plan` previews installation in a human-readable dashboard. `-Check` inventories core files, Node/pnpm/Pi versions, the configured llama.cpp build and launcher registration. Both modes are read-only and load no model. Add `-Json` for automation or `-NoColor -Ascii` for plain terminals. The inventory does not run the doctor.
+
+`local-ai doctor` checks hardware, model configuration and runtime health. Acceptance loads a model and asks Pi to answer and repair code. Passing inventory alone does not prove inference works.
+
 ## Prove the setup works
 
 ```powershell
