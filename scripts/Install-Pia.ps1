@@ -8,4 +8,4 @@ if (($userPath -split ';') -notcontains $binDirectory) {
     [Environment]::SetEnvironmentVariable('Path', ($userPath.TrimEnd(';') + ';' + $binDirectory), 'User')
 }
 if (($env:PATH -split ';') -notcontains $binDirectory) { $env:PATH = $binDirectory + ';' + $env:PATH }
-Write-Output 'pia is registered in your user PATH. New terminals will pick it up; run bin/pia.cmd in an existing terminal.'
+Write-Output 'local-ai and local-ai-app are registered in your user PATH. Open a new terminal or run bin/local-ai.cmd here. Legacy pia aliases remain available.'

@@ -79,7 +79,7 @@ async function probe(config) {
   return data;
 }
 export async function ensureServer(config) {
-  try { await probe(config); throw new Error('PORT_IN_USE_WITH_UNVERIFIABLE_REASONING_SETTINGS: a server is already running; stop that server before using pia so the requested thinking budget can be applied'); }
+  try { await probe(config); throw new Error('PORT_IN_USE_WITH_UNVERIFIABLE_REASONING_SETTINGS: a server is already running; stop that server before using local-ai so the requested thinking budget can be applied'); }
   catch (error) { if (error.message.startsWith('PORT_IN_USE')) throw error; }
   await access(config.ModelFile);
   const logPath = config.LogPath || path.join(root, '.state/llama-server.log');
@@ -134,7 +134,7 @@ export async function prepareProfile(name, config, cwd = root) {
     settings.extensions.push(path.join(root, 'extensions/tool-budget.mjs'));
     settings.extensions.push(path.join(root,'extensions/effort.mjs'));
     settings.skills = [path.join(root, '.state/.agents/skills')];
-    settings.prompts = (await readdir(path.join(root,'prompts'))).filter(name=>name.endsWith('.md')&&name!=='effort.md').map(name=>path.join(root,'prompts',name));
+    settings.prompts = (await readdir(path.join(root,'prompts')).catch(error => { if (error.code === 'ENOENT') return []; throw error; })).filter(name=>name.endsWith('.md')&&name!=='effort.md').map(name=>path.join(root,'prompts',name));
   }
   if(name==='pi-app')settings.extensions.push(path.join(root,'extensions/pi-app-compat.mjs'));
   await writeFile(path.join(agentDir, 'settings.json'), JSON.stringify(settings, null, 2));

@@ -20,7 +20,9 @@
     "eval:coding-context": "node evals/coding-context.mjs",
     "eval:live": "node evals/live.mjs",
     "pia": "node scripts/pia.mjs",
-    "pia:unix": "node scripts/pia-unix.mjs"
+    "pia:unix": "node scripts/pia-unix.mjs",
+    "local-ai": "node scripts/pia.mjs",
+    "local-ai:unix": "node scripts/pia-unix.mjs"
   },
   "dependencies": {
     "@arcanemachine/pi-web-search": "3.0.0",
@@ -29,11 +31,6 @@
     "@playwright/cli": "0.1.22",
     "pi-guard": "1.6.0",
     "pi-lsp-extension": "1.4.0"
-  },
-  "pi": {
-    "prompts": [
-      "./prompts"
-    ]
   },
   "devDependencies": {
     "@earendil-works/pi-coding-agent": "1.3.0",

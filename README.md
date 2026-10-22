@@ -43,17 +43,15 @@ Windows is the tested implementation. macOS/Linux instructions and the baseline 
 - [ ] **Register one-command startup.** Windows:
 
   ```powershell
-  powershell -NoProfile -File scripts/Install-Pia.ps1
+  powershell -NoProfile -File scripts/Install-LocalAI.ps1
   # Open a fresh terminal, then:
-  pia --dry-run
-  pia
+  local-ai --dry-run
+  local-ai
   ```
 
-  `pia` starts the selected model, prepares Pi, and stops its owned server when Pi exits. It refuses overlapping sessions. Defaults: Gemma, 204800 context, reasoning on, 2048 thinking tokens and 8192 total output tokens. Explicit choices: `pia --model qwen`, `pia --model omnicoder`, `pia --model gpt-oss`. Use `--context 32768` for a smaller initial smoke test; GPT-OSS caps at its native 131072.
+  `local-ai` starts the selected model, prepares Pi, and stops its owned server when Pi exits. It refuses overlapping sessions. Defaults: Gemma, 204800 context, reasoning on, 2048 thinking tokens and 8192 total output tokens. Explicit choices: `local-ai --model qwen`, `local-ai --model omnicoder`, `local-ai --model gpt-oss`. Use `--context 32768` for a smaller initial smoke test; GPT-OSS caps at its native 131072.
 - [ ] **Run the checks.** `pnpm test` checks local behavior without inference. Then run a small coding smoke test and a context test before trusting a large window. [Test method and commands](docs/TESTING.md).
-- [ ] **Add optional features one at a time.** The Windows standard profile includes LSP, explicit context usage, `/effort low|medium|high`, and confirmation for destructive commands; normal commits run automatically. `/effort` is session-only unless explicitly saved. Guardrails are not an OS sandbox. Web/research/browser/computer-use modules are optional and have different evidence levels; see [limitations](docs/MODELS.md).
-
-  Optional Windows desktop app: run `powershell -NoProfile -File scripts/Download-PiApp.ps1`, then `powershell -NoProfile -File scripts/Install-PiAppShortcut.ps1`. Use `pia-app` (Gemma by default) or `pia-app --model omnicoder`. Quit the app from its tray before switching models. `scripts/Setup-Integrations.ps1` installs optional browser/research/GUI helpers; it is not required for the core CLI. Its legacy isolated-profile setup expects `scripts/Initialize-Lab.ps1` to have run first.
+- [ ] **Choose optional extensions or a desktop interface** after the core CLI works. The guides below explain their setup and evidence limits.
 
 ## macOS / Linux equivalents
 
@@ -77,17 +75,41 @@ macOS uses Metal; Linux NVIDIA uses CUDA. Other GPU backends exist upstream but 
 After configuring native paths and downloading a model, add this function to `~/.zshrc` (macOS) or `~/.bashrc` (Linux), replacing the clone path:
 
 ```sh
-pia() { node /absolute/path/local-ai-16-gb/scripts/pia-unix.mjs --cwd "$PWD" "$@"; }
+local-ai() { node /absolute/path/local-ai-16-gb/scripts/pia-unix.mjs --cwd "$PWD" "$@"; }
 ```
 
-Then run `pia --dry-run` followed by `pia`. This baseline uses native bash tools, context/effort hooks and the same one-server lifecycle. It does **not** claim Windows LSP, desktop GUI, browser or computer-use parity. The original `.ps1` scripts and GPU eval runners remain Windows-specific.
+Then run `local-ai --dry-run` followed by `local-ai`. This baseline uses native bash tools, context/effort hooks and the same one-server lifecycle. It does **not** claim Windows LSP, desktop GUI, browser or computer-use parity. The original `.ps1` scripts and GPU eval runners remain Windows-specific.
 
 ## Models and measured tradeoffs
 
 ![Completed context and coding-run VRAM comparison](assets/model-comparison.png)
 
-Context bars show completed inference capacity, **not reliable retrieval or coding quality**. VRAM bars are sampled total GPU use during coding, including the desktop, at different configured windows. Qwen3.8 27B is omitted from the success bars: IQ4_XS and Q3_K_XL loaded but failed the 131k throughput gate. See [models, coding scores, effort scores and caveats](docs/MODELS.md). Machine-readable observations: [results/models.json](results/models.json).
+Context bars show completed inference capacity, **not reliable retrieval or coding quality**. VRAM bars are sampled total GPU use during coding, including the desktop, at different configured windows. Qwen3.8 27B IQ4_XS and Q3_K_XL loaded but failed the 131k throughput gate.
+
+Read the [model comparison](docs/MODELS.md) for the hardware tradeoffs. The [evaluation guide](docs/TESTING.md) explains occupancy, recall failures, deadlines and the complete recorded results behind this chart.
+
+## Evaluations: what to expect
+
+Small repair tasks favored Gemma overall, but all four models struggled to implement a native effort command. A large usable allocation does not mean dependable reasoning across that window. We test harness behavior, filled context, clean versus padded coding, and a two-round extension task separately.
+
+The [evaluation guide and results](docs/TESTING.md) includes failures, per-round scores, limitations and reproduction commands.
+
+## Pi extensions and configuration
+
+The standard Windows profile adds context usage, effort control, destructive-command approvals and LSP. Web search, research, browser automation and computer use remain independent optional profiles with different levels of validation. Keep the tool surface small and add one feature at a time.
+
+See [extensions, hooks and guardrails](docs/EXTENSIONS.md) for configuration, researched alternatives and evidence.
+
+## Optional desktop interface: Pi App
+
+Prefer a window to a terminal? Pi App can connect to the same local llama.cpp model through our launcher, with an effort picker and side panels. It is optional; the CLI setup above is sufficient.
+
+Follow the [Pi App setup guide](docs/PI-APP.md) for installation, the local endpoint, SDK compatibility, thinking budgets and model switching.
+
+## One-command startup
+
+Use **`local-ai`** for the CLI or **`local-ai-app`** for the optional Windows app. Both select Gemma by default; `--model qwen|gemma|omnicoder|gpt-oss` chooses another downloaded model. The CLI accepts `--context`; the app takes its context from the model/machine configuration. The launchers start llama.cpp, prepare Pi and clean up their owned server. Old `pia` / `pia-app` commands remain compatibility aliases.
 
 ## What stays local
 
-Model weights, runtimes, credentials, machine configuration, raw sessions, generated eval reports and the session's research diary are ignored. The published guide has three entry points: this checklist, [test methodology](docs/TESTING.md), and [model results](docs/MODELS.md). Pinned install manifests and runnable code remain tracked. Ignoring an earlier tracked report removes it from the current tree; it does not rewrite Git history.
+Model weights, runtimes, credentials, machine configuration, personal prompts, raw sessions and research notes are ignored. Sanitized measured results are published under `results/`; the 105-repository research ledger stays local. Pinned install manifests and runnable code remain tracked. Removing an earlier tracked file does not rewrite Git history.

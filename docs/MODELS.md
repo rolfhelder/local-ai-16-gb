@@ -1,6 +1,6 @@
 # Tested models and limitations
 
-Measured on Windows with an RTX 4090 Laptop GPU (16376 MiB VRAM), 32 GiB system RAM, Pi 1.3.0 and llama.cpp b11669. Results are small local samples from October 21–22, 2026. **Gemma is the current user-selected default** for `pia` and `pia-app`.
+Measured on Windows with an RTX 4090 Laptop GPU (16376 MiB VRAM), 32 GiB system RAM, Pi 1.3.0 and llama.cpp b11669. Results are small local samples from October 21–22, 2026. **Gemma is the current user-selected default** for `local-ai` and `local-ai-app`.
 
 ## Coding and memory
 
@@ -59,8 +59,8 @@ Keep [IQ4_XS](../manifests/qwen38-download.json) and [Q3_K_XL](../manifests/qwen
 
 - Windows LSP diagnostics/navigation/freshness, hooks, guard behavior, context display, browser fixture and worktree isolation have scripted conformance checks.
 - Web extraction/cache/error cases were tested; live DuckDuckGo discovery showed `parse_failed`, so it remains optional.
-- A bounded research-tool run used real local inference and public fetches, but source quality/teaching performance was not compared across all models.
-- Computer-use is installed as an optional profile; native Windows GUI tasks, image grounding and YouTube/ASR have not passed a completed eval suite here.
+- A bounded research-tool run used real local inference and public fetches, but source quality was not compared across all models.
+- Computer-use is installed as an optional profile; native Windows GUI tasks and image grounding have not passed a completed eval suite here.
 - Pi App is optional. Its resident-memory display measures Electron system RAM, not llama.cpp memory or model VRAM. The CLI/API path remains the baseline.
 
 [Machine-readable summary](../results/models.json). Raw session research stays local and ignored. Gemma is a practical starting choice from this sample; repeat on the destination machine rather than treating these numbers as guarantees.

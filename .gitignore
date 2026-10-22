@@ -58,3 +58,8 @@ evals/effort-suite-state.mjs
 evals/gpt-oss-investigation.mjs
 evals/audit-limits.mjs
 evals/direct-lsp.mjs
+
+# Curated public guides; personal prompt templates stay local.
+!docs/PI-APP.md
+!docs/EXTENSIONS.md
+prompts/
