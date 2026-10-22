@@ -19,7 +19,7 @@ test('installer menu defaults to no action and includes every first-run choice',
  const wrapper=path.join(root,'scripts/install-command.ps1');
  const result=spawnSync('pwsh',['-NoProfile','-File',wrapper,'install','--no-color'],{input:'0\n',encoding:'utf8',timeout:15000});
  assert.equal(result.status,0,result.stderr);
- for(const text of ['Check installation','Install core components','Run acceptance test','Verify model + health','Add model folder','Browse model file'])assert.ok((result.stdout+result.stderr).includes(text),text);
+ for(const text of ['Check installation','Install core components','Run acceptance test','Verify model + health','Add model location'])assert.ok((result.stdout+result.stderr).includes(text),text);
  assert.doesNotMatch(result.stdout,/Preview installation|Preview acceptance test/);
  assert.doesNotMatch(result.stdout,/ACCEPTANCE TEST|Core installation complete/);
 });
@@ -39,6 +39,15 @@ test('Windows menu asks for a model and permits cancelling before inference', {s
  const result=spawnSync('powershell.exe',['-NoProfile','-File',path.join(root,'scripts/install-command.ps1'),'install','--no-color'],{input:'3\n\n0\n',encoding:'utf8',timeout:15000});
  assert.equal(result.status,0,result.stderr);assert.match(result.stdout,/Installed models/);assert.match(result.stdout,/No model selected; cancelled/);
  assert.doesNotMatch(result.stdout+result.stderr,/ACCEPTANCE TEST|mmproj-F16/);
+});
+test('unified picker resolves folders and GGUF files without opening a dialog', {skip:process.platform!=='win32'},()=>{
+ const base=fs.mkdtempSync(path.join(root,'.state/unified-picker-'));
+ const model=path.join(base,'sample.gguf');fs.writeFileSync(model,'fixture');
+ for(const [selected,kind,expected] of [[base,'folder',base],[path.join(base,'Use this folder'),'folder',base],[model,'file',model]]){
+  const result=run(path.join(root,'scripts/browse-model.ps1'),['-ResolvePath',selected]);
+  assert.equal(result.status,0,result.stderr);const parsed=JSON.parse(result.stdout);assert.equal(parsed.kind,kind);assert.equal(parsed.path,expected);
+ }
+ const invalid=run(path.join(root,'scripts/browse-model.ps1'),['-ResolvePath',path.join(base,'missing.gguf')]);assert.notEqual(invalid.status,0);
 });
 test('missing core inventory reports failures without creating runtime/config or invoking doctor',()=>{
   // Preserve this disposable fixture under ignored .state for inspection.

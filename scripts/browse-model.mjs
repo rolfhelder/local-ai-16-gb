@@ -4,7 +4,7 @@ import {root} from './local-runtime.mjs';
 
 // Keep the modal GUI out of the menu host, with bounded lifetime and cancellation.
 export async function runPicker(kind,{launch=spawn,timeoutMs=180000,signals=process}={}){
- if(!['folder','file'].includes(kind))throw Error('Choose folder or file.');
+ if(!['folder','file','location'].includes(kind))throw Error('Choose folder or file.');
  const child=launch('powershell.exe',['-NoProfile','-STA','-File',path.join(root,'scripts/browse-model.ps1'),'-Kind',kind],{windowsHide:true,stdio:['ignore','pipe','pipe']});
  let output='',errors='';
  child.stdout.on('data',data=>output+=data);child.stderr.on('data',data=>errors+=data);

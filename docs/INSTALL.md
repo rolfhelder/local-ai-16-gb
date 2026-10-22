@@ -40,7 +40,7 @@ Run `local-ai install` and choose installation, inventory, real acceptance, or m
 
 ## Choose where models live
 
-In `local-ai install`, choose **5 — Add model folder** for a Windows folder browser, or **6 — Browse model file** for a GGUF file picker. The folder is remembered in `machine.local.json` and searched on later runs. Choosing a file also selects it for this menu session. Cancelling either dialog changes nothing. Weights stay where they are; adding a location does not copy, download or load a model. A backup of the previous configuration is saved under ignored `.state/config-backups/` when a new folder is added.
+In `local-ai install`, choose **5 — Add model location**. In the file picker, select a GGUF and click **Open**, or navigate into a model folder, leave **Use this folder** in the file-name box and click **Open**. The folder is remembered in `machine.local.json` and searched on later runs. Choosing a file also selects it for this menu session. Cancelling the dialog changes nothing. Weights stay where they are; adding a location does not copy, download or load a model. A backup of the previous configuration is saved under ignored `.state/config-backups/` when a new folder is added.
 
 The picker opens in a separate process with a foreground owner window. The terminal announces it before opening. Cancel in the dialog or press Ctrl+C; after three minutes it times out without saving a location.
 
