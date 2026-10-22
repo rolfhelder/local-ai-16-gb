@@ -21,26 +21,18 @@ $project=Split-Path -Parent $PSScriptRoot
 function Browse-ModelLocation([bool]$File) {
     $node=Join-Path $project 'runtime/node/node.exe'
     if (-not (Test-Path -LiteralPath $node)) { throw 'Install core components first (option 1).' }
-    Add-Type -AssemblyName System.Windows.Forms
-    $dialog=$null
-    try {
-        if ($File) {
-            $dialog=New-Object System.Windows.Forms.OpenFileDialog
-            $dialog.Title='Choose a local language model (GGUF)'
-            $dialog.Filter='GGUF model (*.gguf)|*.gguf'
-            $dialog.CheckFileExists=$true
-        } else {
-            $dialog=New-Object System.Windows.Forms.FolderBrowserDialog
-            $dialog.Description='Choose a folder containing your GGUF models (subfolders are searched)'
-            $dialog.ShowNewFolderButton=$false
-        }
-        if ($dialog.ShowDialog() -ne [System.Windows.Forms.DialogResult]::OK) { Write-Host '  Selection cancelled; configuration unchanged.'; return }
-        $folder=if ($File) { Split-Path -Parent $dialog.FileName } else { $dialog.SelectedPath }
-        & $node (Join-Path $PSScriptRoot 'model-folders.mjs') $folder
-        if ($LASTEXITCODE) { throw 'Model folder was not saved; see the error above.' }
-        if ($File) { $script:model=$dialog.FileName; Write-Host ('  Selected for this menu session: ' + $script:model) }
-        Write-Host '  Models remain in their current location. No weights are copied or loaded.'
-    } finally { if ($dialog) { $dialog.Dispose() } }
+    $kind=if ($File) { 'file' } else { 'folder' }
+    Write-Host ('  Opening ' + $kind + ' picker in a separate window...')
+    Write-Host '  Cancel in the dialog or press Ctrl+C. Timeout: 3 minutes.'
+    $raw=& $node (Join-Path $PSScriptRoot 'browse-model.mjs') $kind
+    if ($LASTEXITCODE) { Write-Host '  Picker ended; no model location was saved.'; return }
+    $result=($raw -join "`n") | ConvertFrom-Json
+    if ($result.cancelled) { Write-Host '  Selection cancelled; configuration unchanged.'; return }
+    $folder=if ($File) { Split-Path -Parent $result.path } else { $result.path }
+    & $node (Join-Path $PSScriptRoot 'model-folders.mjs') $folder
+    if ($LASTEXITCODE) { throw 'Model folder was not saved; see the error above.' }
+    if ($File) { $script:model=$result.path; Write-Host ('  Selected for this menu session: ' + $script:model) }
+    Write-Host '  Models remain in their current location. No weights are copied or loaded.'
 }
 function Select-InstalledModel {
     if ($model) { return $model }

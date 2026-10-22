@@ -8,6 +8,24 @@ import fs from 'node:fs/promises';
 import {root,machine} from '../scripts/local-runtime.mjs';
 import {activity} from '../scripts/terminal-activity.mjs';
 import {addModelFolder} from '../scripts/model-folders.mjs';
+import {runPicker} from '../scripts/browse-model.mjs';
+import {EventEmitter} from 'node:events';
+import {PassThrough} from 'node:stream';
+
+test('picker runs separately in STA, handles cancel, and removes signal handlers',async()=>{
+ const signals=new EventEmitter();let command;
+ const launch=(exe,args)=>{command={exe,args};const child=new EventEmitter();child.stdout=new PassThrough();child.stderr=new PassThrough();child.kill=()=>{};
+  setTimeout(()=>{child.stdout.write('{"cancelled":true}');child.emit('close',0);},10);return child;};
+ assert.deepEqual(await runPicker('folder',{launch,signals}),{cancelled:true});assert.ok(command.args.includes('-STA'));assert.equal(signals.listenerCount('SIGINT'),0);
+});
+test('picker timeout and Ctrl+C terminate only the dialog process',async()=>{
+ for(const cancel of [false,true]){
+  const signals=new EventEmitter();let killed=0;
+  const launch=()=>{const child=new EventEmitter();child.stdout=new PassThrough();child.stderr=new PassThrough();child.kill=()=>killed++;return child;};
+  const promise=runPicker('file',{launch,signals,timeoutMs:cancel?1000:10});if(cancel)signals.emit('SIGINT');
+  await assert.rejects(promise,cancel?/cancelled/:/timed out/);assert.equal(killed,1);assert.equal(signals.listenerCount('SIGINT'),0);
+ }
+});
 
 test('additional model folders persist without losing settings and are discovered once',async()=>{
  const base=await fs.mkdtemp(path.join(root,'.state/model-folder-config-'));
