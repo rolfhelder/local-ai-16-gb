@@ -4,6 +4,7 @@ import {randomUUID} from 'node:crypto';
 import {readFile,unlink} from 'node:fs/promises';
 import { root, nodeExe, piEntry, machine, environment, acquireInferenceLock, ensureServer, serverArguments, prepareProfile, exec } from './local-runtime.mjs';
 const args = process.argv.slice(2);
+if(args[0]==='doctor'){await (await import('./doctor.mjs')).main(args.slice(1));process.exit(process.exitCode??0);}
 const value = (flag, fallback) => { const index = args.indexOf(flag); if (index < 0) return fallback; const result = args[index + 1]; args.splice(index, 2); if (!result) throw new Error(`${flag} requires a value`); return result; };
 const flag = name => { const index = args.indexOf(name); if (index < 0) return false; args.splice(index, 1); return true; };
 if (flag('--help')) {
