@@ -1,7 +1,9 @@
-import {mkdir,writeFile} from 'node:fs/promises';
+import {mkdir,writeFile,readFile,readdir} from 'node:fs/promises';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {root,nodeExe,exec} from '../scripts/local-runtime.mjs';
+import {consoleUI,number} from '../scripts/console-ui.mjs';
+import {activity} from '../scripts/terminal-activity.mjs';
 export function matchedPlan(models=['gemma','qwen','omnicoder','gpt-oss'],seeds=[101,202,303]){
  if(!models.length||new Set(models).size!==models.length||!models.every(m=>['gemma','qwen','omnicoder','gpt-oss'].includes(m)))throw Error('Invalid model list');
  if(!seeds.length||new Set(seeds).size!==seeds.length||!seeds.every(s=>Number.isInteger(s)&&s>=0&&s<1000000000))throw Error('Invalid seeds');
@@ -11,13 +13,27 @@ export async function executePlan(plan,run,onUpdate=async()=>{}){
  const results=[];for(const argv of plan.commands){try{await run(argv);results.push({argv,status:'complete'});}catch(e){results.push({argv,status:'controller-failed',error:e.message});await onUpdate(results);return {controllerCompleted:false,results,cancelled:plan.commands.length-results.length};}await onUpdate(results);}return {controllerCompleted:true,results,cancelled:0};
 }
 export async function main(args=process.argv.slice(2)){
+ args=[...args];
+ for(const key of ['--models','--seeds']){const i=args.indexOf(key);if(i>=0){if(!args[i+1]||args[i+1].startsWith('--'))throw Error(key+' needs a value');args.splice(i,2,key+'='+args[i+1]);}}
+ const ui=consoleUI(args),json=args.includes('--json');
  const get=(name,fallback)=>{const p=args.find(a=>a.startsWith(name+'='));return p?p.slice(name.length+1):fallback;};
- if(args.some(a=>a!=='--run'&&!a.startsWith('--models=')&&!a.startsWith('--seeds=')))throw Error('matched-evals [--models=gemma,qwen,omnicoder,gpt-oss] [--seeds=101,202,303] [--run]');
- const plan=matchedPlan(get('--models','gemma,qwen,omnicoder,gpt-oss').split(','),get('--seeds','101,202,303').split(',').map(Number));if(!args.includes('--run')){console.log(JSON.stringify(plan,null,2));return;}
+ if(args.some(a=>!['--run','--json','--no-color','--ascii'].includes(a)&&!a.startsWith('--models=')&&!a.startsWith('--seeds=')))throw Error('matched-evals [--models=gemma,qwen,omnicoder,gpt-oss] [--seeds=101,202,303] [--run]');
+ const plan=matchedPlan(get('--models','gemma,qwen,omnicoder,gpt-oss').split(','),get('--seeds','101,202,303').split(',').map(Number));if(!json){ui.title('MATCHED EVALUATIONS',args.includes('--run')?'Explicit run / one model at a time':'Preview only / no inference');ui.table(['Model','Context (tokens)','Cases','Trials'],plan.models.map(model=>[model,number(plan.commonContext),plan.cases,plan.seeds.length*6]));ui.row('Total trials',plan.trials);ui.row('Conditions',plan.conditions.join(', '));ui.line('  Background variants: '+plan.seeds.join(', '));ui.line('  Clean and 100k unrelated-background repairs; controller completion is not a quality pass.');}
+ if(!args.includes('--run')){if(json)console.log(JSON.stringify(plan,null,2));else ui.finish('Run when ready: local-ai eval --run');return;}
  const gitArgs=['-c','safe.directory='+root.replaceAll('\\','/')];const git=async argv=>(await exec('git',[...gitArgs,...argv],{cwd:root})).stdout.trim();if(await git(['status','--porcelain','--untracked-files=no']))throw Error('Freeze/commit tracked changes before a matched batch');
  const base=path.join(root,'.state/matched',new Date().toISOString().replace(/[:.]/g,'-'));await mkdir(base,{recursive:true});const receipt={...plan,mode:'running',baseCommit:await git(['rev-parse','HEAD']),nodeVersion:process.version,started:new Date().toISOString()};
  const save=async results=>writeFile(path.join(base,'batch.json'),JSON.stringify({...receipt,results},null,2)+'\n');await save([]);
- let index=0;const result=await executePlan(plan,async argv=>{const r=await exec(nodeExe,argv,{cwd:root,maxBuffer:32*1024*1024,windowsHide:true});await writeFile(path.join(base,'seed-'+plan.seeds[index++]+'.stdout.txt'),r.stdout);},save);
- receipt.mode='finished';receipt.finished=new Date().toISOString();await writeFile(path.join(base,'batch.json'),JSON.stringify({...receipt,...result},null,2)+'\n');console.log(JSON.stringify({directory:base,...result},null,2));if(!result.controllerCompleted)process.exitCode=1;
+ let index=0;const result=await executePlan(plan,async argv=>{
+  const seed=plan.seeds[index];const started=Date.now();const busy=json?null:activity({color:process.stderr.isTTY&&!process.env.NO_COLOR&&!args.includes('--no-color'),ascii:args.includes('--ascii')});
+  busy?.update('Variant '+(index+1)+'/'+plan.seeds.length+' · background '+seed+' · starting');
+  let sampling=false;
+  const timer=setInterval(async()=>{if(sampling||!busy)return;sampling=true;try{
+   const directory=path.join(root,'.state/evals');const names=(await readdir(directory)).filter(n=>n.startsWith('coding-context-')&&Number(n.slice(15))>=started).sort().reverse();
+   if(names[0]){const state=JSON.parse(await readFile(path.join(directory,names[0],'report.json'),'utf8'));const complete=state.trials.filter(t=>t.stage==='complete').length;const latest=state.trials.at(-1);busy.update('Variant '+(index+1)+'/'+plan.seeds.length+' · '+complete+'/'+state.plannedTrials+' trials · '+(latest?.model??'loading'),complete/state.plannedTrials);}
+  }catch{}finally{sampling=false;}},1000);
+  try{const r=await exec(nodeExe,argv,{cwd:root,maxBuffer:32*1024*1024,windowsHide:true});await writeFile(path.join(base,'seed-'+seed+'.stdout.txt'),r.stdout);index++;}
+  finally{clearInterval(timer);busy?.stop();}
+ },async results=>{await save(results);if(!json){const last=results.at(-1);ui.status(last.status==='complete','Background '+plan.seeds[results.length-1]+' / '+last.status);if(last.error){ui.line('  '+last.error.split('\n')[0].slice(0,180));ui.line('  Full diagnostic retained in the batch report.');}}});
+ receipt.mode='finished';receipt.finished=new Date().toISOString();await writeFile(path.join(base,'batch.json'),JSON.stringify({...receipt,...result},null,2)+'\n');if(json)console.log(JSON.stringify({directory:base,...result},null,2));else {ui.row('Saved batch',base);ui.row('Cancelled variants',result.cancelled);ui.finish(result.controllerCompleted?'Controller finished; inspect trial scores before judging quality.':'Controller failed; later variants skipped. Completed results retained.');}if(!result.controllerCompleted)process.exitCode=1;
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href)await main();
