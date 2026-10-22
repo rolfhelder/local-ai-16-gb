@@ -1,8 +1,0 @@
-{
-  "defaultModel": "omnicoder-local",
-  "switchedModel": "gemma-local",
-  "sessionMessagesPreserved": true,
-  "serverAliasMatches": true,
-  "oneInferenceSlot": true,
-  "cleanExit": true
-}

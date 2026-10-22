@@ -1,0 +1,213 @@
+{
+  "date": "2026-10-22",
+  "hardware": {
+    "gpu": "NVIDIA GeForce RTX 4090 Laptop GPU",
+    "vramMiB": 16376,
+    "ramGiB": 32,
+    "platform": "Windows"
+  },
+  "models": [
+    {
+      "id": "qwen",
+      "name": "Qwen3.5 9B Q4_K_M",
+      "codingContext": 204800,
+      "largestCompletedContext": 262144,
+      "cleanCodingPasses": 2,
+      "loadedCodingPasses": 0,
+      "codingPassMaximumPerCondition": 3,
+      "loadedGenerationTpsMean": 49.1,
+      "codingPeakVramMiB": 14453,
+      "effortRound1": 0,
+      "effortRound2": 7,
+      "effortMaximum": 13,
+      "effortPeakVramMiB": 14648
+    },
+    {
+      "id": "gemma",
+      "name": "Gemma 4 12B IT Q4_K_M",
+      "codingContext": 204800,
+      "largestCompletedContext": 262144,
+      "cleanCodingPasses": 3,
+      "loadedCodingPasses": 2,
+      "codingPassMaximumPerCondition": 3,
+      "loadedGenerationTpsMean": 44.6,
+      "codingPeakVramMiB": 13468,
+      "effortRound1": 2,
+      "effortRound2": 6,
+      "effortMaximum": 13,
+      "effortPeakVramMiB": 13765
+    },
+    {
+      "id": "omnicoder",
+      "name": "OmniCoder 9B Q4_K_M",
+      "codingContext": 204800,
+      "largestCompletedContext": 204800,
+      "cleanCodingPasses": 2,
+      "loadedCodingPasses": 2,
+      "codingPassMaximumPerCondition": 3,
+      "loadedGenerationTpsMean": 49,
+      "codingPeakVramMiB": 14393,
+      "effortRound1": 0,
+      "effortRound2": 0,
+      "effortMaximum": 13,
+      "effortPeakVramMiB": 15523
+    },
+    {
+      "id": "gpt-oss",
+      "name": "GPT-OSS 20B MXFP4",
+      "codingContext": 131072,
+      "largestCompletedContext": 131072,
+      "cleanCodingPasses": 3,
+      "loadedCodingPasses": 1,
+      "codingPassMaximumPerCondition": 3,
+      "loadedGenerationTpsMean": 71.5,
+      "codingPeakVramMiB": 15809,
+      "effortRound1": 2,
+      "effortRound2": 2,
+      "effortMaximum": 13,
+      "effortPeakVramMiB": 15919
+    }
+  ],
+  "qwen38": {
+    "date": "2026-10-22",
+    "model": "Qwen3.8-27B",
+    "nativeContext": 262144,
+    "minimumTestedContext": 131072,
+    "contextGatePassed": false,
+    "trials": [
+      {
+        "quant": "UD-IQ4_XS",
+        "context": 204800,
+        "kv": "f16",
+        "loadPassed": true,
+        "completedInference": false,
+        "outcome": "throughput-timeout",
+        "recallAssessed": false,
+        "peakTotalVramMiB": 15870,
+        "timeoutSeconds": 600,
+        "lastPromptProgress": {
+          "tokens": 26364,
+          "fraction": 0.14,
+          "elapsedSeconds": 538.7,
+          "averageTokensPerSecond": 48.94
+        },
+        "generationTimings": {
+          "prompt": [],
+          "generation": [],
+          "promptTpsMean": null,
+          "generationTpsMean": null,
+          "generationTpsWeighted": null
+        }
+      },
+      {
+        "quant": "UD-IQ4_XS",
+        "context": 204800,
+        "kv": "q8_0",
+        "loadPassed": true,
+        "completedInference": false,
+        "outcome": "throughput-timeout",
+        "recallAssessed": false,
+        "peakTotalVramMiB": 15851,
+        "timeoutSeconds": 600,
+        "lastPromptProgress": {
+          "tokens": 24316,
+          "fraction": 0.13,
+          "elapsedSeconds": 540.55,
+          "averageTokensPerSecond": 44.98
+        },
+        "generationTimings": {
+          "prompt": [],
+          "generation": [],
+          "promptTpsMean": null,
+          "generationTpsMean": null,
+          "generationTpsWeighted": null
+        }
+      },
+      {
+        "quant": "UD-IQ4_XS",
+        "context": 131072,
+        "kv": "f16",
+        "loadPassed": true,
+        "completedInference": false,
+        "outcome": "throughput-timeout",
+        "recallAssessed": false,
+        "peakTotalVramMiB": 15924,
+        "timeoutSeconds": 360,
+        "lastPromptProgress": {
+          "tokens": 18172,
+          "fraction": 0.15,
+          "elapsedSeconds": 324.89,
+          "averageTokensPerSecond": 55.93
+        },
+        "generationTimings": {
+          "prompt": [],
+          "generation": [],
+          "promptTpsMean": null,
+          "generationTpsMean": null,
+          "generationTpsWeighted": null
+        }
+      },
+      {
+        "quant": "UD-Q3_K_XL",
+        "context": 131072,
+        "kv": "f16",
+        "loadPassed": true,
+        "completedInference": false,
+        "outcome": "throughput-timeout",
+        "recallAssessed": false,
+        "peakTotalVramMiB": 15852,
+        "timeoutSeconds": 600,
+        "lastPromptProgress": {
+          "tokens": 28414,
+          "fraction": 0.24,
+          "elapsedSeconds": 542.42,
+          "averageTokensPerSecond": 52.38
+        },
+        "generationTimings": {
+          "prompt": [],
+          "generation": [],
+          "promptTpsMean": null,
+          "generationTpsMean": null,
+          "generationTpsWeighted": null
+        }
+      },
+      {
+        "quant": "UD-Q3_K_XL",
+        "context": 131072,
+        "kv": "q8_0",
+        "loadPassed": true,
+        "completedInference": false,
+        "outcome": "throughput-timeout",
+        "recallAssessed": false,
+        "peakTotalVramMiB": 15841,
+        "timeoutSeconds": 600,
+        "lastPromptProgress": {
+          "tokens": 24318,
+          "fraction": 0.21,
+          "elapsedSeconds": 532.35,
+          "averageTokensPerSecond": 45.68
+        },
+        "generationTimings": {
+          "prompt": [],
+          "generation": [],
+          "promptTpsMean": null,
+          "generationTpsMean": null,
+          "generationTpsWeighted": null
+        }
+      }
+    ],
+    "unscored": [
+      "IQ4_XS 163840 trial cancelled to test minimum directly",
+      "IQ4_XS 131072 q8 attempt cancelled after user identified repeated throughput failure"
+    ],
+    "downstreamTests": "Not run: context gate failed. No coding/research/effort quality score assigned.",
+    "limitations": [
+      "Loading is not evidence of useful processing speed.",
+      "Timeouts do not prove allocation failure or a native context limit.",
+      "Recall was not assessed because ingestion did not finish.",
+      "No confirmed Windows shared-GPU-memory measurement; memory spill remains unverified.",
+      "Peak VRAM is sampled total adapter usage, including desktop apps."
+    ],
+    "defaultModelChanged": false
+  }
+}

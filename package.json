@@ -1,12 +1,12 @@
 {
-  "name": "rolfhelder-pi-local-lab",
+  "name": "rolfhelder-local-ai-16-gb",
   "version": "0.1.0",
   "private": true,
-  "description": "Windows local-model Pi research and reusable workflow prompts",
+  "description": "Setup checklist and tested Windows baseline for Pi + llama.cpp on a 16 GB GPU",
   "packageManager": "pnpm@12.14.0",
   "scripts": {
     "browser": "playwright-cli",
-    "test": "node --test evals/policy.test.mjs evals/context-status.test.mjs evals/recall-grader.test.mjs evals/timings.test.mjs evals/runtime.test.mjs evals/local-token-budget.test.mjs evals/effort.test.mjs",
+    "test": "node --test evals/policy.test.mjs evals/context-status.test.mjs evals/recall-grader.test.mjs evals/timings.test.mjs evals/runtime.test.mjs evals/local-token-budget.test.mjs evals/effort.test.mjs evals/effort-score.test.mjs evals/posix-launcher.test.mjs",
     "eval:tools": "node evals/run.mjs",
     "eval:hooks": "node evals/hooks.mjs",
     "eval:guard": "node evals/guard-integration.mjs",
@@ -19,7 +19,8 @@
     "eval:coding": "node evals/model-coding.mjs",
     "eval:coding-context": "node evals/coding-context.mjs",
     "eval:live": "node evals/live.mjs",
-    "pia": "node scripts/pia.mjs"
+    "pia": "node scripts/pia.mjs",
+    "pia:unix": "node scripts/pia-unix.mjs"
   },
   "dependencies": {
     "@arcanemachine/pi-web-search": "3.0.0",

@@ -1,6 +1,6 @@
 # Working in Pi Local Lab
 
-This repository records a Windows-first, local-model setup. Read README.md and docs/VALIDATION.md before changing it.
+This repository is a local-AI setup checklist and runnable Windows baseline. Read README.md, docs/TESTING.md and docs/MODELS.md before changing it. macOS/Linux instructions and the POSIX baseline are not task-validated here.
 
 - Budget for 16 GB VRAM. Start one model and one inference request at a time.
 - Do not add subagent modules or plan mode. Research batches run sequentially.

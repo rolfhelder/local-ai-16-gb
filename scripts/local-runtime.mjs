@@ -17,7 +17,7 @@ export const localModels = {
   'gpt-oss': { file: 'ggml-org/gpt-oss-20b-GGUF/gpt-oss-20b-MXFP4.gguf', context: 131072 },
 };
 export async function machine(selection = 'gemma') {
-  const config = JSON.parse(await readFile(path.join(root, 'machine.local.json'), 'utf8'));
+  const config = JSON.parse((await readFile(path.join(root, 'machine.local.json'), 'utf8')).replace(/^\uFEFF/,''));
   if (selection && !localModels[selection]) throw new Error('--model must be '+Object.keys(localModels).join(', '));
   if (selection) {
     config.ModelFile = path.join(config.ModelsDirectory, localModels[selection].file);

@@ -1,0 +1,12 @@
+{
+  "LlamaExecutable": "/absolute/path/to/llama-server",
+  "ModelsDirectory": "/absolute/path/to/models",
+  "RouterUrl": "http://127.0.0.1:48763",
+  "Port": 48763,
+  "ContextSize": 204800,
+  "GpuLayers": 999,
+  "ParallelSlots": 1,
+  "Reasoning": true,
+  "ReasoningBudget": 2048,
+  "MaxTokens": 8192
+}

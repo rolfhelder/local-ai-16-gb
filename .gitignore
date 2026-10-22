@@ -35,3 +35,26 @@ Thumbs.db
 .playwright-cli/
 .playwright/
 .pi-lsp.json
+
+# Session research is retained locally, outside the published setup checklist.
+docs/*
+!docs/TESTING.md
+!docs/MODELS.md
+evaluation/*
+!evaluation/fixtures/
+manifests/architecture.sources.json
+manifests/extensions.candidates.json
+manifests/eval-stack.json
+manifests/pi-observed.json
+manifests/toolchain.observed.json
+knowledge.example/
+# Inactive prompt created before the native effort extension.
+prompts/effort.md
+# One-off research orchestration and report exporters; reusable tests stay tracked.
+evals/export-*.mjs
+evals/*-queue.mjs
+evals/continue-effort-suite.mjs
+evals/effort-suite-state.mjs
+evals/gpt-oss-investigation.mjs
+evals/audit-limits.mjs
+evals/direct-lsp.mjs
