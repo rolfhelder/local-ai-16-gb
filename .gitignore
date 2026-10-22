@@ -63,3 +63,6 @@ evals/direct-lsp.mjs
 !docs/PI-APP.md
 !docs/EXTENSIONS.md
 prompts/
+
+!docs/INSTALL.md
+manifests/machine-models.json

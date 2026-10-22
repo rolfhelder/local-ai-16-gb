@@ -11,6 +11,12 @@ A practical checklist for running a local coding agent: **Pi + llama.cpp**, with
 
 Windows is the tested implementation. macOS/Linux instructions and the baseline launcher below are provided, but have not been run on those operating systems. A larger GPU may make rejected models viable; rerun the context test there.
 
+## Core installer
+
+On Windows, one script installs the non-optional tools; model downloads remain your choice. It provides a preview and a separate real-inference acceptance check.
+
+Follow the [core installation and model-selection guide](docs/INSTALL.md). The manual checklist below explains each component.
+
 ## Installation checklist
 
 - [ ] **Install a shell, Git and GPU support.** Windows: PowerShell 7, Git for Windows and an NVIDIA driver; use a CUDA llama.cpp build. macOS: Terminal with zsh/bash and Metal. Linux: bash and an appropriate NVIDIA driver/CUDA toolkit for CUDA builds. See the platform notes below.
