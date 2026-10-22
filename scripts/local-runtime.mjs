@@ -19,8 +19,13 @@ export const localModels = {
 };
 export async function machine(selection = 'gemma') {
   const config = JSON.parse((await readFile(path.join(root, 'machine.local.json'), 'utf8')).replace(/^\uFEFF/,''));
-  if (selection && !localModels[selection]) throw new Error('--model must be '+Object.keys(localModels).join(', '));
-  if (selection) {
+  if (selection && !localModels[selection] && !/\.gguf$/i.test(selection)) throw new Error('--model must be a registered name or a GGUF file path');
+  if (selection && !localModels[selection]) {
+    config.ModelFile=path.resolve(selection);
+    config.ModelId='custom-local';
+    config.NativeContext=32768;
+    config.ContextSize=Math.min(config.ContextSize,32768);
+  } else if (selection) {
     config.ModelFile = path.join(config.ModelsDirectory, localModels[selection].file);
     config.ModelId = selection + '-local';
     config.NativeContext = localModels[selection].context;

@@ -36,7 +36,7 @@ Qwen3.8 27B recipes remain available in the model-results guide, but the tested 
 
 ## Setup menu
 
-Run `local-ai install` and choose preview, inventory, installation, acceptance preview, real acceptance, or model checksum/health. Nothing installs or loads merely by opening the menu. Choose `0` to exit. Acceptance uses Gemma by default; use `local-ai install --model omnicoder` to select another installed model. Direct alternatives remain available: `local-ai install --plan`, `--check`, `--run`, `--test` (acceptance preview), and `--test --run` (real acceptance). `local-ai test --run` remains a shortcut.
+Run `local-ai install` and choose installation, inventory, real acceptance, or model checksum/health. Nothing installs or loads merely by opening the menu. Choose `0` to exit. Acceptance and doctor list installed GGUF models, automatically selecting only when exactly one is found. With several models, choose a number or enter a full GGUF path. `--model omnicoder` skips selection. Projector files and split shards are excluded from automatic discovery; a split model can be selected explicitly by its first shard path. Direct alternatives remain available: `local-ai install --plan`, `--check`, `--run`, `--test` (acceptance preview), and `--test --run` (real acceptance). `local-ai test --run` remains a shortcut.
 
 ## Preview, inventory and health are different
 
@@ -52,7 +52,7 @@ Run `local-ai install` and choose preview, inventory, installation, acceptance p
 local-ai install --check
 local-ai doctor --verify-model
 local-ai test                        # preview
-local-ai test --run                  # real inference, disposable repair (Gemma)
+local-ai test --run                  # choose an installed model, then test
 local-ai test --model omnicoder --run # choose another installed model
 local-ai
 ```
@@ -62,3 +62,5 @@ Acceptance uses a small 32768-token slot, keeps the normal production context un
 A stopped server is not a doctor failure. Passive live GPU diagnosis requires a launcher-owned startup log and a verified Windows port owner; prior loads are labeled historical. Run `local-ai doctor --check-gpu` for an explicit temporary model load (up to 32k context) that verifies actual layer and buffer placement, then stops its owned server. This does not test the saved 200k context setting. The default doctor does not start a model, install software or modify configuration. The explicit GPU probe writes private run evidence but leaves production settings unchanged. --verify-model explicitly hashes a large file. The normal installation and live acceptance commands do change local assets/start inference; preview and doctor are the read-only choices.
 
 The doctor now defaults to a human-readable terminal report with real paths, status symbols, memory bars and decimal GB units (bytes divided by 1,000,000,000). Use `--json` for scripts, `--public` to hide personal folders, or `--json --public` for a redacted structured export. `--no-color` and `--ascii` support simpler terminals. The result explains unverified live checks and provides next steps.
+
+Custom GGUF files use a conservative 32768-token test configuration. Their actual native context, chat template, reasoning and tool support still need model-specific validation; discovery is not compatibility certification. A model without a pinned manifest receives a computed SHA256 fingerprint, clearly labeled as unverified download integrity. Doctor shows measured percent/GB read during checksum work and an activity bar while inspecting hardware/runtime; checksum verification does not load weights into VRAM.

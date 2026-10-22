@@ -8,6 +8,7 @@ import {machine,root,nodeExe,piEntry,exec} from './local-runtime.mjs';
 import {renderDoctor,explainDoctor} from './doctor-format.mjs';
 import {discoverOffload} from './gpu-offload.mjs';
 import {runGpuProbe} from './gpu-probe.mjs';
+import {activity} from './terminal-activity.mjs';
 
 export function endpointVerdict(config,models,props){
  if(!models?.data?.some(m=>m.id===config.ModelId))return {status:'fail',reason:'model alias differs'};
@@ -22,14 +23,14 @@ export function publicDiagnostics(value){
  return value.replace(/[A-Za-z]:[\\/]+Users[\\/]+[^\\/\s]+/gi,'<HOME>').replaceAll(os.homedir(),'<HOME>').replace(/([?&](?:token|key|api_key)=)[^&\s]+/gi,'$1<REDACTED>');
 }
 export async function hashFile(file,onProgress){const hash=createHash('sha256');let bytes=0;for await(const chunk of createReadStream(file)){hash.update(chunk);bytes+=chunk.length;onProgress?.(bytes);}return hash.digest('hex');}
-export async function collectDoctor(config,{verifyModel=false,command=exec,offload=discoverOffload,getJson=async url=>{const r=await fetch(url,{signal:AbortSignal.timeout(2000)});if(!r.ok)throw Error('HTTP '+r.status);return r.json();}}={}){
+export async function collectDoctor(config,{verifyModel=false,onProgress=()=>{},command=exec,offload=discoverOffload,getJson=async url=>{const r=await fetch(url,{signal:AbortSignal.timeout(2000)});if(!r.ok)throw Error('HTTP '+r.status);return r.json();}}={}){
  const report={schemaVersion:1,mode:'read-only; no model startup',model:config.ModelId,endpoint:config.RouterUrl,contextTokens:config.ContextSize,modelHashRequested:verifyModel,platform:process.platform,architecture:process.arch,ram:{totalBytes:os.totalmem(),freeBytes:os.freemem()},checks:[]};
  const check=(id,status,details)=>report.checks.push({id,status,...details});
  for(const [id,file]of [['node',nodeExe],['pi',piEntry],['llama',config.LlamaExecutable],['model',config.ModelFile]]){try{await access(file);const info=await stat(file);check(id,info.isFile()?'pass':'fail',{path:file,bytes:info.size});}catch(e){check(id,'fail',{path:file,error:e.code??e.message});}}
  for(const [id,file,args]of [['node-version',nodeExe,['--version']],['llama-version',config.LlamaExecutable,['--version']],['gpu','nvidia-smi',['--query-gpu=name,driver_version,memory.total,memory.free','--format=csv,noheader,nounits']]]){try{const r=await command(file,args,{timeout:7000,maxBuffer:128*1024,windowsHide:true});check(id,'pass',{value:(r.stdout||r.stderr).trim()});}catch(e){check(id,'unknown',{error:e.code??e.message});}}
  try{const sdk=JSON.parse(await readFile(path.join(root,'node_modules/@earendil-works/pi-coding-agent/package.json'),'utf8'));check('pi-version','pass',{value:sdk.version});}catch(e){check('pi-version','unknown',{error:e.code??e.message});}
  try{const info=await statfs(config.ModelsDirectory);report.disk={freeBytes:info.bavail*info.bsize};}catch(e){report.disk={status:'unknown',error:e.code};}
- if(verifyModel){try{const digest=await hashFile(config.ModelFile);const manifests=['models.download-plan.json','gemma-download.json','coding-model-downloads.json','qwen38-download.json','qwen38-next-candidate.json'];let expected;for(const name of manifests){for(const entry of JSON.parse(await readFile(path.join(root,'manifests',name),'utf8'))){if(config.ModelFile.replaceAll('\\','/').endsWith('/'+entry.Repo+'/'+entry.File))expected=entry.SHA256;}}check('model-sha256',expected?(digest===expected?'pass':'fail'):'unknown',{sha256:digest,expected:expected??null});}catch(e){check('model-sha256','fail',{error:e.code??e.message});}}
+ if(verifyModel){try{const size=(await stat(config.ModelFile)).size;onProgress('Reading model for SHA256');const digest=await hashFile(config.ModelFile,bytes=>onProgress(`Verifying model · ${Math.floor(bytes/size*100)}% · ${(bytes/1e9).toFixed(1)} / ${(size/1e9).toFixed(1)} GB`,bytes/size));onProgress('Checking endpoint and GPU evidence');const manifests=['models.download-plan.json','gemma-download.json','coding-model-downloads.json','qwen38-download.json','qwen38-next-candidate.json'];let expected;for(const name of manifests){for(const entry of JSON.parse(await readFile(path.join(root,'manifests',name),'utf8'))){if(config.ModelFile.replaceAll('\\','/').endsWith('/'+entry.Repo+'/'+entry.File))expected=entry.SHA256;}}check('model-sha256',expected?(digest===expected?'pass':'fail'):'unknown',{sha256:digest,expected:expected??null});}catch(e){check('model-sha256','fail',{error:e.code??e.message});}}
  try{await getJson(config.RouterUrl+'/health');const models=await getJson(config.RouterUrl+'/v1/models');const props=await getJson(config.RouterUrl+'/props');check('endpoint',endpointVerdict(config,models,props).status,{...endpointVerdict(config,models,props),requestedContext:config.ContextSize,effectiveContext:props.default_generation_settings?.n_ctx,slots:props.total_slots});}catch(e){check('endpoint','unknown',{reason:'No matching running endpoint verified',error:e.message});}
  const portOwner=async port=>{
   if(process.platform!=='win32'||!Number.isInteger(port)||port<1||port>65535)return null;
@@ -51,11 +52,13 @@ export async function main(args=process.argv.slice(2)){
   const failure={summary:'attention',error:error.code==='ENOENT'?'Machine configuration is missing. Run ./scripts/Install-Core.ps1 or create machine.local.json using docs/INSTALL.md.':error.message};
   const shown=publicOutput?publicDiagnostics(failure):failure;console.log(json?JSON.stringify(shown,null,2):'LOCAL AI · SETUP DOCTOR\n\n✗ '+shown.error);process.exitCode=1;return;
  }
- const report=await collectDoctor(config,{verifyModel:args.includes('--verify-model')});
+ const busy=json?null:activity({color:process.stderr.isTTY&&!process.env.NO_COLOR&&!args.includes('--no-color'),ascii:args.includes('--ascii')});
+ let report;try{report=await collectDoctor(config,{verifyModel:args.includes('--verify-model'),onProgress:(text,ratio)=>busy?.update(text,ratio)});}finally{busy?.stop();}
  if(args.includes('--check-gpu')){
   report.mode='explicit temporary GPU probe; no generation';
   if(!json)console.error('Checking GPU offload · temporary model load (up to 32k context) · no generation');
-  try{report.backend=await runGpuProbe(config);if(report.backend.endpointVerified){const endpoint=report.checks.find(c=>c.id==='endpoint');Object.assign(endpoint,{status:'pass',scope:'probe',reason:'Verified during temporary load; server is now stopped.',configuredContext:config.ContextSize,requestedContext:report.backend.contextSize,effectiveContext:report.backend.contextSize,slots:1});}}catch(error){report.backend={status:'fail',reason:'GPU probe failed: '+error.message};}
+  const probeBusy=json?null:activity({color:process.stderr.isTTY&&!process.env.NO_COLOR&&!args.includes('--no-color'),ascii:args.includes('--ascii')});probeBusy?.update('Loading temporary model to verify GPU offload');
+  try{report.backend=await runGpuProbe(config);if(report.backend.endpointVerified){const endpoint=report.checks.find(c=>c.id==='endpoint');Object.assign(endpoint,{status:'pass',scope:'probe',reason:'Verified during temporary load; server is now stopped.',configuredContext:config.ContextSize,requestedContext:report.backend.contextSize,effectiveContext:report.backend.contextSize,slots:1});}}catch(error){report.backend={status:'fail',reason:'GPU probe failed: '+error.message};}finally{probeBusy?.stop();}
   finalizeDoctor(report);
  }
  if(json)console.log(JSON.stringify(publicOutput?publicDiagnostics(report):report,null,2));

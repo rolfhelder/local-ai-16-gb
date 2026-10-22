@@ -17,9 +17,10 @@ function run(file,args=[]) {
 }
 test('installer menu defaults to no action and includes every first-run choice', {skip:process.platform!=='win32'},()=>{
  const wrapper=path.join(root,'scripts/install-command.ps1');
- const result=spawnSync('pwsh',['-NoProfile','-File',wrapper,'install','--no-color'],{input:'4\n0\n',encoding:'utf8',timeout:15000});
+ const result=spawnSync('pwsh',['-NoProfile','-File',wrapper,'install','--no-color'],{input:'0\n',encoding:'utf8',timeout:15000});
  assert.equal(result.status,0,result.stderr);
- for(const text of ['Preview installation','Check installation','Install core components','Preview acceptance test','Run acceptance test','Verify model + health','TEST PREVIEW'])assert.ok((result.stdout+result.stderr).includes(text),text);
+ for(const text of ['Check installation','Install core components','Run acceptance test','Verify model + health'])assert.ok((result.stdout+result.stderr).includes(text),text);
+ assert.doesNotMatch(result.stdout,/Preview installation|Preview acceptance test/);
  assert.doesNotMatch(result.stdout,/ACCEPTANCE TEST|Core installation complete/);
 });
 test('installer preview is human-readable; JSON remains explicit',()=>{
@@ -33,6 +34,11 @@ test('installer preview is human-readable; JSON remains explicit',()=>{
   const report=JSON.parse(json.stdout.replace(/^\uFEFF/,''));
   assert.equal(report.Mode,'plan');
   assert.equal(report.ChangesMade,false);
+});
+test('Windows menu asks for a model and permits cancelling before inference', {skip:process.platform!=='win32'},()=>{
+ const result=spawnSync('powershell.exe',['-NoProfile','-File',path.join(root,'scripts/install-command.ps1'),'install','--no-color'],{input:'3\n\n0\n',encoding:'utf8',timeout:15000});
+ assert.equal(result.status,0,result.stderr);assert.match(result.stdout,/Installed models/);assert.match(result.stdout,/No model selected; cancelled/);
+ assert.doesNotMatch(result.stdout+result.stderr,/ACCEPTANCE TEST|mmproj-F16/);
 });
 test('missing core inventory reports failures without creating runtime/config or invoking doctor',()=>{
   // Preserve this disposable fixture under ignored .state for inspection.

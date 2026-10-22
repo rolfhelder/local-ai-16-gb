@@ -16,7 +16,7 @@ const value = (flag, fallback) => { const index = args.indexOf(flag); if (index 
 const flag = name => { const index = args.indexOf(name); if (index < 0) return false; args.splice(index, 1); return true; };
 if (flag('--help')) {
   console.log('local-ai install             Open installation and acceptance menu\nlocal-ai install --plan      Preview core installation\nlocal-ai install --check     Inspect installed core components\nlocal-ai install --run       Install the pinned core stack\nlocal-ai install --test --run  Run acceptance directly\n');
-  console.log('local-ai doctor              Hardware and model health\nlocal-ai test                Preview first-run acceptance\nlocal-ai test --run          Run acceptance (Gemma by default; --model NAME to select)\n');
+  console.log('local-ai doctor              Hardware and model health\nlocal-ai test                Preview first-run acceptance\nlocal-ai test --run          Run acceptance (select installed model; --model NAME or GGUF path)\n');
   console.log('local-ai [--model qwen|gemma|omnicoder|gpt-oss] [--context TOKENS] [--kv f16|q8_0] [--preset smoke|coding|long-context] [--profile standard|native|guard|lsp|lsp-windows|research|desktop|web]\n    [--reasoning-budget TOKENS] [--no-reasoning] [--browser] [--cwd PATH] [--dry-run] [--probe] [Pi arguments]\nDefaults: Gemma, 204800 context (GPT-OSS capped at 131072), reasoning on, 2048 thinking tokens, loopback port 48763.\n--local-model remains a compatibility alias for --model.\n--dry-run prints both full process commands without starting the model.');
   process.exit(0);
 }

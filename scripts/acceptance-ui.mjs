@@ -39,6 +39,7 @@ export function createAcceptanceUI({stream=process.stderr,color=stream.isTTY&&!p
    write('\n  Preview only · no model loading or file changes');write('  Start › local-ai test --run\n');},
   start(name){stop();active=names[name]?.[0]??name;detail='';start=now();write(paint('  '+(names[name]?.[1]??name),'90'));draw();timer=setInterval(draw,stream.isTTY?250:10000);timer.unref();},
   progress(text){detail=text;},
+  note(text){clear();write('  '+clean(text));draw();},
   complete(stage){stop();if(stage.status==='pass')done++;write('  '+paint(stage.status==='pass'?symbols.ok:symbols.fail,stage.status==='pass'?'32':'31')+'  '+(names[stage.name]?.[0]??stage.name)+'  '+(stage.durationMs/1000).toFixed(1)+'s');
    if(stage.error)write('     '+paint(clean(stage.error),'31'));active=undefined;},
   cleanup(){stop();active='Cleanup';detail='Stopping owned server and saving evidence';start=now();draw();timer=setInterval(draw,stream.isTTY?250:10000);timer.unref();},

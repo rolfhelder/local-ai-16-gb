@@ -2,13 +2,13 @@
 $ErrorActionPreference = 'Stop'
 if ($args.Count -lt 1 -or $args[0] -ne 'install') { throw 'Expected local-ai install' }
 $mapping = @{ '--plan'='Plan'; '--check'='Check'; '--json'='Json'; '--no-color'='NoColor'; '--ascii'='Ascii' }
-$options = @{}; $execute=$false; $test=$false; $model='gemma'
+$options = @{}; $execute=$false; $test=$false; $model=$null
 for ($i=1; $i -lt $args.Count; $i++) {
     $argument=$args[$i]
     if ($argument -eq '--run') { $execute=$true }
     elseif ($argument -eq '--test') { $test=$true }
     elseif ($argument -eq '--model') {
-        $i++; if ($i -ge $args.Count -or $args[$i] -notin @('gemma','qwen','omnicoder','gpt-oss')) { throw '--model requires gemma, qwen, omnicoder or gpt-oss' }
+        $i++; if ($i -ge $args.Count -or [string]::IsNullOrWhiteSpace($args[$i])) { throw '--model requires a registered name or GGUF path' }
         $model=$args[$i]
     }
     elseif ($mapping.ContainsKey($argument)) { $options[$mapping[$argument]]=$true }
@@ -18,10 +18,28 @@ $actions=@($options.ContainsKey('Plan'),$options.ContainsKey('Check'),$test | Wh
 if ($actions.Count -gt 1 -or ($execute -and ($options.ContainsKey('Plan') -or $options.ContainsKey('Check')))) { throw 'Choose one action: --plan, --check, --run, --test or --test --run' }
 if ($options.ContainsKey('Json') -and $actions.Count -eq 0) { throw '--json requires --plan, --check or --test' }
 $project=Split-Path -Parent $PSScriptRoot
+function Select-InstalledModel {
+    if ($model) { return $model }
+    $node=Join-Path $project 'runtime/node/node.exe'
+    $raw=& $node (Join-Path $PSScriptRoot 'model-selection.mjs')
+    if ($LASTEXITCODE) { throw 'Cannot discover models; check machine.local.json.' }
+    # PS 5.1 emits a JSON array as one pipeline object; enumerate after parsing.
+    $parsed=($raw -join "`n") | ConvertFrom-Json
+    $models=@($parsed)
+    if ($models.Count -eq 1) { Write-Host ('Selected installed model: ' + $models[0].name); return $models[0].selection }
+    Write-Host ''; Write-Host '  Installed models'
+    for ($n=0; $n -lt $models.Count; $n++) { Write-Host ('  ' + ($n+1) + '  ' + $models[$n].name) }
+    $answer=Read-Host '  Choose a number, registered name or full GGUF path (blank cancels)'
+    if ([string]::IsNullOrWhiteSpace($answer)) { throw 'No model selected; cancelled.' }
+    $number=0
+    if ([int]::TryParse($answer,[ref]$number) -and $number -ge 1 -and $number -le $models.Count) { return $models[$number-1].selection }
+    return $answer.Trim('"')
+}
 function Invoke-Acceptance([bool]$Run) {
     $node=Join-Path $project 'runtime/node/node.exe'
-    if (-not (Test-Path -LiteralPath $node)) { throw 'Install core components first (menu option 3).' }
-    $testArgs=@((Join-Path $PSScriptRoot 'acceptance.mjs'),'--model',$model)
+    if (-not (Test-Path -LiteralPath $node)) { throw 'Install core components first (menu option 1).' }
+    $selected=Select-InstalledModel
+    $testArgs=@((Join-Path $PSScriptRoot 'acceptance.mjs'),'--model',$selected)
     if ($Run) { $testArgs+='--run' }
     if ($options.ContainsKey('Json')) { $testArgs+='--json' }
     if ($options.ContainsKey('NoColor')) { $testArgs+='--no-color' }
@@ -38,30 +56,27 @@ while ($true) {
     Write-Output (Accent '+--------------------------------------------------------------------+')
     Write-Output (Accent '|  LOCAL AI / INSTALL & FIRST RUN                                    |')
     Write-Output (Accent '+--------------------------------------------------------------------+')
-    Write-Output '  1  Preview installation       Read-only installation route'
+    Write-Output '  1  Install core components    Download dependencies; register commands'
     Write-Output '  2  Check installation         Inspect core files and versions'
-    Write-Output '  3  Install core components    Download dependencies; register commands'
-    Write-Output '  4  Preview acceptance test    Explain checks; no model loading'
-    Write-Output ("  5  Run acceptance test        Load $model; answer + coding repair")
-    Write-Output '  6  Verify model + health      Doctor with full model checksum'
+    Write-Output '  3  Run acceptance test        Select installed model; answer + repair'
+    Write-Output '  4  Verify model + health      Doctor with full model checksum'
     Write-Output '  0  Exit'
     Write-Output ''
-    $choice=Read-Host '  Choose [0-6]'
+    $choice=Read-Host '  Choose [0-4]'
     if ([string]::IsNullOrWhiteSpace($choice) -or $choice -eq '0') { return }
     try {
         $view=@{}; foreach ($key in @('NoColor','Ascii')) { if ($options.ContainsKey($key)) { $view[$key]=$true } }
         switch ($choice) {
-            '1' { & (Join-Path $PSScriptRoot 'Install-Core.ps1') -Plan @view }
+            '1' { & (Join-Path $PSScriptRoot 'Install-Core.ps1') @view }
             '2' { & (Join-Path $PSScriptRoot 'Install-Core.ps1') -Check @view }
-            '3' { & (Join-Path $PSScriptRoot 'Install-Core.ps1') @view }
-            '4' { Invoke-Acceptance $false }
-            '5' { Invoke-Acceptance $true }
-            '6' {
+            '3' { Invoke-Acceptance $true }
+            '4' {
                 $node=Join-Path $project 'runtime/node/node.exe'
-                if (-not (Test-Path -LiteralPath $node)) { throw 'Install core components first (option 3).' }
-                & $node (Join-Path $PSScriptRoot 'doctor.mjs') --model $model --verify-model
+                if (-not (Test-Path -LiteralPath $node)) { throw 'Install core components first (option 1).' }
+                $selected=Select-InstalledModel
+                & $node (Join-Path $PSScriptRoot 'doctor.mjs') --model $selected --verify-model
             }
-            default { Write-Output '  Choose a number from 0 to 6.' }
+            default { Write-Output '  Choose a number from 0 to 4.' }
         }
     } catch { Write-Output ('  Action failed: ' + $_.Exception.Message) }
 }

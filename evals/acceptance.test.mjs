@@ -3,6 +3,25 @@ import {runStages,gradeRepair} from '../scripts/acceptance.mjs';
 import {spawnSync} from 'node:child_process';
 import path from 'node:path';
 import {createAcceptanceUI} from '../scripts/acceptance-ui.mjs';
+import {installedModels} from '../scripts/model-selection.mjs';
+import fs from 'node:fs/promises';
+import {root,machine} from '../scripts/local-runtime.mjs';
+import {activity} from '../scripts/terminal-activity.mjs';
+
+test('doctor activity displays measured hash progress without blank redraws',async()=>{
+ const writes=[];const busy=activity({stream:{write:s=>writes.push(s),isTTY:true,columns:100},color:false});
+ try{busy.update('Verifying model 50% · 3.5 / 7.0 GB',0.5);await new Promise(r=>setTimeout(r,230));
+ assert.ok(writes.some(s=>s.includes('█'.repeat(12)+'░'.repeat(12))&&s.includes('50%')));
+ assert.ok(writes.every(s=>!s.includes('\x1b[2K')));
+ }finally{busy.stop();}
+});
+
+test('model discovery includes custom weights and excludes projector, partial and shard files',async()=>{
+ const base=await fs.mkdtemp(path.join(root,'.state/model-picker-'));
+ for(const name of ['custom.gguf','mmproj-F16.gguf','download.gguf.part','model-00002-of-00003.gguf'])await fs.writeFile(path.join(base,name),'fixture');
+ const models=await installedModels(base,{});assert.deepEqual(models.map(m=>m.name),['custom.gguf']);
+ const custom=await machine(path.join(base,'custom.gguf'));assert.equal(custom.ModelFile,path.join(base,'custom.gguf'));assert.equal(custom.ContextSize,32768);
+});
 
 test('local-ai test previews acceptance without starting inference',()=>{
  const result=spawnSync(process.execPath,[path.resolve(import.meta.dirname,'../scripts/pia.mjs'),'test','--model','omnicoder','--json'],{encoding:'utf8',timeout:10000});

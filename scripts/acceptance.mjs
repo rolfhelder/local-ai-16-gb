@@ -6,6 +6,7 @@ import {hashFile} from './doctor.mjs';
 import {serverTimings} from '../evals/timings.mjs';
 import {makeReceipt,publicReceipt} from './run-receipt.mjs';
 import {createAcceptanceUI} from './acceptance-ui.mjs';
+import {chooseModel} from './model-selection.mjs';
 
 export async function runStages(stages,report,onUpdate=async()=>{},onStart=()=>{}){
  for(const [name,work] of stages){onStart(name);const start=performance.now();try{const evidence=await work();report.stages.push({name,status:'pass',durationMs:Math.round(performance.now()-start),evidence});}catch(error){report.stages.push({name,status:'fail',durationMs:Math.round(performance.now()-start),error:error.message});report.passed=false;await onUpdate();return false;}await onUpdate();}report.passed=true;await onUpdate();return true;
@@ -20,9 +21,10 @@ export function gradeRepair({messages,sourcePreserved,hiddenPassed}){
 }
 export async function main(args=process.argv.slice(2)){
  const value=(key,fallback)=>{const i=args.indexOf(key);if(i<0)return fallback;const v=args[i+1];if(!v||v.startsWith('--'))throw Error(key+' needs a value');args.splice(i,2);return v;};
- const model=value('--model','gemma');const run=args.includes('--run'),json=args.includes('--json');
+ const requested=value('--model',undefined);const run=args.includes('--run'),json=args.includes('--json');
  if(args.some(x=>!['--run','--json','--no-color','--ascii'].includes(x)))throw Error('local-ai test [--model NAME] [--run] [--json] [--no-color] [--ascii]');
  const ui=json?undefined:createAcceptanceUI({color:process.stderr.isTTY&&!process.env.NO_COLOR&&!args.includes('--no-color'),ascii:args.includes('--ascii')});
+ const model=await chooseModel(requested);
  ui?.header(model,run);
  try {
  if(!run){if(!json){ui.preview();return;}console.log(JSON.stringify({mode:'plan',model,context:32768,stages:['pinned model SHA256','owned server health/model/config','real model answer','Pi read/edit/test loop'],deadlineSeconds:{startup:180,answer:120,repair:180},modelDownloads:false},null,2));return;}
@@ -33,7 +35,7 @@ export async function main(args=process.argv.slice(2)){
  const release=await acquireInferenceLock();let server;
  try{
  await runStages([
- ['pinned-model',async()=>{let expected;for(const filename of ['models.download-plan.json','gemma-download.json','coding-model-downloads.json']){for(const m of JSON.parse(await readFile(path.join(root,'manifests',filename),'utf8'))){if(config.ModelFile.replaceAll('\\','/').endsWith('/'+m.Repo+'/'+m.File))expected=m.SHA256;}}if(!expected)throw Error('No pinned model hash found');const total=(await stat(config.ModelFile)).size;const actual=await hashFile(config.ModelFile,bytes=>ui?.progress(`${Math.floor(bytes/total*100)}% · ${(bytes/1e9).toFixed(1)} / ${(total/1e9).toFixed(1)} GB`));if(actual!==expected)throw Error('Model checksum mismatch');return {sha256:actual};}],
+ ['pinned-model',async()=>{let expected;for(const filename of ['models.download-plan.json','gemma-download.json','coding-model-downloads.json']){for(const m of JSON.parse(await readFile(path.join(root,'manifests',filename),'utf8'))){if(config.ModelFile.replaceAll('\\','/').endsWith('/'+m.Repo+'/'+m.File))expected=m.SHA256;}}if(!expected)ui?.note('No pinned hash: computing a local fingerprint; download integrity is unverified.');const total=(await stat(config.ModelFile)).size;const actual=await hashFile(config.ModelFile,bytes=>ui?.progress(`${Math.floor(bytes/total*100)}% · ${(bytes/1e9).toFixed(1)} / ${(total/1e9).toFixed(1)} GB`));if(expected&&actual!==expected)throw Error('Model checksum mismatch');return {sha256:actual,expected:expected??null,verification:expected?'pinned checksum matched':'local fingerprint only; integrity unverified'};}],
  ['owned-endpoint',async()=>{server=await ensureServer(config);return {model:config.ModelId,context:config.ContextSize,slots:1,owned:server.owned};}],
  ['real-answer',async()=>{const response=await fetch(config.RouterUrl+'/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:config.ModelId,messages:[{role:'user',content:'Reply with exactly LOCAL_READY_7319 and nothing else.'}],max_tokens:8192,temperature:0}),signal:AbortSignal.timeout(120000)});if(!response.ok)throw Error('Provider HTTP '+response.status);const data=await response.json();const content=data.choices?.[0]?.message?.content;if(typeof content!=='string'||content.trim()!=='LOCAL_READY_7319')throw Error('Model did not return the requested readiness marker');return {answerMatches:true,usage:data.usage};}],
  ['pi-tool-loop',async()=>{const cwd=path.join(base,'workspace');await mkdir(cwd,{recursive:true});await writeFile(path.join(cwd,'math.cjs'),'exports.add = (a,b) => a-b;\n');const check='const a=require("node:assert/strict"),{add}=require("./math.cjs");a.equal(add(2,3),5);a.equal(add(-2,3),1);console.log("checks passed");\n';await writeFile(path.join(cwd,'check.cjs'),check);
