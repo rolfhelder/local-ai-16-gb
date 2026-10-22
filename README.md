@@ -1,74 +1,133 @@
-# local-ai-16-gb
+![Local Agent: Pi harness and llama.cpp on a 16 GB GPU](assets/readme-hero.svg)
 
-A practical checklist for running a local coding agent: **Pi + llama.cpp**, with model downloads, a one-command launcher, small extensions and repeatable tests. **Gemma is the default.** No cloud inference account is needed for the core workflow.
+# local-agent-pi-llama-cpp-16gb
 
-## Hardware this was developed for
+**A fully local AI coding-agent setup with the Pi harness + llama.cpp.** Developed on Windows with an **RTX 4090 Laptop GPU, 16 GB VRAM and 32 GiB RAM**. Optional Pi App, one-command startup, and reproducible coding/context evals.
 
-- **GPU:** NVIDIA GeForce RTX 4090 **Laptop** GPU, 16 GB dedicated VRAM (16,376 MiB reported).
-- **System RAM:** 32 GiB. Native Windows; one loaded model and one inference session at a time.
-- **Software baseline:** Node 24.22.1, pnpm 12.14.0, Pi SDK/CLI 1.3.0, llama.cpp b11669 (CUDA).
-- Aim to fit **weights + context/cache + compute buffers + desktop usage**, not just the GGUF file. Similar VRAM does not imply similar speed. Apple unified memory is shared with the OS and is not equivalent to dedicated VRAM.
+> **Release status:** improvements are being validated in the private development repository, `rolfhelder/local-ai-16-gb`. The name above is for the future public release with a clean Git history. That repository has not been created yet.
 
-Windows is the tested implementation. macOS/Linux instructions and the baseline launcher below are provided, but have not been run on those operating systems. A larger GPU may make rejected models viable; rerun the context test there.
+## One command, one local model
 
-## Core installer
+After setup, open a terminal in your project:
 
-On Windows, one script installs the non-optional tools; model downloads remain your choice. It provides a preview and a separate real-inference acceptance check.
+```powershell
+local-ai
+local-ai --model omnicoder
+local-ai --preset smoke --dry-run
+```
 
-Follow the [core installation and model-selection guide](docs/INSTALL.md). The manual checklist below explains each component.
+The launcher prepares Pi, starts llama.cpp on loopback, and stops its owned server when Pi exits. One model and one inference session run at a time. Core inference needs no cloud account; optional web tools still contact the internet.
 
-## Installation checklist
+| Harness | Inference runtime | Default model | Optional interface |
+|:--|:--|:--|:--|
+| Pi CLI 1.3.0 | llama.cpp b11669 / CUDA | Gemma 4 12B IT Q4_K_M | Pi App 0.7.6 |
 
-- [ ] **Install a shell, Git and GPU support.** Windows: PowerShell 7, Git for Windows and an NVIDIA driver; use a CUDA llama.cpp build. macOS: Terminal with zsh/bash and Metal. Linux: bash and an appropriate NVIDIA driver/CUDA toolkit for CUDA builds. See the platform notes below.
-- [ ] **Clone the private repository** after `gh auth login`:
+## Built around a real 16 GB budget
 
-  ```sh
-  gh repo clone rolfhelder/local-ai-16-gb
-  cd local-ai-16-gb
-  ```
+| GPU tested | Dedicated VRAM | System memory | Operating system |
+|:--|:--|:--|:--|
+| RTX 4090 **Laptop** GPU | 16,376 MiB | 32 GiB | Native Windows |
 
-- [ ] **Install Node/Pi dependencies.** Windows can use the pinned portable bootstrap:
+**Weights + KV/context cache + compute buffers + desktop usage must fit together.** The GGUF file size alone is not the memory requirement. Desktop GPUs with similar names can have different memory, and Apple unified memory is shared with the OS.
 
-  ```powershell
-  powershell -NoProfile -File scripts/Bootstrap-Toolchain.ps1
-  . ./scripts/Activate-Tools.ps1
-  pnpm install --ignore-scripts --frozen-lockfile
-  ```
+Windows is the tested path. macOS/Linux have a documented baseline, with native acceptance still pending. Keep model results tied to the hardware and settings that produced them.
 
-  On macOS/Linux, install [Node 24 LTS](https://nodejs.org/en/download), then `npm install -g pnpm@12.14.0` and the same `pnpm install` command. Pi is a pinned project dependency; no separate global Pi installation is necessary. [Upstream Pi](https://github.com/earendil-works/pi/tree/main/packages/coding-agent).
+## Get a working local agent
 
-- [ ] **Install llama.cpp.** Keep this runtime on every OS; no replacement is needed. Windows: extract the official b11669 CUDA binary and matching runtime archives into one local tools directory; exact URLs/hashes are in [the runtime manifest](manifests/llama-observed-assets.json). macOS/Linux alternatives are below. Binaries are deliberately not in Git.
-- [ ] **Create `machine.local.json`.** Windows: copy `config/machine.example.json`; macOS/Linux: copy `config/machine.posix.example.json`. Set absolute `LlamaExecutable` and `ModelsDirectory` paths. Keep the endpoint on `127.0.0.1:48763`. This file is ignored by Git. Windows' `PiExecutable` should point to this clone's `node_modules/.bin/pi.cmd`; the main launcher invokes the pinned Node-based CLI directly.
-- [ ] **Download one model.** Start with Gemma 4 12B IT Q4_K_M. Preserve the repository/filename layout from [the Gemma manifest](manifests/gemma-download.json). Windows:
+| Done | Step | What success looks like |
+|:--:|:--|:--|
+| ☐ | Install PowerShell 7, Git and an NVIDIA driver | The shell, Git and GPU tools work |
+| ☐ | Clone the development repository | A local checkout with no private machine paths copied in |
+| ☐ | Preview, then run the core installer | Pinned Node, pnpm, Pi, search tools and llama.cpp are present |
+| ☐ | Choose and download one model | Its pinned size and SHA-256 match |
+| ☐ | Run first-start acceptance | A real answer and a verified Pi read/edit/test loop |
+| ☐ | Launch `local-ai` | Your selected local model is ready |
 
-  ```powershell
-  powershell -NoProfile -File scripts/Download-CodingModels.ps1 -RateLimit 10M -Manifest gemma-download.json -StatusName gemma-download -Unlimited
-  ```
+```powershell
+gh repo clone rolfhelder/local-ai-16-gb
+cd local-ai-16-gb
+./scripts/Install-Core.ps1 -Plan
+./scripts/Install-Core.ps1
+```
 
-  This verifies pinned size/SHA-256; `-Unlimited` removes the speed cap. macOS/Linux: download that manifest's revision/file using `curl -fL -C - -o FILE URL`, then compare `shasum -a 256 FILE` (macOS) or `sha256sum FILE` (Linux) to its SHA-256. Put it under `ModelsDirectory/unsloth/gemma-4-12b-it-GGUF/`. No image projector is required for text.
-- [ ] **Register one-command startup.** Windows:
+Model weights are a separate choice. Optional desktop/browser/helper assets are separate too. The installer has preview/current-machine checks; **clean-Windows installation acceptance remains pending**.
 
-  ```powershell
-  powershell -NoProfile -File scripts/Install-LocalAI.ps1
-  # Open a fresh terminal, then:
-  local-ai --dry-run
-  local-ai
-  ```
+Follow the [installation checklist and model-selection guide](docs/INSTALL.md) for download recipes, machine configuration, first-run checks and recovery boundaries.
 
-  `local-ai` starts the selected model, prepares Pi, and stops its owned server when Pi exits. It refuses overlapping sessions. Defaults: Gemma, 204800 context, reasoning on, 2048 thinking tokens and 8192 total output tokens. Explicit choices: `local-ai --model qwen`, `local-ai --model omnicoder`, `local-ai --model gpt-oss`. Use `--context 32768` for a smaller initial smoke test; GPT-OSS caps at its native 131072.
-- [ ] **Run the checks.** `pnpm test` checks local behavior without inference. Then run a small coding smoke test and a context test before trusting a large window. [Test method and commands](docs/TESTING.md).
-- [ ] **Choose optional extensions or a desktop interface** after the core CLI works. The guides below explain their setup and evidence limits.
+## See the measured tradeoffs
 
-## macOS / Linux equivalents
+![Completed context capacity and sampled coding-run GPU memory](assets/model-comparison.png)
 
-[llama.cpp supports macOS and Linux](https://github.com/ggml-org/llama.cpp/blob/master/docs/install.md). On macOS with Homebrew:
+Context bars show **completed inference capacity**, not dependable recall or coding quality. GPU-memory bars include the desktop and come from different configured windows. The operating default is 204800 tokens; GPT-OSS is capped at its native 131072.
+
+| Tested model | Clean coding /3 | With 100k unrelated tokens /3 | Peak coding GPU use |
+|:--|:--:|:--:|--:|
+| **Gemma 4 12B · default** | **3** | **2** | **13.15 GiB** |
+| Qwen3.5 9B | 2 | 0 | 14.11 GiB |
+| OmniCoder 9B | 2 | **2** | 14.06 GiB |
+| GPT-OSS 20B | **3** | 1 | 15.44 GiB |
+
+These are small exploratory samples. A full coding pass requires correct repairs, preserved checks and normal agent completion. Qwen3.8 27B IQ4_XS and Q3_K_XL loaded but failed the practical 131k prompt-ingestion gate; no coding-quality verdict follows from that failure.
+
+Read the [model comparison](docs/MODELS.md) for quantizations, speeds and failure details. The [evaluation guide](docs/TESTING.md) explains occupied context, recall and the recorded results behind the graph.
+
+## Evaluations: the limits matter
+
+![Two-round effort-command implementation scores; none completed all 13 checks](assets/effort-comparison.svg)
+
+Small repairs favored Gemma overall. Building a complete native effort command was harder: **none of the four models finished the feature**, even after steering. A registered command or confident completion message did not count as correct behavior.
+
+We evaluate tool conformance, filled context, clean/padded coding and the two-round extension task separately. Failures and setup repairs remain visible; scripted-provider tests are distinguished from real inference.
+
+The [eval methodology and full results](docs/TESTING.md) includes every criterion, both rounds, timing/memory observations and reproduction commands.
+
+## Pi extensions: keep the tool surface small
+
+| Standard Windows profile | Optional trials |
+|:--|:--|
+| Context usage in the terminal footer | Web search and bounded page reading |
+| Native `/effort` session control | Research/retrieval tools |
+| Destructive-command approval adapters | Playwright CLI browser automation |
+| Windows-adapted TypeScript LSP | Computer use |
+
+Ordinary local Git commits run automatically; destructive commands request approval. Guardrails are an ergonomic protection, **not an OS sandbox**. Optional capabilities have different validation levels; installed does not mean task-validated.
+
+See the [extensions, hooks and guardrails guide](docs/EXTENSIONS.md) for configuration, source links, candidates and known failures.
+
+## Prefer a window? Add Pi App
+
+Pi App is an **optional desktop interface** to the same local model, with an effort picker and Files, Run, Context and Browser panels. It does not require replacing the CLI setup.
+
+```powershell
+local-ai-app
+local-ai-app --model gemma
+```
+
+Quit the app from its tray before changing models. Its Resident memory counter reports Electron RAM, not llama.cpp VRAM. The CLI and app share one owned-inference lock.
+
+Follow the [Pi App setup guide](docs/PI-APP.md) for installation, connection to llama.cpp, SDK compatibility and thinking budgets.
+
+## Try improvements independently
+
+Diagnostics, explicit resource presets, a read-only progress observer, receipts and safe configuration previews are opt-in. The core functional acceptance test passed with Gemma; fresh-machine reconstruction and the new repeated model matrix still have open gates. Normal startup defaults remain unchanged.
+
+The [demonstration guide](docs/IMPROVEMENTS.md) shows each command and its evidence level. Legacy `pia` / `pia-app` names remain compatibility aliases.
+
+## macOS and Linux: documented, not yet validated
+
+llama.cpp supports both platforms; no alternative inference runtime is required. The native baseline uses bash tools and the same model/server lifecycle. It does not claim Windows LSP or desktop-feature parity.
+
+<details>
+<summary><strong>Expand platform commands and the shell alias</strong></summary>
+
+Install Node 24 LTS, then `npm install -g pnpm@12.14.0` and `pnpm install --ignore-scripts --frozen-lockfile`. Pi is a pinned project dependency. macOS with Homebrew:
 
 ```sh
 brew install git llama.cpp ripgrep fd
 command -v llama-server
 ```
 
-On Linux with an NVIDIA GPU, install Git, CMake, a C++ compiler and the [CUDA toolkit](https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md), then build (example layout):
+For Linux/NVIDIA, install a compiler, CMake and CUDA, then build the pinned baseline:
 
 ```sh
 git clone --depth 1 --branch b11669 https://github.com/ggml-org/llama.cpp "$HOME/.local/src/llama.cpp"
@@ -76,52 +135,29 @@ cmake -S "$HOME/.local/src/llama.cpp" -B "$HOME/.local/src/llama.cpp/build" -DCM
 cmake --build "$HOME/.local/src/llama.cpp/build" --config Release -j
 ```
 
-macOS uses Metal; Linux NVIDIA uses CUDA. Other GPU backends exist upstream but were not tested here. Install `rg` and `fd` on PATH too (some Linux distributions name the latter `fdfind`). Homebrew installs its current build, so record that version; do not assume our b11669 measurements transfer unchanged.
+Copy `config/machine.posix.example.json` to ignored `machine.local.json`, set native absolute runtime/model paths and download a pinned model from the installation guide. Install `rg` and `fd` too; some Linux distributions call the latter `fdfind`.
 
-After configuring native paths and downloading a model, add this function to `~/.zshrc` (macOS) or `~/.bashrc` (Linux), replacing the clone path:
+Add to `~/.zshrc` or `~/.bashrc`, replacing the checkout path:
 
 ```sh
-local-ai() { node /absolute/path/local-ai-16-gb/scripts/pia-unix.mjs --cwd "$PWD" "$@"; }
+local-ai() { node /absolute/path/local-agent-pi-llama-cpp-16gb/scripts/pia-unix.mjs --cwd "$PWD" "$@"; }
 ```
 
-Then run `local-ai --dry-run` followed by `local-ai`. This baseline uses native bash tools, context/effort hooks and the same one-server lifecycle. It does **not** claim Windows LSP, desktop GUI, browser or computer-use parity. The original `.ps1` scripts and GPU eval runners remain Windows-specific.
+Use `local-ai --dry-run` before a real launch. macOS uses Metal; Linux/NVIDIA uses CUDA. Homebrew installs its current version, so record it rather than assuming our pinned measurements transfer.
 
-## Models and measured tradeoffs
+Upstream [installation](https://github.com/ggml-org/llama.cpp/blob/master/docs/install.md) and [build instructions](https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md) describe backend prerequisites. GPU eval runners remain Windows-specific.
 
-![Completed context and coding-run VRAM comparison](assets/model-comparison.png)
+</details>
 
-Context bars show completed inference capacity, **not reliable retrieval or coding quality**. VRAM bars are sampled total GPU use during coding, including the desktop, at different configured windows. Qwen3.8 27B IQ4_XS and Q3_K_XL loaded but failed the 131k throughput gate.
+## What ships, and what stays yours
 
-Read the [model comparison](docs/MODELS.md) for the hardware tradeoffs. The [evaluation guide](docs/TESTING.md) explains occupancy, recall failures, deadlines and the complete recorded results behind this chart.
+| In the repository | Kept local and ignored |
+|:--|:--|
+| Pinned install/model manifests | Model weights and downloaded runtimes |
+| Launchers and general extensions | Credentials and machine configuration |
+| Reviewed observations and test code | Raw sessions and personal prompts |
+| Setup and evaluation guides | The 105-repository research diary |
 
-## Evaluations: what to expect
+Qwen3.6, further Qwen3.8 experiments and larger Gemma variants are queued **after improvement acceptance**. They are not additional validated models or current defaults.
 
-Small repair tasks favored Gemma overall, but all four models struggled to implement a native effort command. A large usable allocation does not mean dependable reasoning across that window. We test harness behavior, filled context, clean versus padded coding, and a two-round extension task separately.
-
-The [evaluation guide and results](docs/TESTING.md) includes failures, per-round scores, limitations and reproduction commands.
-
-## Pi extensions and configuration
-
-The standard Windows profile adds context usage, effort control, destructive-command approvals and LSP. Web search, research, browser automation and computer use remain independent optional profiles with different levels of validation. Keep the tool surface small and add one feature at a time.
-
-See [extensions, hooks and guardrails](docs/EXTENSIONS.md) for configuration, researched alternatives and evidence.
-
-## Optional desktop interface: Pi App
-
-Prefer a window to a terminal? Pi App can connect to the same local llama.cpp model through our launcher, with an effort picker and side panels. It is optional; the CLI setup above is sufficient.
-
-Follow the [Pi App setup guide](docs/PI-APP.md) for installation, the local endpoint, SDK compatibility, thinking budgets and model switching.
-
-## One-command startup
-
-Use **`local-ai`** for the CLI or **`local-ai-app`** for the optional Windows app. Both select Gemma by default; `--model qwen|gemma|omnicoder|gpt-oss` chooses another downloaded model. The CLI accepts `--context`; the app takes its context from the model/machine configuration. The launchers start llama.cpp, prepare Pi and clean up their owned server. Old `pia` / `pia-app` commands remain compatibility aliases.
-
-## Trying the improvements
-
-Diagnostics, resource presets and validation tools can be tried independently. Their evidence levels and remaining acceptance gaps are explicit.
-
-See the [demonstration and validation guide](docs/IMPROVEMENTS.md).
-
-## What stays local
-
-Model weights, runtimes, credentials, machine configuration, personal prompts, raw sessions and research notes are ignored. Sanitized measured results are published under `results/`; the 105-repository research ledger stays local. Pinned install manifests and runnable code remain tracked. Removing an earlier tracked file does not rewrite Git history.
+The future public repository will use a reviewed clean-history export. Removing a file from today's tree does not erase older commits.
