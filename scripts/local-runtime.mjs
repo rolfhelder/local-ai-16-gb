@@ -4,6 +4,7 @@ import { readFile, writeFile, mkdir, open, unlink, access,readdir } from 'node:f
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import {randomUUID} from 'node:crypto';
 export const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const exec = promisify(execFile);
 export const nodeExe = path.join(root, 'runtime/node/node.exe');
@@ -65,7 +66,7 @@ export function generationLimits(config) {
 export function serverArguments(config) {
   return ['--model', config.ModelFile, '--alias', config.ModelId, '--host', '127.0.0.1', '--port', String(config.Port),
     '--jinja', '--reasoning', config.Reasoning === false ? 'off' : 'on', '--reasoning-budget', String(generationLimits(config).reasoningBudget), '--fit', 'off', '--no-context-shift',
-    '-ngl', String(config.GpuLayers), '-c', String(config.ContextSize), '--parallel', '1', ...(config.ExtraServerArgs || [])];
+    '-ngl', String(config.GpuLayers), '-c', String(config.ContextSize), '--parallel', '1', '--log-verbosity','4', ...(config.ExtraServerArgs || [])];
 }
 async function probe(config) {
   const response = await fetch(config.RouterUrl + '/v1/models', { signal: AbortSignal.timeout(1500) });
@@ -83,18 +84,26 @@ export async function ensureServer(config) {
   catch (error) { if (error.message.startsWith('PORT_IN_USE')) throw error; }
   await access(config.ModelFile);
   const logPath = config.LogPath || path.join(root, '.state/llama-server.log');
+  await mkdir(path.dirname(logPath),{recursive:true});
+  const evidenceDirectory=path.join(root,'.state/runtime-evidence');await mkdir(evidenceDirectory,{recursive:true});
+  const modelStat=fs.statSync(config.ModelFile);
+  const evidence={schemaVersion:1,runId:randomUUID(),startedAt:new Date().toISOString(),modelId:config.ModelId,modelFile:config.ModelFile,modelStat:{size:modelStat.size,mtimeMs:modelStat.mtimeMs},requestedGpuLayers:config.GpuLayers,contextSize:config.ContextSize,logPath,logStart:fs.existsSync(logPath)?fs.statSync(logPath).size:0};
   const log = fs.openSync(logPath, 'a');
   const server = spawn(config.LlamaExecutable, serverArguments(config), { windowsHide: true, stdio: ['ignore', log, log] });
   fs.closeSync(log);
   let spawnError;
   server.once('error', error => { spawnError = error; });
-  const stop = async () => { if (server.exitCode === null && server.pid) { server.kill(); await new Promise(resolve => { server.once('exit', resolve); setTimeout(resolve, 5000).unref(); }); } };
+  let ready=false,stopping;
+  const stop = () => stopping??=(async()=>{
+    if (server.exitCode === null && server.pid) { server.kill(); await new Promise(resolve => { server.once('exit', resolve); setTimeout(resolve, 5000).unref(); }); }
+    if(ready){await writeFile(path.join(evidenceDirectory,'last.json'),JSON.stringify({...evidence,stoppedAt:new Date().toISOString()},null,2));try{const active=JSON.parse(await readFile(path.join(evidenceDirectory,'active.json'),'utf8'));if(active.runId===evidence.runId)await unlink(path.join(evidenceDirectory,'active.json'));}catch(error){if(error.code!=='ENOENT')throw error;}}
+  })();
   try {
     const deadline = Date.now() + 180000;
     while (Date.now() < deadline) {
       if (spawnError) throw spawnError;
       if (server.exitCode !== null) throw new Error(`llama.cpp exited (${server.exitCode}); inspect ${logPath}`);
-      try { await probe(config); return { owned: true, pid: server.pid, stop }; } catch (error) { if (error.message.startsWith('PORT_IN_USE')) throw error; }
+      try { await probe(config); evidence.pid=server.pid;ready=true;await writeFile(path.join(evidenceDirectory,'active.json'),JSON.stringify(evidence,null,2));return { owned: true, pid: server.pid, evidence, stop }; } catch (error) { if (error.message.startsWith('PORT_IN_USE')) throw error; }
       await new Promise(resolve => setTimeout(resolve, 500));
     }
     throw new Error('llama.cpp did not become ready within 180 seconds');
