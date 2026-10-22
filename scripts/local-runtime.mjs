@@ -106,6 +106,7 @@ export async function prepareProfile(name, config, cwd = root) {
     lsp: ['pi-lsp-extension'],
     'lsp-windows': ['lsp-windows'],
     standard: ['bash-policy', 'windows-policy', 'lsp-windows'],
+    'pi-app': ['bash-policy', 'windows-policy', 'lsp-windows'],
     research: ['bash-policy', 'windows-policy', 'lsp-windows', '@lincoln504/pi-research'],
     desktop: ['bash-policy', 'windows-policy', 'lsp-windows', '@injaneity/pi-computer-use'],
     web: ['bash-policy', 'windows-policy', 'lsp-windows', '@arcanemachine/pi-web-search'],
@@ -133,6 +134,7 @@ export async function prepareProfile(name, config, cwd = root) {
     settings.skills = [path.join(root, '.state/.agents/skills')];
     settings.prompts = (await readdir(path.join(root,'prompts'))).filter(name=>name.endsWith('.md')&&name!=='effort.md').map(name=>path.join(root,'prompts',name));
   }
+  if(name==='pi-app')settings.extensions.push(path.join(root,'extensions/pi-app-compat.mjs'));
   await writeFile(path.join(agentDir, 'settings.json'), JSON.stringify(settings, null, 2));
   await writeFile(path.join(agentDir, 'models.json'), JSON.stringify({ providers: { 'local-llama': {
     baseUrl: config.RouterUrl + '/v1', api: 'openai-completions', apiKey: 'local-only', models: [{

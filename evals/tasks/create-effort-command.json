@@ -1,0 +1,39 @@
+{
+  "id": "create-effort-command",
+  "status": "gemma-pi-app-trial-in-progress",
+  "category": "harness-extension",
+  "source": "Regression task derived from an observed failed implementation; sanitized, no session transcript included.",
+  "prompt": "Create a native /effort command for the installed Pi coding agent. I want to change reasoning effort in this TUI on a per-session basis, like /model. With no argument show the current setting and available levels; /effort low, medium, high or off must change the current session without an LLM call. Make the next local llama.cpp request use the corresponding thinking budget. Clearly distinguish native model effort from local token-budget presets and reject unsupported levels. Read installed SDK documentation, implement the command as an extension, and verify it in a real Pi process. Do not create a skill or prompt template, edit unrelated user settings, or claim a test passed without running it.",
+  "fixture": {
+    "piVersion": "1.3.0",
+    "cwd": "disposable user-home-like directory, outside the agent configuration directory",
+    "agentDirectory": "separate isolated PI_CODING_AGENT_DIR",
+    "provider": "scripted OpenAI-compatible endpoint; no GPU required for grading",
+    "models": {
+      "omnicoder-local": {"nativeEffort": false, "off": true},
+      "gpt-oss-local": {"nativeEffort": true, "off": false}
+    },
+    "budgets": {"off": 0, "low": 512, "medium": 2048, "high": 4096},
+    "maxOutputTokens": 8192,
+    "candidateAccess": "installed SDK docs/types and task fixture only; withhold our existing effort implementation and grader",
+    "runs": ["clean context first", "100k unrelated context in a separate trial"]
+  },
+  "acceptance": [
+    {"id": "registered", "check": "Real Pi get_commands reports effort as an extension command."},
+    {"id": "arguments", "check": "high and low result in different actual session levels and request budgets."},
+    {"id": "no-llm-control-turn", "check": "Calling /effort or changing its value makes zero provider requests."},
+    {"id": "session-state", "check": "Real Pi get_state shows the requested level immediately."},
+    {"id": "session-only", "check": "Fresh independent session starts with fixture defaults; global and project settings snapshots remain unchanged."},
+    {"id": "picker", "check": "No-argument command exposes current setting and supported choices through the extension UI protocol."},
+    {"id": "provider-budget", "check": "Next real Pi provider request transmits reasoning_budget_tokens of 512, 2048 or 4096 respectively, preserving answer room."},
+    {"id": "off", "check": "OmniCoder off sets enable_thinking false and budget 0; GPT-OSS off is rejected without changing its previous state."},
+    {"id": "native-effort", "check": "GPT-OSS sends reasoning_effort low/medium/high; OmniCoder levels are described as budget presets, not native levels."},
+    {"id": "bad-input", "check": "Unknown levels and extra arguments produce useful feedback without changing state or making a provider request."},
+    {"id": "sdk-client", "check": "Changing level through SDK setThinkingLevel, without a TUI selection event, changes the next request budget."},
+    {"id": "resource-isolation", "check": "Works from a home-like cwd while using the isolated agent directory; no dependency on a nonexistent machine.json."},
+    {"id": "verification", "check": "Candidate executes runtime checks, reports their actual results, and loads without extension errors."}
+  ],
+  "metrics": ["pass per criterion, not just aggregate", "input/output/thinking tokens", "prompt and generation TPS separately", "wall time", "tool calls", "interventions", "context size", "model/quant/SDK/llama.cpp versions"],
+  "scoring": {"firstTryPass": 1, "newPassAfterOneFollowUp": 0.5, "finalFailure": 0, "maximumFollowUps": 1, "regressionPolicy": "A first-try pass that fails the final check earns zero; final behavior must retain earlier passes."},
+  "runner": "prepare-effort-task.mjs creates an isolated fixture and hashed backup; effort-app-trial.mjs drives generation through Pi App; grade-effort-task.mjs probes candidate extensions in real Pi RPC processes against scripted endpoints. No automatic promotion to the production profile."
+}

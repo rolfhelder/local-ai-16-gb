@@ -17,3 +17,14 @@ for (const [label, ctx, expected, prompts] of [
   assert.equal(Boolean(result?.block), expected);
   assert.equal(count, prompts);
 });
+test('desktop SDK can approve or decline; unattended RPC still blocks',async()=>{
+ const before=process.env.PI_LOCAL_DESKTOP_UI;process.env.PI_LOCAL_DESKTOP_UI='1';
+ try{
+  let handler,count=0;windowsPolicy({on:(_name,callback)=>{handler=callback;}});
+  for(const approved of [true,false]){
+   const result=await handler({toolName:'powershell',input:{command:'Remove-Item -LiteralPath victim.txt'}},{mode:'rpc',hasUI:true,ui:{confirm:async()=>{count++;return approved;}}});
+   assert.equal(Boolean(result?.block),!approved);
+  }
+  assert.equal(count,2);
+ }finally{if(before===undefined)delete process.env.PI_LOCAL_DESKTOP_UI;else process.env.PI_LOCAL_DESKTOP_UI=before;}
+});

@@ -4,6 +4,7 @@
   "sessionOnlyByDefault": true,
   "explicitSavePersists": true,
   "highBudgetTransmitted": 4096,
+  "sdkSwitchLowBudgetTransmitted": 512,
   "modelRestartRequested": true,
   "stderr": ""
 }

@@ -1,0 +1,14 @@
+{
+  "appVersion": "0.7.6",
+  "sdkVersion": "1.3.0",
+  "sdkFallback": false,
+  "localModelVisible": true,
+  "loadedAliasOnly": true,
+  "context": 204800,
+  "outputCap": 8192,
+  "effortRegistered": true,
+  "builtInEffortSwitchChangesState": true,
+  "browserPanelEnabled": true,
+  "oneWorker": true,
+  "providerRequestsMade": 0
+}

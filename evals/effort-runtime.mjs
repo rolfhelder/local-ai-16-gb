@@ -21,12 +21,17 @@ try{
  assert.equal((await send('get_state')).data.thinkingLevel,'high');
  await send('prompt',{message:'Reply OK'});await waitFor(()=>events.some(e=>e.type==='agent_end'));
  assert.equal(requests.length,1);assert.equal(requests[0].reasoning_budget_tokens,4096);assert.equal(requests[0].chat_template_kwargs.enable_thinking,true);
+ // Pi App's switch calls SDK setThinkingLevel rather than the TUI event.
+ await send('set_thinking_level',{level:'low'});
+ const ended=events.filter(e=>e.type==='agent_end').length;
+ await send('prompt',{message:'Reply OK again'});await waitFor(()=>events.filter(e=>e.type==='agent_end').length>ended);
+ assert.equal(requests.length,2);assert.equal(requests[1].reasoning_budget_tokens,512);
  await send('prompt',{message:'/effort high --save'});await waitFor(()=>events.some(e=>e.method==='notify'&&e.message?.includes('Saved')));
- assert.equal(JSON.parse(await readFile(preference,'utf8')).omnicoder,'high');assert.equal(requests.length,1);
+ assert.equal(JSON.parse(await readFile(preference,'utf8')).omnicoder,'high');assert.equal(requests.length,2);
  await send('prompt',{message:'/local-model gemma'});await waitFor(()=>events.some(e=>e.method==='notify'&&e.message?.includes('Switching')));
  // RPC prompt acknowledgements precede extension execution; one read-only round
  // trip lets the RPC loop observe the subsequently requested idle shutdown.
  await send('get_state');
  await waitFor(()=>child.exitCode!==null);assert.equal(JSON.parse(await readFile(restart,'utf8')).model,'gemma');
- const report={commandsRegistered:true,noLlmCallForEffort:true,sessionOnlyByDefault:true,explicitSavePersists:true,highBudgetTransmitted:requests[0].reasoning_budget_tokens,modelRestartRequested:true,stderr};await writeFile(path.join(root,'evaluation/EFFORT-RUNTIME-2026-10-21.json'),JSON.stringify(report,null,2)+'\n');console.log(report);
+ const report={commandsRegistered:true,noLlmCallForEffort:true,sessionOnlyByDefault:true,explicitSavePersists:true,highBudgetTransmitted:requests[0].reasoning_budget_tokens,sdkSwitchLowBudgetTransmitted:requests[1].reasoning_budget_tokens,modelRestartRequested:true,stderr};await writeFile(path.join(root,'evaluation/EFFORT-RUNTIME-2026-10-21.json'),JSON.stringify(report,null,2)+'\n');console.log(report);
 }finally{child.kill();server.close();}

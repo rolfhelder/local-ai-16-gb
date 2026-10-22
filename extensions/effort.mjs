@@ -48,7 +48,10 @@ export default function(pi){
  pi.on('before_provider_request',(event,ctx)=>{
   if(ctx.model?.provider!=='local-llama'||!Array.isArray(event.payload?.messages))return;
   const model=modelKey(ctx.model.id);if(!names[model])return;
-  return applyEffort(event.payload,model,canonical(pi.getThinkingLevel()),customBudget);
+  // SDK clients (including Pi App's built-in switch) need not emit the TUI
+  // thinking_level_select event. Observe the actual session level here too.
+  const level=canonical(pi.getThinkingLevel());if(initialized&&level!==previous)customBudget=undefined;previous=level;
+  return applyEffort(event.payload,model,level,customBudget);
  });
  pi.on('session_shutdown',(_event,ctx)=>{if(ctx.mode==='tui')ctx.ui.setStatus('01-effort',undefined);});
 }

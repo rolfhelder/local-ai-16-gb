@@ -61,7 +61,7 @@ export default function windowsDestructivePolicy(pi) {
     }
     if (!decision || decision.action === 'allow') return;
     const reason = decision.reasons.join('; ');
-    if (!ctx.hasUI || ctx.mode !== 'tui') return { block: true, reason: `Approval required: ${reason}` };
+    if (!ctx.hasUI || (ctx.mode !== 'tui' && process.env.PI_LOCAL_DESKTOP_UI !== '1')) return { block: true, reason: `Approval required: ${reason}` };
     if (!(await ctx.ui.confirm('Destructive action', `${reason}\n\n${String(event.input.command || event.input.path || '').slice(0, 4000)}`))) {
       return { block: true, reason: 'Destructive action was not approved' };
     }
