@@ -15,6 +15,9 @@ if ($Check) {
     if ($LASTEXITCODE) { throw 'Doctor found a failed prerequisite. No files were changed.' }
     return
 }
+if (-not (Get-Command nvidia-smi -ErrorAction SilentlyContinue)) { throw 'NVIDIA driver tools were not found. Install/verify the driver before this CUDA-only installer.' }
+& nvidia-smi --query-gpu=name,driver_version --format=csv,noheader
+if ($LASTEXITCODE) { throw 'NVIDIA driver query failed; no core assets were changed.' }
 & (Join-Path $PSScriptRoot 'Bootstrap-Toolchain.ps1')
 . (Join-Path $PSScriptRoot 'Activate-Tools.ps1')
 Push-Location -LiteralPath $labRoot
@@ -54,6 +57,8 @@ try {
         $config | ConvertTo-Json | Set-Content -LiteralPath $configPath -Encoding UTF8
     }
     & (Join-Path $PSScriptRoot 'Install-LocalAI.ps1')
+    & node (Join-Path $PSScriptRoot 'doctor.mjs') --public
+    if ($LASTEXITCODE) { Write-Warning 'Some prerequisites (usually a not-yet-downloaded model) need attention; inspect the doctor report.' }
     Write-Output 'Core installation complete. Download a model using docs/INSTALL.md section 2.1; then run local-ai doctor --verify-model.'
     if ($AcceptModel) {
         & node (Join-Path $PSScriptRoot 'acceptance.mjs') --model $AcceptModel --run

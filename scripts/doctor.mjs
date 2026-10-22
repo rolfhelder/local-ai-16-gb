@@ -34,4 +34,4 @@ export async function main(args=process.argv.slice(2)){
  if(args.some(x=>!['--verify-model','--public'].includes(x)))throw Error('doctor [--model NAME] [--verify-model] [--public]');
  const report=await collectDoctor(await machine(model),{verifyModel:args.includes('--verify-model')});console.log(JSON.stringify(args.includes('--public')?publicDiagnostics(report):report,null,2));if(report.summary==='attention')process.exitCode=1;
 }
-if(import.meta.url===pathToFileURL(process.argv[1]).href)await main();
+if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href)await main();
