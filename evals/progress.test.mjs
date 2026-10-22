@@ -1,0 +1,4 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {progressState} from '../scripts/progress.mjs';
+const line=(n,p)=>'I slot print_timing: task 7 | prompt processing, n_tokens = '+n+', progress = '+p+', t = 2.00 s / 100.00 tokens per second';
+test('ETA needs two samples and never equates GPU activity with progress',()=>{assert.equal(progressState(['GPU busy']).phase,'unknown');assert.equal(progressState([line(1000,.1)]).etaSeconds,null);const p=progressState([line(1000,.1),line(2000,.2)]);assert.equal(p.phase,'prefill');assert.equal(p.etaSeconds,80);});
+test('reset counters, allocation errors and unknown format preserve uncertainty',()=>{assert.equal(progressState([line(2000,.2),line(1000,.1)]).etaSeconds,null);assert.equal(progressState(['CUDA error: out of memory']).phase,'allocation-error');assert.equal(progressState(['unrecognized format']).tokens,null);});
