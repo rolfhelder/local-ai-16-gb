@@ -116,6 +116,12 @@ Follow the [Pi App setup guide](docs/PI-APP.md) for installation, the local endp
 
 Use **`local-ai`** for the CLI or **`local-ai-app`** for the optional Windows app. Both select Gemma by default; `--model qwen|gemma|omnicoder|gpt-oss` chooses another downloaded model. The CLI accepts `--context`; the app takes its context from the model/machine configuration. The launchers start llama.cpp, prepare Pi and clean up their owned server. Old `pia` / `pia-app` commands remain compatibility aliases.
 
+## Trying the improvements
+
+Diagnostics, resource presets and validation tools can be tried independently. Their evidence levels and remaining acceptance gaps are explicit.
+
+See the [demonstration and validation guide](docs/IMPROVEMENTS.md).
+
 ## What stays local
 
 Model weights, runtimes, credentials, machine configuration, personal prompts, raw sessions and research notes are ignored. Sanitized measured results are published under `results/`; the 105-repository research ledger stays local. Pinned install manifests and runnable code remain tracked. Removing an earlier tracked file does not rewrite Git history.

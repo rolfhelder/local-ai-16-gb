@@ -66,3 +66,4 @@ prompts/
 
 !docs/INSTALL.md
 manifests/machine-models.json
+!docs/IMPROVEMENTS.md
