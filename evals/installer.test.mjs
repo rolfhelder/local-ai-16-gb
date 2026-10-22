@@ -6,6 +6,12 @@ import path from 'node:path';
 
 const root=path.resolve(import.meta.dirname,'..');
 const script=path.join(root,'scripts/Install-Core.ps1');
+test('unified installer command previews and rejects unknown flags before installing', {skip:process.platform!=='win32'},()=>{
+ const wrapper=path.join(root,'scripts/install-command.ps1');
+ const preview=run(wrapper,['install','--plan','--json','--no-color']);
+ assert.equal(preview.status,0,preview.stderr);assert.equal(JSON.parse(preview.stdout).Mode,'plan');
+ const invalid=run(wrapper,['install','--typo']);assert.notEqual(invalid.status,0);assert.match(invalid.stderr,/Unknown installation option/);
+});
 function run(file,args=[]) {
   return spawnSync('pwsh',['-NoProfile','-File',file,...args],{encoding:'utf8',timeout:30000});
 }

@@ -46,8 +46,8 @@ if ($Plan) {
     Write-Output '     Model weights and optional apps are separate steps.'
     if ($AcceptModel) { Write-Output "     Installation will also run acceptance for: $AcceptModel" }
     Section '  NEXT'
-    Write-Output '  Install    .\scripts\Install-Core.ps1'
-    Write-Output '  Inventory  .\scripts\Install-Core.ps1 -Check'
+    Write-Output '  Install    local-ai install'
+    Write-Output '  Inventory  local-ai install --check'
     Write-Output '  Health     local-ai doctor'
     Write-Output ''
     return
@@ -142,7 +142,11 @@ try {
     $configured = if (Test-Path -LiteralPath $configPath) { Get-Content -Raw -LiteralPath $configPath | ConvertFrom-Json } else { $null }
     $llama = if ($configured) { $configured.LlamaExecutable } else { Join-Path $labRoot 'runtime/llama.cpp/llama-server.exe' }
     if (Test-Path -LiteralPath $llama) {
-        $version = (& $llama --version 2>&1 | Out-String)
+        $previousPreference=$ErrorActionPreference
+        try {
+            $ErrorActionPreference='Continue'
+            $version = (& $llama --version 2>&1 | Out-String)
+        } finally { $ErrorActionPreference=$previousPreference }
         if ($LASTEXITCODE -or $version -notmatch 'build 11669') { throw 'Existing llama.cpp is not the pinned build; preserved it. Choose a separate runtime path explicitly.' }
     } else {
         if ($configured) { throw 'Configured llama.cpp path is missing; preserved machine.local.json. Fix the path or install into a new checkout.' }

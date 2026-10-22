@@ -46,8 +46,8 @@ Windows is the tested path. macOS/Linux have a documented baseline, with native 
 ```powershell
 gh repo clone rolfhelder/local-ai-16-gb
 cd local-ai-16-gb
-./scripts/Install-Core.ps1 -Plan
-./scripts/Install-Core.ps1
+.\bin\local-ai.cmd install --plan
+.\bin\local-ai.cmd install
 ```
 
 Model weights are a separate choice. Optional desktop/browser/helper assets are separate too. The installer has preview/current-machine checks; **clean-Windows installation acceptance remains pending**.

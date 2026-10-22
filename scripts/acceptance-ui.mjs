@@ -7,7 +7,7 @@ const names={
 const clean=value=>String(value).replace(/[\x00-\x1f\x7f-\x9f]/g,' ');
 export function createAcceptanceUI({stream=process.stderr,color=stream.isTTY&&!process.env.NO_COLOR,ascii=false,now=Date.now}={}){
  const paint=(s,c='38;5;80')=>color?`\x1b[${c}m${s}\x1b[0m`:s;
- const symbols=ascii?{ok:'OK',fail:'X',fill:'#',empty:'-',frames:['|','/','-','\\']}:{ok:'✓',fail:'✗',fill:'━',empty:'─',frames:['⠋','⠙','⠹','⠸','⠼','⠴','⠦','⠧','⠇','⠏']};
+ const symbols=ascii?{ok:'OK',fail:'X',fill:'#',empty:'.',frames:['|','/','-','\\']}:{ok:'✓',fail:'✗',fill:'█',empty:'░',frames:['⠋','⠙','⠹','⠸','⠼','⠴','⠦','⠧','⠇','⠏']};
  let timer,active,start,overall=now(),done=0,frame=0,detail='',lineOpen=false;
  const width=()=>Math.max(30,(stream.columns||100)-2);
  const write=s=>stream.write(s+'\n');
@@ -15,9 +15,10 @@ export function createAcceptanceUI({stream=process.stderr,color=stream.isTTY&&!p
  function draw(){
   if(!active)return;
   const elapsed=((now()-start)/1000).toFixed(1);
-  const bar=symbols.fill.repeat(done*4)+symbols.empty.repeat((4-done)*4);
+ const bar=symbols.fill.repeat(done*6)+symbols.empty.repeat((4-done)*6);
   const text=`${symbols.frames[frame++%symbols.frames.length]} [${bar}] ${done}/4 checks · ${active} · ${elapsed}s${detail?' · '+detail:''}`;
-  if(stream.isTTY){clear();stream.write(paint(clean(text).slice(0,width())));lineOpen=true;}
+  // Overwrite in one write; clearing first creates a visibly blank frame.
+  if(stream.isTTY){stream.write('\r'+paint(clean(text).slice(0,width()).padEnd(width())));lineOpen=true;}
   else write(`  Working · ${active} · ${elapsed}s${detail?' · '+clean(detail):''}`);
  }
  function stop(){clearInterval(timer);timer=undefined;clear();}
@@ -32,14 +33,14 @@ export function createAcceptanceUI({stream=process.stderr,color=stream.isTTY&&!p
   },
   preview(){for(const [i,[label,description]] of Object.values(names).entries()){write(paint(`  0${i+1}  ${label}`,'1;38;5;159'));write('      '+description);}
    write('\n  Preview only · no model loading or file changes');write('  Start › local-ai test --run\n');},
-  start(name){stop();active=names[name]?.[0]??name;detail='';start=now();write(paint('  '+(names[name]?.[1]??name),'90'));draw();timer=setInterval(draw,stream.isTTY?120:10000);timer.unref();},
+  start(name){stop();active=names[name]?.[0]??name;detail='';start=now();write(paint('  '+(names[name]?.[1]??name),'90'));draw();timer=setInterval(draw,stream.isTTY?250:10000);timer.unref();},
   progress(text){detail=text;},
   complete(stage){stop();if(stage.status==='pass')done++;write('  '+paint(stage.status==='pass'?symbols.ok:symbols.fail,stage.status==='pass'?'32':'31')+'  '+(names[stage.name]?.[0]??stage.name)+'  '+(stage.durationMs/1000).toFixed(1)+'s');
    if(stage.error)write('     '+paint(clean(stage.error),'31'));active=undefined;},
-  cleanup(){stop();active='Cleanup';detail='Stopping owned server and saving evidence';start=now();draw();timer=setInterval(draw,stream.isTTY?120:10000);timer.unref();},
+  cleanup(){stop();active='Cleanup';detail='Stopping owned server and saving evidence';start=now();draw();timer=setInterval(draw,stream.isTTY?250:10000);timer.unref();},
   finish(report,file){stop();active=undefined;
    write('');write(paint(report.passed?'  ALL CHECKS PASSED':'  ACCEPTANCE FAILED',report.passed?'1;32':'1;31'));
-   write(`  [${symbols.fill.repeat(done*4)}${symbols.empty.repeat((4-done)*4)}] ${done}/4 passed · ${((now()-overall)/1000).toFixed(1)}s total`);
+   write(`  [${symbols.fill.repeat(done*6)}${symbols.empty.repeat((4-done)*6)}] ${done}/4 passed · ${((now()-overall)/1000).toFixed(1)}s total`);
    const failed=report.stages.find(s=>s.status==='fail');if(failed)write('  Stopped after '+(names[failed.name]?.[0]??failed.name)+'; later checks were skipped.');
    if(report.timings?.generationTpsMean!=null)write(`  Generation  ${report.timings.generationTpsMean.toFixed(1)} tokens/sec average`);
    write('  Production context unchanged · owned server cleanup completed');write('  Report  '+clean(file));write('');

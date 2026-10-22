@@ -5,11 +5,19 @@ import {readFile,unlink} from 'node:fs/promises';
 import { root, nodeExe, piEntry, machine, environment, acquireInferenceLock, ensureServer, serverArguments, prepareProfile, exec } from './local-runtime.mjs';
 import {applyResourceProfile,effectiveResources} from './resource-profiles.mjs';
 const args = process.argv.slice(2);
+if(args[0]==='install'){
+ const allowed=new Set(['--plan','--check','--json','--no-color','--ascii']);
+ if(args.slice(1).some(a=>!allowed.has(a)))throw Error('local-ai install [--plan|--check] [--json] [--no-color] [--ascii]');
+ const child=spawn('powershell.exe',['-NoProfile','-File',path.join(root,'scripts/install-command.ps1'),...args],{stdio:'inherit'});
+ process.exitCode=await new Promise((resolve,reject)=>{child.once('error',reject);child.once('exit',code=>resolve(code??1));});
+ process.exit(process.exitCode);
+}
 if(args[0]==='doctor'){await (await import('./doctor.mjs')).main(args.slice(1));process.exit(process.exitCode??0);}
 if(args[0]==='test'){await (await import('./acceptance.mjs')).main(args.slice(1));process.exit(process.exitCode??0);}
 const value = (flag, fallback) => { const index = args.indexOf(flag); if (index < 0) return fallback; const result = args[index + 1]; args.splice(index, 2); if (!result) throw new Error(`${flag} requires a value`); return result; };
 const flag = name => { const index = args.indexOf(name); if (index < 0) return false; args.splice(index, 1); return true; };
 if (flag('--help')) {
+  console.log('local-ai install --plan      Preview core installation\nlocal-ai install --check     Inspect installed core components\nlocal-ai install             Install the pinned core stack\n');
   console.log('local-ai doctor              Hardware and model health\nlocal-ai test                Preview first-run acceptance\nlocal-ai test --run          Run acceptance (Gemma by default; --model NAME to select)\n');
   console.log('local-ai [--model qwen|gemma|omnicoder|gpt-oss] [--context TOKENS] [--kv f16|q8_0] [--preset smoke|coding|long-context] [--profile standard|native|guard|lsp|lsp-windows|research|desktop|web]\n    [--reasoning-budget TOKENS] [--no-reasoning] [--browser] [--cwd PATH] [--dry-run] [--probe] [Pi arguments]\nDefaults: Gemma, 204800 context (GPT-OSS capped at 131072), reasoning on, 2048 thinking tokens, loopback port 48763.\n--local-model remains a compatibility alias for --model.\n--dry-run prints both full process commands without starting the model.');
   process.exit(0);

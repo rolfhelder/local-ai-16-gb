@@ -2,11 +2,11 @@
 
 ## 2. Core installer and first-run acceptance
 
-Use PowerShell 7 from a clone. Git and an NVIDIA driver are prerequisites; installing a driver requires a separate OS-level decision. The installer targets Windows x64/CUDA 12.4 and the pinned llama.cpp b11669 build. macOS/Linux setup remains documented in README and is not installed by this script.
+From a fresh clone, use `.\bin\local-ai.cmd install --plan` and `.\bin\local-ai.cmd install` until the command is registered in PATH. This entry point works before Node is installed. Use PowerShell 7 for installation. Git and an NVIDIA driver are prerequisites; installing a driver requires a separate OS-level decision. The installer targets Windows x64/CUDA 12.4 and the pinned llama.cpp b11669 build. macOS/Linux setup remains documented in README and is not installed by this script.
 
 ```powershell
-./scripts/Install-Core.ps1 -Plan   # show actions; no installation
-./scripts/Install-Core.ps1         # install core dependencies and register commands
+local-ai install --plan  # show actions; no installation
+local-ai install         # install core dependencies and register commands
 ```
 
 Core means Node, pnpm, rg/fd, pinned Pi dependencies and official llama.cpp binaries/runtime. Dependency lifecycle scripts are disabled. Existing machine.local.json is preserved, including an existing verified-version runtime path. Optional GUI/browser/helper assets and GGUF model weights are not downloaded. The project dependency lock includes optional extension packages, but they are not all enabled or loaded.
@@ -35,7 +35,7 @@ Qwen3.8 27B recipes remain available in the model-results guide, but the tested 
 
 ## Preview, inventory and health are different
 
-`Install-Core.ps1 -Plan` previews installation in a human-readable dashboard. `-Check` inventories core files, Node/pnpm/Pi versions, the configured llama.cpp build and launcher registration. Both modes are read-only and load no model. Add `-Json` for automation or `-NoColor -Ascii` for plain terminals. The inventory does not run the doctor.
+`local-ai install --plan` previews installation in a human-readable dashboard. `local-ai install --check` inventories core files, Node/pnpm/Pi versions, the configured llama.cpp build and launcher registration. Both modes are read-only and load no model. Add `--json` for automation or `--no-color --ascii` for plain terminals. The inventory does not run the doctor.
 
 `local-ai doctor` checks hardware, model configuration and runtime health. Acceptance loads a model and asks Pi to answer and repair code. Passing inventory alone does not prove inference works.
 
@@ -44,7 +44,7 @@ Qwen3.8 27B recipes remain available in the model-results guide, but the tested 
 `local-ai test` previews the checks. Add `--run` for the live dashboard: completed-check progress, an animated active step, elapsed time, measured SHA256 reading progress in GB, and a final pass/fail summary with the report path. Loading and coding indicators show activity rather than an estimated percentage. Redirected output uses periodic plain-text updates. Use `--json` for machine-readable output (no dashboard), `--no-color` to disable colors, or `--ascii` for basic symbols.
 
 ```powershell
-./scripts/Install-Core.ps1 -Check
+local-ai install --check
 local-ai doctor --verify-model
 local-ai test                        # preview
 local-ai test --run                  # real inference, disposable repair (Gemma)

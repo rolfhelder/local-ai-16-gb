@@ -23,5 +23,16 @@ test('live acceptance redraws progress and clears its line on completion',()=>{
  assert.match(output,/0\/4 checks/);assert.match(output,/\x1b\[2K/);assert.match(output,/Check response  2.0s/);
 });
 test('a failed stage prevents later work and preserves failure evidence',async()=>{let called=false;const r={stages:[]};assert.equal(await runStages([['health',async()=>{throw Error('wrong alias');}],['infer',async()=>{called=true;}]],r),false);assert.equal(called,false);assert.equal(r.stages[0].status,'fail');assert.equal(r.passed,false);});
+test('progress refresh overwrites atomically without blank frames and uses full-height blocks',async()=>{
+ const writes=[];const ui=createAcceptanceUI({stream:{write:s=>writes.push(s),isTTY:true,columns:120},color:false});
+ try {
+  ui.start('real-answer');await new Promise(resolve=>setTimeout(resolve,300));
+  const redraws=writes.filter(s=>s.startsWith('\r'));
+  assert.ok(redraws.length>=2);assert.ok(redraws.every(s=>!s.includes('\x1b[2K')));
+  assert.match(redraws[0],/░{24}/);
+  ui.complete({name:'real-answer',status:'pass',durationMs:300});
+  ui.finish({passed:true,stages:[]},'report.json');assert.ok(writes.some(s=>s.includes('██████')));
+ }finally{ui.stop();}
+});
 test('successful stages are distinct and persisted',async()=>{const r={stages:[]};let saved=0;assert.equal(await runStages([['health',async()=>({ok:true})],['answer',async()=>({answer:true})]],r,async()=>saved++),true);assert.equal(r.stages.length,2);assert.equal(saved,3);});
 test('code-only success cannot fake an actual tool loop',()=>{assert.equal(gradeRepair({messages:[],sourcePreserved:true,hiddenPassed:true}).passed,false);const messages=[{role:'assistant',content:[{type:'toolCall',name:'powershell',arguments:{command:'node check.cjs'}},{type:'toolCall',name:'edit'},{type:'toolCall',name:'powershell',arguments:{command:'node check.cjs'}}]},{role:'toolResult',content:[{type:'text',text:'AssertionError'}]}];assert.equal(gradeRepair({messages,sourcePreserved:true,hiddenPassed:true}).passed,true);assert.equal(gradeRepair({messages,sourcePreserved:false,hiddenPassed:true}).passed,false);assert.equal(gradeRepair({messages,sourcePreserved:true,hiddenPassed:false}).passed,false);});
