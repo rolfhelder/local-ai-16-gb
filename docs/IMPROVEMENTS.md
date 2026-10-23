@@ -46,4 +46,8 @@ The method, preserved public checks and hidden grading remain the same as the re
 
 ## Validation boundaries
 
-The simplification passed 121 unit checks and one real Gemma acceptance run (4/4 stages). The new run wrote one report.json with settings and versions, produced no receipt pair, stopped its owned server and preserved the 204800 production context. The development coding comparison was not executed. Native Windows acceptance is functional evidence; the core install still needs a clean-machine trial, and macOS/Linux remain unvalidated. Private reports stay ignored. Use one model/session at a time and promote each improvement separately after its remaining gate passes.
+On October 23, 2026, the simplified setup passed a real 65536-token Gemma startup probe and all four acceptance stages at 32768 tokens. Acceptance saved only report.json, stopped its owned server and preserved the 204800 production context. All 118 unit/regression checks passed, including retired commands, model configuration, single-report metadata and timeout scoring.
+
+The two-trial development coding check completed operationally but scored **1/2 full passes**: clean passed; the 100k-background repair passed all hidden checks but exceeded the six-minute normal-completion deadline. It remains a failure, not a successful long-context trial. The evaluator now shows per-trial scores and returns nonzero for this outcome. See [the recorded validation results](TESTING.md#simplified-setup-validation-october-23-2026).
+
+Fresh-machine installation still needs a clean-machine trial, and macOS/Linux remain unvalidated. Private artifacts stay ignored. Use one model/session at a time.

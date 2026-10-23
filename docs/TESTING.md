@@ -212,3 +212,25 @@ Further confidence requires repeated matched runs, cold-start and fresh-clone ac
 ## Optional development coding check
 
 This is separate from the setup acceptance test. After activating the local tools, `pnpm eval:coding-check` previews two trials: one CSV repair with no padding, then the same task with 100000 unrelated background tokens. It uses Gemma and 131072 context. `pnpm eval:coding-check --models qwen --run` explicitly runs the small suite for another tested model. Add `--cases csv-records,pagination-contract,async-retry` only for a broader research run. Keep the tracked tree clean before execution. The suite preserves public checks, uses hidden grading and retains the existing six-minute per-repair bound. Reports stay ignored under .state/. This small sample is diagnostic, not a general model ranking.
+
+## Simplified setup validation — October 23, 2026
+
+The remaining command surface is startup, installation, doctor and acceptance. The standalone progress observer and defaults-merging/configuration demo were abandoned. Context settings, one automatic acceptance report and the small development suite were checked independently:
+
+| Check | Result |
+|---|---|
+| Gemma real server with explicit context override | 65536 tokens verified; owned server stopped |
+| Functional acceptance at 32768 tokens | 4/4 stages passed; 84.5 seconds; 54.5 mean generation tokens/sec |
+| Automatic acceptance output | One report.json with settings, versions, model fingerprint evidence, outcomes and timings; no receipt pair |
+| Saved everyday configuration | 204800 context preserved |
+
+The development check used Gemma, 131072 context, one CSV repair, one background variant (101), reasoning enabled with a 2048-token budget and an 8192-token output cap. These are two task observations, not a new general model ranking:
+
+| Condition | Full result | Hidden checks | Duration | Mean generation tokens/sec | Sampled peak adapter use |
+|---|---|---:|---:|---:|---:|
+| Clean | Pass | 6/6 | 212.0 s | 51.8 | 12.70 GB |
+| 100000 background tokens prepared | Timeout | 6/6 | 361.8 s | 43.7 | 12.83 GB |
+
+Both repairs preserved public files and passed the public and hidden code checks. The padded agent did not settle within the 360-second task deadline; correct code alone is insufficient for a full pass. Its finalized RPC usage/context-condition evidence was unavailable after the timeout, so this is not counted as a validated long-context success. Generation speed includes generated reasoning and excludes tool/prefill latency. Memory is sampled total adapter use, including the desktop, rather than isolated model allocation.
+
+The controller cleaned up its server and inference lock. Its UI/exit handling was corrected after this run: it displays PASS/TIMEOUT per trial and returns a failing exit status when any coding trial fails, even if the controller itself completed. Regression fixtures replay this distinction without sending another model prompt. The production profile is isolated from development-run compaction settings.
