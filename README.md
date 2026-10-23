@@ -109,7 +109,7 @@ Follow the [Pi App setup guide](docs/PI-APP.md) for installation, connection to 
 
 ## Try improvements independently
 
-Diagnostics, a read-only progress observer and safe configuration previews are opt-in. Normal startup uses the saved context; acceptance uses 32k and saves one local report. The core functional acceptance test passed with Gemma; fresh-machine reconstruction and broader model comparisons still have open gates. Normal startup defaults remain unchanged.
+The everyday commands cover startup, installation, diagnostics and functional acceptance. Separate progress-observer and configuration-repair commands have been dropped. Normal startup uses the saved context; acceptance uses 32k and saves one local report. The core functional acceptance test passed with Gemma; fresh-machine reconstruction and broader model comparisons still have open gates. Normal startup defaults remain unchanged.
 
 The [demonstration guide](docs/IMPROVEMENTS.md) shows each command and its evidence level. Legacy `pia` / `pia-app` names remain compatibility aliases.
 

@@ -51,7 +51,7 @@ try {
         const spec=task.specification+'\nUse only existing project files; no packages or network are needed.\n';
         const publicTest=publicSource(task);await writeFile(path.join(cwd,'check.cjs'),publicTest);await writeFile(path.join(cwd,'README.md'),spec);
         const hidden=path.join(base,`${model}-${task.id}-${condition}-${repeat}-grader.cjs`);await writeFile(hidden,hiddenSource(task));
-        const prepared=await prepareProfile('standard',config,cwd);
+        const prepared=await prepareProfile('standard',config,cwd,{agentDirectory:path.join(cwd,'agent')});
         prepared.env.PI_EFFORT_PREFERENCES=path.join(cwd,'effort-preferences.json');
         // Prevent a small native window from silently discarding the 100k prefix.
         prepared.settings.compaction.enabled=false;

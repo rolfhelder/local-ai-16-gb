@@ -4,14 +4,10 @@ import {randomUUID} from 'node:crypto';
 import {readFile,unlink} from 'node:fs/promises';
 import { root, nodeExe, piEntry, machine, environment, acquireInferenceLock, ensureServer, serverArguments, prepareProfile, exec } from './local-runtime.mjs';
 const args = process.argv.slice(2);
-if(['presets','receipts','eval'].includes(args[0])||args.some(a=>a==='--preset'||a.startsWith('--preset='))){
+if(['presets','receipts','eval','progress','config'].includes(args[0])||args.some(a=>a==='--preset'||a.startsWith('--preset='))){
  console.error('This development command was retired. Use --context TOKENS for launch settings; tests save report.json automatically. Development evals: pnpm eval:coding-check.');process.exit(1);
 }
-if(args[0]==='help'||args.length===1&&args[0]==='--help'){(await import('./lab-commands.mjs')).help(args);process.exit(0);}
-if((await import('./lab-commands.mjs')).labCommands.includes(args[0])){
- try{await (await import('./lab-commands.mjs')).main(args[0],args.slice(1));}catch(error){const ui=(await import('./console-ui.mjs')).consoleUI(args,process.stderr);ui.title('NEEDS ATTENTION');ui.status(false,error.message.split('\n')[0]);ui.finish('See local-ai '+args[0]+' --help for options.');process.exitCode=1;}
- process.exit(process.exitCode??0);
-}
+if(args[0]==='help'||args.length===1&&args[0]==='--help'){(await import('./help.mjs')).help(args);process.exit(0);}
 if(args[0]==='install'){
  const child=spawn('powershell.exe',['-NoProfile','-File',path.join(root,'scripts/install-command.ps1'),...args],{stdio:'inherit'});
  process.exitCode=await new Promise((resolve,reject)=>{child.once('error',reject);child.once('exit',code=>resolve(code??1));});

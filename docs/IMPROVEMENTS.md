@@ -17,28 +17,26 @@ Preview `local-ai test`, then run `local-ai test --run` for a bounded real test.
 | Item | Command | Default behavior |
 |---|---|---|
 | 3 | `local-ai --context 32768` | Explicit context override; saved default otherwise |
-| 4 | `local-ai progress` | Inspect latest server log |
 | 5 | Automatic after `local-ai test --run` | One local report; path printed at completion |
-| 6 | `local-ai config --demo` | Preview an isolated configuration |
 | 7 (development) | `pnpm eval:coding-check` | Preview one repair, clean and with 100k background |
 
-`local-ai help` lists everyday commands. Progress and configuration keep their readable/JSON modes. Development evaluations stay separate from installation and normal startup.
+`local-ai help` lists everyday commands. Development evaluations stay separate from installation and normal startup.
 
 ## 3. Context settings
 
 Normal startup uses ContextSize from machine.local.json, capped by a registered model's native limit. Acceptance always uses a conservative 32768-token slot without changing that saved setting. For a one-off override, use `local-ai --context 65536`. The named resource presets and their separate comparison command have been removed. Context capacity is not a coding-quality guarantee.
 
-## 4. Progress observer
+## 4. Separate progress observer — abandoned
 
-Run `local-ai progress` to inspect the latest known server log automatically; use `local-ai progress --follow` for a live bar, elapsed time and parsed progress, or `--log PATH` for a specific log. Ctrl+C returns to the terminal. Historical logs are labeled, unknown values remain unmeasured, and `--json` retains structured event output. It reads bounded chunks and distinguishes ready, prefill, generating, generation-complete and allocation-error when the pinned log format provides evidence. Prefill ETA needs at least two samples and is approximate. Thirty seconds without newly parsed prefill progress emits an uncertainty warning; it does not kill the model. Parser fixtures and a completed real log were checked. It is a separate observer, not a new embedded Pi App panel.
+Progress belongs in startup, doctor and tests. The standalone log observer and its command have been removed. Their old local evidence remains preserved.
 
 ## 5. One automatic acceptance report
 
 Acceptance saves one private `report.json` with the settings, model fingerprint evidence, Node/Pi versions, runtime command, per-stage outcomes, timings and errors. The terminal prints its location. Missing VRAM measurements stay null. There is no receipt viewer, history menu or automatic public/private export pair. Existing old receipts and test evidence are preserved locally. Reports include local paths and should be reviewed before sharing.
 
-## 6. Safe configuration preview and reconstruction
+## 6. Separate configuration reconstruction — abandoned
 
-`local-ai config` previews missing default keys and preserves all existing values, including false and custom keys. It writes nothing by default. For a disposable demonstration, run `local-ai config --demo`; use `local-ai config --demo --apply` to write only the ignored demo configuration. Run it twice to see the no-change result. `local-ai config --apply` targets the real configuration; `--file PATH` selects a specific checkout-local file. Applying twice is idempotent; changing an existing file makes a backup and uses a setup lock. Tests covered paths with spaces, preview preservation and repeat apply. This helper does not make the entire bootstrap/fresh-machine upgrade and rollback path validated; that acceptance remains pending.
+The installer creates missing machine configuration and preserves an existing one. The independent defaults-merging command and demo have been removed. Fresh-machine installation still needs a real acceptance trial; a merge helper does not prove portability.
 
 ## 7. Development coding check
 
