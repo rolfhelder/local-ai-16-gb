@@ -1,3 +1,0 @@
-import test from 'node:test';import assert from 'node:assert/strict';import {applyResourceProfile} from '../scripts/resource-profiles.mjs';
-test('no preset preserves user settings and does not mutate config',()=>{const c={ContextSize:204800,NativeContext:262144,ReasoningBudget:2048};assert.deepEqual(applyResourceProfile(c),c);assert.equal(applyResourceProfile(c,'smoke').ContextSize,32768);assert.equal(c.ContextSize,204800);});
-test('presets respect native limits and reject unknown names',()=>{const c={ContextSize:204800,NativeContext:131072};assert.equal(applyResourceProfile(c,'long-context').ContextSize,131072);assert.equal(applyResourceProfile(c,'coding').ContextSize,65536);assert.throws(()=>applyResourceProfile(c,'fast'),/preset/);});

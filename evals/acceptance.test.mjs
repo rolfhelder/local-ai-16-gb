@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {runStages,gradeRepair} from '../scripts/acceptance.mjs';
+import {runStages,gradeRepair,reportMetadata} from '../scripts/acceptance.mjs';
 import {spawnSync} from 'node:child_process';
 import path from 'node:path';
 import {createAcceptanceUI} from '../scripts/acceptance-ui.mjs';
@@ -11,6 +11,11 @@ import {addModelFolder} from '../scripts/model-folders.mjs';
 import {runPicker} from '../scripts/browse-model.mjs';
 import {EventEmitter} from 'node:events';
 import {PassThrough} from 'node:stream';
+test('single acceptance report carries reproducible settings and honest missing measurements',()=>{
+ const data=reportMetadata({ContextSize:32768,ModelFile:'fixture.gguf',ModelId:'fixture',LlamaExecutable:'llama-server',Port:48763,GpuLayers:999,Reasoning:false},'test-version');
+ assert.equal(data.settings.contextTokens,32768);assert.equal(data.settings.thinkingBudget,0);assert.equal(data.runtime.versions.pi,'test-version');
+ assert.ok(data.runtime.arguments.includes('fixture.gguf'));assert.equal(data.measurements.peakVramBytes,null);
+});
 
 test('picker runs separately in STA, handles cancel, and removes signal handlers',async()=>{
  const signals=new EventEmitter();let command;

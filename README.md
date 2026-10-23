@@ -13,7 +13,7 @@ After setup, open a terminal in your project:
 ```powershell
 local-ai
 local-ai --model omnicoder
-local-ai --preset smoke --dry-run
+local-ai --context 32768 --dry-run
 ```
 
 The launcher prepares Pi, starts llama.cpp on loopback, and stops its owned server when Pi exits. One model and one inference session run at a time. Core inference needs no cloud account; optional web tools still contact the internet.
@@ -109,7 +109,7 @@ Follow the [Pi App setup guide](docs/PI-APP.md) for installation, connection to 
 
 ## Try improvements independently
 
-Diagnostics, explicit resource presets, a read-only progress observer, receipts and safe configuration previews are opt-in. The core functional acceptance test passed with Gemma; fresh-machine reconstruction and the new repeated model matrix still have open gates. Normal startup defaults remain unchanged.
+Diagnostics, a read-only progress observer and safe configuration previews are opt-in. Normal startup uses the saved context; acceptance uses 32k and saves one local report. The core functional acceptance test passed with Gemma; fresh-machine reconstruction and broader model comparisons still have open gates. Normal startup defaults remain unchanged.
 
 The [demonstration guide](docs/IMPROVEMENTS.md) shows each command and its evidence level. Legacy `pia` / `pia-app` names remain compatibility aliases.
 

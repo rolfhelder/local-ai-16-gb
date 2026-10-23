@@ -3,8 +3,10 @@ import path from 'node:path';
 import {randomUUID} from 'node:crypto';
 import {readFile,unlink} from 'node:fs/promises';
 import { root, nodeExe, piEntry, machine, environment, acquireInferenceLock, ensureServer, serverArguments, prepareProfile, exec } from './local-runtime.mjs';
-import {applyResourceProfile,effectiveResources} from './resource-profiles.mjs';
 const args = process.argv.slice(2);
+if(['presets','receipts','eval'].includes(args[0])||args.some(a=>a==='--preset'||a.startsWith('--preset='))){
+ console.error('This development command was retired. Use --context TOKENS for launch settings; tests save report.json automatically. Development evals: pnpm eval:coding-check.');process.exit(1);
+}
 if(args[0]==='help'||args.length===1&&args[0]==='--help'){(await import('./lab-commands.mjs')).help(args);process.exit(0);}
 if((await import('./lab-commands.mjs')).labCommands.includes(args[0])){
  try{await (await import('./lab-commands.mjs')).main(args[0],args.slice(1));}catch(error){const ui=(await import('./console-ui.mjs')).consoleUI(args,process.stderr);ui.title('NEEDS ATTENTION');ui.status(false,error.message.split('\n')[0]);ui.finish('See local-ai '+args[0]+' --help for options.');process.exitCode=1;}
@@ -20,14 +22,12 @@ if(args[0]==='test'){await (await import('./acceptance.mjs')).main(args.slice(1)
 const value = (flag, fallback) => { const index = args.indexOf(flag); if (index < 0) return fallback; const result = args[index + 1]; args.splice(index, 2); if (!result) throw new Error(`${flag} requires a value`); return result; };
 const flag = name => { const index = args.indexOf(name); if (index < 0) return false; args.splice(index, 1); return true; };
 if (flag('--help')) {
-  console.log('local-ai presets             Compare resource presets\nlocal-ai progress            Inspect latest server log (--follow to watch)\nlocal-ai receipts            Inspect latest run (--list for history)\nlocal-ai config              Preview missing settings (--apply to write)\nlocal-ai eval                Preview matched evaluations (--run to execute)\n');
   console.log('local-ai install             Open installation and acceptance menu\nlocal-ai install --plan      Preview core installation\nlocal-ai install --check     Inspect installed core components\nlocal-ai install --run       Install the pinned core stack\nlocal-ai install --test --run  Run acceptance directly\n');
   console.log('local-ai doctor              Hardware and model health\nlocal-ai test                Preview first-run acceptance\nlocal-ai test --run          Run acceptance (select installed model; --model NAME or GGUF path)\n');
-  console.log('local-ai [--model qwen|gemma|omnicoder|gpt-oss] [--context TOKENS] [--kv f16|q8_0] [--preset smoke|coding|long-context] [--profile standard|native|guard|lsp|lsp-windows|research|desktop|web]\n    [--reasoning-budget TOKENS] [--no-reasoning] [--browser] [--cwd PATH] [--dry-run] [--probe] [Pi arguments]\nDefaults: Gemma, 204800 context (GPT-OSS capped at 131072), reasoning on, 2048 thinking tokens, loopback port 48763.\n--local-model remains a compatibility alias for --model.\n--dry-run prints both full process commands without starting the model.');
+  console.log('local-ai [--model qwen|gemma|omnicoder|gpt-oss] [--context TOKENS] [--kv f16|q8_0] [--profile standard|native|guard|lsp|lsp-windows|research|desktop|web]\n    [--reasoning-budget TOKENS] [--no-reasoning] [--browser] [--cwd PATH] [--dry-run] [--probe] [Pi arguments]\nDefaults: Gemma, 204800 context (GPT-OSS capped at 131072), reasoning on, 2048 thinking tokens, loopback port 48763.\n--local-model remains a compatibility alias for --model.\n--dry-run prints both full process commands without starting the model.');
   process.exit(0);
 }
 const profile = value('--profile', 'standard');
-const preset = value('--preset', undefined);
 const dryRun = flag('--dry-run');
 const probeOnly = flag('--probe');
 const browser = flag('--browser');
@@ -44,7 +44,7 @@ try {
   if(requestedModel&&legacyModel&&requestedModel!==legacyModel)throw new Error('Conflicting --model and --local-model selections');
   let selectedModel=localModel,resume=false;
   for(;;){
-  const config = applyResourceProfile(await machine(selectedModel),preset);
+  const config = await machine(selectedModel);
   if(!['f16','q8_0'].includes(kv))throw new Error('--kv must be f16 or q8_0');
   if(kv==='q8_0')config.ExtraServerArgs=[...(config.ExtraServerArgs||[]),'--cache-type-k','q8_0','--cache-type-v','q8_0','--flash-attn','on'];
   if (noReasoning) config.Reasoning = false;
@@ -63,7 +63,7 @@ try {
     config.ContextSize = config.ModelId==='gpt-oss-local'?Math.min(Number(context),config.NativeContext):Number(context);
   }
   if (dryRun) {
-    console.log(JSON.stringify({ profile, preset, resources:effectiveResources(config), cwd, executable: nodeExe, pi: piEntry, piArguments: piArgs, model: `local-llama/${config.ModelId}`, server: config.LlamaExecutable, arguments: serverArguments(config), browser, singleSession: true }, null, 2));
+    console.log(JSON.stringify({ profile, cwd, executable: nodeExe, pi: piEntry, piArguments: piArgs, model: `local-llama/${config.ModelId}`, server: config.LlamaExecutable, arguments: serverArguments(config), browser, singleSession: true }, null, 2));
   } else {
     release ??= await acquireInferenceLock();
     const prepared = await prepareProfile(profile, config, cwd);

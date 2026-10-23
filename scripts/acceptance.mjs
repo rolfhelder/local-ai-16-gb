@@ -1,13 +1,17 @@
 import {mkdir,writeFile,readFile,stat} from 'node:fs/promises';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
-import {root,machine,ensureServer,acquireInferenceLock,prepareProfile,nodeExe,exec,serverArguments} from './local-runtime.mjs';
+import {root,machine,ensureServer,acquireInferenceLock,prepareProfile,nodeExe,exec,serverArguments,generationLimits} from './local-runtime.mjs';
 import {hashFile} from './doctor.mjs';
 import {serverTimings} from '../evals/timings.mjs';
-import {makeReceipt,publicReceipt} from './run-receipt.mjs';
+import os from 'node:os';
 import {createAcceptanceUI} from './acceptance-ui.mjs';
 import {chooseModel} from './model-selection.mjs';
 
+export function reportMetadata(config,piVersion=null){
+ const limits=generationLimits(config);
+ return {started:new Date().toISOString(),settings:{contextTokens:config.ContextSize,slots:1,thinkingBudget:limits.reasoningBudget,outputCap:limits.maxTokens},runtime:{executable:config.LlamaExecutable,arguments:serverArguments(config),versions:{node:process.version,pi:piVersion}},hardware:{platform:process.platform,architecture:process.arch,ramBytes:os.totalmem()},measurements:{peakVramBytes:null}};
+}
 export async function runStages(stages,report,onUpdate=async()=>{},onStart=()=>{}){
  for(const [name,work] of stages){onStart(name);const start=performance.now();try{const evidence=await work();report.stages.push({name,status:'pass',durationMs:Math.round(performance.now()-start),evidence});}catch(error){report.stages.push({name,status:'fail',durationMs:Math.round(performance.now()-start),error:error.message});report.passed=false;await onUpdate();return false;}await onUpdate();}report.passed=true;await onUpdate();return true;
 }
@@ -30,7 +34,8 @@ export async function main(args=process.argv.slice(2)){
  if(!run){if(!json){ui.preview();return;}console.log(JSON.stringify({mode:'plan',model,context:32768,stages:['pinned model SHA256','owned server health/model/config','real model answer','Pi read/edit/test loop'],deadlineSeconds:{startup:180,answer:120,repair:180},modelDownloads:false},null,2));return;}
  const config=await machine(model);config.ContextSize=32768;
  const base=path.join(root,'.state/acceptance',new Date().toISOString().replace(/[:.]/g,'-'));await mkdir(base,{recursive:true});config.LogPath=path.join(base,'server.log');
- const report={schemaVersion:1,model,context:32768,mode:'real-local-inference',stages:[],passed:false};const save=()=>writeFile(path.join(base,'report.json'),JSON.stringify(report,null,2)+'\n');
+ const piVersion=JSON.parse(await readFile(path.join(root,'node_modules/@earendil-works/pi-coding-agent/package.json'),'utf8')).version;
+ const report={schemaVersion:2,...reportMetadata(config,piVersion),model,context:32768,mode:'real-local-inference',stages:[],passed:false};const save=()=>writeFile(path.join(base,'report.json'),JSON.stringify(report,null,2)+'\n');
  ui?.start('Preparing configuration and inference lock');
  const release=await acquireInferenceLock();let server;
  try{
@@ -45,8 +50,8 @@ export async function main(args=process.argv.slice(2)){
  const score=gradeRepair({messages:result.messages,sourcePreserved,hiddenPassed});if(!score.passed)throw Error('Tool-loop acceptance failed: '+JSON.stringify(score));return score;}]
  ],report,async()=>{await save();const stage=report.stages.at(-1);if(stage&&!stage.displayed){ui?.complete(stage);Object.defineProperty(stage,'displayed',{value:true});}},name=>ui?.start(name));
  }finally{ui?.cleanup();await server?.stop();await release();report.timings=serverTimings(await readFile(config.LogPath,'utf8').catch(()=>''));await save();
- const receipt=makeReceipt({config,argv:serverArguments(config),modelHash:report.stages.find(x=>x.name==='pinned-model')?.evidence?.sha256??null,passed:report.passed,error:report.stages.find(x=>x.status==='fail')?.error??null,timings:report.timings,versions:{node:process.version,pi:JSON.parse(await readFile(path.join(root,'node_modules/@earendil-works/pi-coding-agent/package.json'),'utf8')).version}});
- await writeFile(path.join(base,'receipt.private.json'),JSON.stringify(receipt,null,2)+'\n');await writeFile(path.join(base,'receipt.public.json'),JSON.stringify(publicReceipt(receipt),null,2)+'\n');}
+ report.finished=new Date().toISOString();await save();}
+
  if(json)console.log(JSON.stringify({passed:report.passed,stages:report.stages,report:path.join(base,'report.json')},null,2));else ui.finish(report,path.join(base,'report.json'));if(!report.passed)process.exitCode=1;
  }catch(error){if(ui){ui.abort(error);process.exitCode=1;}else throw error;}finally{ui?.stop();}
 }
