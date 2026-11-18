@@ -161,3 +161,7 @@ Upstream [installation](https://github.com/ggml-org/llama.cpp/blob/master/docs/i
 Qwen3.6, further Qwen3.8 experiments and larger Gemma variants are queued **after improvement acceptance**. They are not additional validated models or current defaults.
 
 The future public repository will use a reviewed clean-history export. Removing a file from today's tree does not erase older commits.
+
+## Slop warning
+
+This repo was mostly done by AI agents. I'm sharing this because I think this may be useful for other people. Be warned this may contain slop and bad code I didn't review line by line. I tested this on my machine, made it work and put the end result into this repo.
